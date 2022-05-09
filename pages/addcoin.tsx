@@ -1,20 +1,28 @@
-import { storageRef, database } from "../firebase/firebase";
+import { database, storageRef } from "../firebase/firebase";
 import { setDoc, doc } from "firebase/firestore";
-import { uploadBytes, ref } from "firebase/storage";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
 import { useState } from "react";
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 
 type Inputs = {
-  example: string;
-  exampleRequired: string;
   name: string;
   class: string;
+  obs: string;
+  rev: string;
+  page: string;
+  weight: string;
+  variation: string;
+  type: string;
+  collection: string;
+  url?: string;
 };
 
 const AddCoin = () => {
   const [file, setFile] = useState<File>();
+
+  const [u, setU] = useState("");
 
   const {
     register,
@@ -25,35 +33,22 @@ const AddCoin = () => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     let id = uuidv4();
 
+    const fileRef = ref(storageRef, `coins/${id}`);
+
+    await uploadBytes(fileRef, file as Blob);
+
+    let url = await getDownloadURL(ref(storageRef, `coins/${id}`));
     let obj = {
       ...data,
       coinId: id,
+      url: url,
     };
 
-    const metadata = {
-      contentType: "image/jpeg",
-      coidId: id,
-    };
+    setU(url);
 
-    try {
-      const fileRef = ref(storageRef, `coins/${id}`);
-      console.log("trying to upload");
-      uploadBytes(fileRef, file as Blob, metadata).then(() => {
-        console.log("Uploaded a blob or file!");
-      });
-    } catch (err) {
-      console.log(err);
-    }
-
-    try {
-      await setDoc(doc(database, "coins", id), obj).then(() =>
-        console.log("added to firestore!")
-      );
-    } catch (err) {
-      console.log(err);
-    }
-
-    console.log(obj);
+    setDoc(doc(database, "coins", id), obj).then(() =>
+      console.log("added to firestore!")
+    );
   };
 
   const handleFile = (e: React.ChangeEvent) => {
@@ -63,12 +58,12 @@ const AddCoin = () => {
   };
 
   return (
-    <div className="bg-slate-50 h-screen flex flex-col items-center py-4">
+    <div className="bg-slate-50 h-full flex flex-col items-center py-4">
       <h2 className="tracking-tight text-zinc-800 font-bold text-4xl p-4">
         Add a new coin
       </h2>
 
-      <div className="flex flex-col p-8 shadow-md bg-white">
+      <div className="flex flex-col p-8 shadow-md bg-white w-2/5">
         <form className="flex flex-col " onSubmit={handleSubmit(onSubmit)}>
           {/* register your input into the hook by invoking the "register" function */}
 
@@ -93,11 +88,95 @@ const AddCoin = () => {
               // defaultValue="Class"
               type="text"
               className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
-                errors.name && `border-red-500`
+                errors.class && `border-red-500`
               }`}
               {...register("class", { required: true })}
             />
             {errors.class && (
+              <span className="text-red-500">This field is required</span>
+            )}
+          </div>
+          <div className="mb-2 flex flex-col">
+            <label className="font-bold text-zinc-800 mb-1">Variation</label>
+            <input
+              // defaultValue="Name"
+              type="text"
+              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
+                errors.variation && `border-red-500`
+              }`}
+              {...register("variation", { required: true })}
+            />
+            {errors.variation && (
+              <span className="text-red-500">This field is required</span>
+            )}
+          </div>
+          <div className="mb-2 flex flex-col">
+            <label className="font-bold text-zinc-800 mb-1">Type</label>
+            <input
+              // defaultValue="Name"
+              type="text"
+              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
+                errors.type && `border-red-500`
+              }`}
+              {...register("type", { required: true })}
+            />
+            {errors.type && (
+              <span className="text-red-500">This field is required</span>
+            )}
+          </div>
+          <div className="mb-2 flex flex-col">
+            <label className="font-bold text-zinc-800 mb-1">Weight</label>
+            <input
+              // defaultValue="Name"
+              type="text"
+              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
+                errors.weight && `border-red-500`
+              }`}
+              {...register("weight", { required: true })}
+            />
+            {errors.weight && (
+              <span className="text-red-500">This field is required</span>
+            )}
+          </div>
+          <div className="mb-2 flex flex-col">
+            <label className="font-bold text-zinc-800 mb-1">Page</label>
+            <input
+              // defaultValue="Name"
+              type="text"
+              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
+                errors.page && `border-red-500`
+              }`}
+              {...register("page", { required: true })}
+            />
+            {errors.page && (
+              <span className="text-red-500">This field is required</span>
+            )}
+          </div>
+          <div className="mb-2 flex flex-col">
+            <label className="font-bold text-zinc-800 mb-1">Obs</label>
+            <textarea
+              // defaultValue="Name"
+              //   type="textarea"
+              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
+                errors.obs && `border-red-500`
+              }`}
+              {...register("obs", { required: true })}
+            />
+            {errors.obs && (
+              <span className="text-red-500">This field is required</span>
+            )}
+          </div>
+          <div className="mb-2 flex flex-col">
+            <label className="font-bold text-zinc-800 mb-1">Rev</label>
+            <textarea
+              // defaultValue="Name"
+              //   type="text"
+              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
+                errors.rev && `border-red-500`
+              }`}
+              {...register("rev", { required: true })}
+            />
+            {errors.rev && (
               <span className="text-red-500">This field is required</span>
             )}
           </div>
@@ -123,6 +202,8 @@ const AddCoin = () => {
           />
         </form>
       </div>
+
+      <div>{u !== "" && <img src={u} alt="example" />}</div>
     </div>
   );
 };

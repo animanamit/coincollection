@@ -28,4 +28,4 @@ const storage = getStorage(app);
 const storageRef = ref(storage);
 
 const coinStorageRef = ref(storage, "coins");
-export { database, storage, storageRef, coinStorageRef };
+export { app, database, storage, storageRef, coinStorageRef };
