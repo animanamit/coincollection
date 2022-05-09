@@ -15,10 +15,10 @@ const RecentlyAdded = () => {
             <CoinCard key={index} />
           ))}
       </div>
-      <div className="absolute top-1/2 transform -translate-y-1/2 py-2 bg-red-500 w-full h-2 flex justify-between items-center px-3">
+      {/* <div className="absolute top-1/2 transform -translate-y-1/2 py-2 bg-red-500 w-full h-2 flex justify-between items-center px-3">
         <button>prev</button>
         <button>next</button>
-      </div>
+      </div> */}
     </div>
   );
 };

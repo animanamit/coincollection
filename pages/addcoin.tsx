@@ -1,25 +1,60 @@
-// import { storageRef } from "../firebase/firebase";
-// import { collection, addDoc } from "firebase/firestore";
-// import { uploadBytes, ref } from "firebase/storage";
+import { storageRef, database } from "../firebase/firebase";
+import { setDoc, doc } from "firebase/firestore";
+import { uploadBytes, ref } from "firebase/storage";
 import { useState } from "react";
 
 import { useForm, SubmitHandler } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
 
 type Inputs = {
   example: string;
   exampleRequired: string;
+  name: string;
+  class: string;
 };
 
 const AddCoin = () => {
-  const [, setFile] = useState<File>();
+  const [file, setFile] = useState<File>();
 
   const {
     register,
     handleSubmit,
-
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    let id = uuidv4();
+
+    let obj = {
+      ...data,
+      coinId: id,
+    };
+
+    const metadata = {
+      contentType: "image/jpeg",
+      coidId: id,
+    };
+
+    try {
+      const fileRef = ref(storageRef, `coins/${id}`);
+      console.log("trying to upload");
+      uploadBytes(fileRef, file as Blob, metadata).then(() => {
+        console.log("Uploaded a blob or file!");
+      });
+    } catch (err) {
+      console.log(err);
+    }
+
+    try {
+      await setDoc(doc(database, "coins", id), obj).then(() =>
+        console.log("added to firestore!")
+      );
+    } catch (err) {
+      console.log(err);
+    }
+
+    console.log(obj);
+  };
 
   const handleFile = (e: React.ChangeEvent) => {
     const target = e.currentTarget as HTMLInputElement;
@@ -27,44 +62,67 @@ const AddCoin = () => {
     setFile(image);
   };
 
-  const submit = async () => {
-    // try {
-    //   const fileRef = ref(storageRef, "coins/example");
-    //   console.log("trying to upload");
-    //   uploadBytes(fileRef, file).then(() => {
-    //     console.log("Uploaded a blob or file!");
-    //   });
-    // } catch (err) {
-    //   console.log(err);
-    // }
-  };
-
-  const chooseFile = () => {};
-
   return (
-    <div className="bg-slate-50 h-screen mx-auto">
+    <div className="bg-slate-50 h-screen flex flex-col items-center py-4">
       <h2 className="tracking-tight text-zinc-800 font-bold text-4xl p-4">
         Add a new coin
       </h2>
 
-      <div className="flex flex-col">
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="flex flex-col p-8 shadow-md bg-white">
+        <form className="flex flex-col " onSubmit={handleSubmit(onSubmit)}>
           {/* register your input into the hook by invoking the "register" function */}
-          <input defaultValue="test" {...register("example")} />
 
           {/* include validation with required or other standard HTML validation rules */}
-          <input {...register("exampleRequired", { required: true })} />
-          {/* errors will return when field validation fails  */}
-          {errors.exampleRequired && <span>This field is required</span>}
+          <div className="mb-2 flex flex-col">
+            <label className="font-bold text-zinc-800 mb-1">Name</label>
+            <input
+              // defaultValue="Name"
+              type="text"
+              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
+                errors.name && `border-red-500`
+              }`}
+              {...register("name", { required: true })}
+            />
+            {errors.name && (
+              <span className="text-red-500">This field is required</span>
+            )}
+          </div>
+          <div className="mb-2 flex flex-col p-1">
+            <label className="font-bold text-zinc-800 mb-1">Class</label>
+            <input
+              // defaultValue="Class"
+              type="text"
+              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
+                errors.name && `border-red-500`
+              }`}
+              {...register("class", { required: true })}
+            />
+            {errors.class && (
+              <span className="text-red-500">This field is required</span>
+            )}
+          </div>
+          <div className="p-1 mb-2">
+            <label
+              className=" text-zinc-800 font-bold block mb-2"
+              htmlFor="user_avatar"
+            >
+              Upload file
+            </label>
+            <input
+              type="file"
+              aria-describedby="user_avatar_help"
+              id="user_avatar"
+              className="text-zinc-600 bg-zinc-200 text-base rounded focus:outline-none focus:border-transparent"
+              onChange={handleFile}
+            />
+          </div>
 
-          <input type="submit" />
+          <input
+            type="submit"
+            className="py-2 px-3 shadow-sm  rounded bg-slate-200 uppercase tracking-loose"
+          />
         </form>
       </div>
-      <button onClick={chooseFile}>Choose File</button>
-      <input type="file" onChange={handleFile} />
-      <button className="bg-red-200" onClick={submit}>
-        Submit
-      </button>
     </div>
   );
 };
