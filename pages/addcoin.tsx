@@ -20,9 +20,8 @@ type Inputs = {
 };
 
 const AddCoin = () => {
-  const [file, setFile] = useState<File>();
-
-  const [u, setU] = useState("");
+  const [obs, setObs] = useState<File>();
+  const [rev, setRev] = useState<File>();
 
   const {
     register,
@@ -33,28 +32,45 @@ const AddCoin = () => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     let id = uuidv4();
 
-    const fileRef = ref(storageRef, `coins/${id}`);
+    const fileRefObs = ref(storageRef, `coins/obs-${id}`);
+    const fileRefRev = ref(storageRef, `coins/rev-${id}`);
+    if (obs) {
+      await uploadBytes(fileRefObs, obs as Blob);
+    }
 
-    await uploadBytes(fileRef, file as Blob);
+    if (rev) {
+      await uploadBytes(fileRefRev, rev as Blob);
+    }
 
-    let url = await getDownloadURL(ref(storageRef, `coins/${id}`));
+    let urls = await Promise.all([
+      getDownloadURL(ref(storageRef, `coins/obs-${id}`)),
+      getDownloadURL(ref(storageRef, `coins/rev-${id}`)),
+    ]);
     let obj = {
       ...data,
       coinId: id,
-      url: url,
+      url: urls,
+      dateAdded: Date(),
     };
 
-    setU(url);
-
+    console.log(obj);
     setDoc(doc(database, "coins", id), obj).then(() =>
       console.log("added to firestore!")
     );
   };
 
-  const handleFile = (e: React.ChangeEvent) => {
+  const handleObs = (e: React.ChangeEvent) => {
     const target = e.currentTarget as HTMLInputElement;
     const image = (target.files as FileList)[0];
-    setFile(image);
+    console.log(target.files);
+    setObs(image);
+  };
+
+  const handleRev = (e: React.ChangeEvent) => {
+    const target = e.currentTarget as HTMLInputElement;
+    const image = (target.files as FileList)[0];
+    console.log(target.files);
+    setRev(image);
   };
 
   return (
@@ -69,7 +85,7 @@ const AddCoin = () => {
 
           {/* include validation with required or other standard HTML validation rules */}
           <div className="mb-2 flex flex-col">
-            <label className="font-bold text-zinc-800 mb-1">Name</label>
+            <label className="font-bold text-zinc-800 mb-1">Ruler</label>
             <input
               // defaultValue="Name"
               type="text"
@@ -79,6 +95,20 @@ const AddCoin = () => {
               {...register("name", { required: true })}
             />
             {errors.name && (
+              <span className="text-red-500">This field is required</span>
+            )}
+          </div>
+          <div className="mb-2 flex flex-col">
+            <label className="font-bold text-zinc-800 mb-1">Type</label>
+            <input
+              // defaultValue="Name"
+              type="text"
+              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
+                errors.type && `border-red-500`
+              }`}
+              {...register("type", { required: true })}
+            />
+            {errors.type && (
               <span className="text-red-500">This field is required</span>
             )}
           </div>
@@ -110,20 +140,7 @@ const AddCoin = () => {
               <span className="text-red-500">This field is required</span>
             )}
           </div>
-          <div className="mb-2 flex flex-col">
-            <label className="font-bold text-zinc-800 mb-1">Type</label>
-            <input
-              // defaultValue="Name"
-              type="text"
-              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
-                errors.type && `border-red-500`
-              }`}
-              {...register("type", { required: true })}
-            />
-            {errors.type && (
-              <span className="text-red-500">This field is required</span>
-            )}
-          </div>
+
           <div className="mb-2 flex flex-col">
             <label className="font-bold text-zinc-800 mb-1">Weight</label>
             <input
@@ -185,14 +202,29 @@ const AddCoin = () => {
               className=" text-zinc-800 font-bold block mb-2"
               htmlFor="user_avatar"
             >
-              Upload file
+              Upload Obs Photo
             </label>
             <input
               type="file"
               aria-describedby="user_avatar_help"
               id="user_avatar"
               className="text-zinc-600 bg-zinc-200 text-base rounded focus:outline-none focus:border-transparent"
-              onChange={handleFile}
+              onChange={handleObs}
+            />
+          </div>
+          <div className="p-1 mb-2">
+            <label
+              className=" text-zinc-800 font-bold block mb-2"
+              htmlFor="user_avatar"
+            >
+              Upload Rev Photo
+            </label>
+            <input
+              type="file"
+              aria-describedby="user_avatar_help"
+              id="user_avatar"
+              className="text-zinc-600 bg-zinc-200 text-base rounded focus:outline-none focus:border-transparent"
+              onChange={handleRev}
             />
           </div>
 
@@ -202,8 +234,6 @@ const AddCoin = () => {
           />
         </form>
       </div>
-
-      <div>{u !== "" && <img src={u} alt="example" />}</div>
     </div>
   );
 };
