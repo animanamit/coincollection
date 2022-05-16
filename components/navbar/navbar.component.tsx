@@ -2,8 +2,8 @@ import Link from "next/link";
 
 const NavBar = () => {
   return (
-    <div className="bg-teal-100 w-screen flex justify-between">
-      <div className="mx-2 p-2">
+    <div className="flex justify-between w-screen bg-zinc-200">
+      <div className="p-2 mx-2">
         <ul className="flex">
           <li className="mx-1">
             <Link href="/">Home</Link>
@@ -11,8 +11,9 @@ const NavBar = () => {
           <li className="mx-1">
             <Link href="/addcoin">Add Coin</Link>
           </li>
-          <li className="mx-1">View Collection</li>
-          <li className="mx-1">Profile</li>
+          <li className="mx-1">
+            <Link href="/collection">View Collection</Link>
+          </li>
         </ul>
       </div>
     </div>

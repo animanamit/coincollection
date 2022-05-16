@@ -1,19 +1,36 @@
 import Image from "next/image";
-const CoinCard = () => {
+import { useState } from "react";
+const CoinCard = ({ data }) => {
+  const [img, setImg] = useState(data.url[0]);
+
+  const handleMouseEnter = () => {
+    setImg(data.url[1]);
+  };
+
+  const handleMouseLeave = () => {
+    setImg(data.url[0]);
+  };
+
   return (
-    <div className="bg-blue-400 shadow-md m-1 rounded-xl h-72 min-w-[250px]  ">
-      <div className="h-3/4 w-auto relative rounded-t-xl">
+    <div className="bg-black shadow-md m-1 rounded-xl h-[400px] w-[300px]  ">
+      <div
+        className="relative w-auto h-3/4 rounded-t-xl"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         <Image
-          src={"/coin.jpg"}
+          src={img}
           alt="example coin"
           layout="fill"
-          objectFit="cover"
+          objectFit="contain"
           className="rounded-t-xl"
+          height={500}
+          width={300}
         />
       </div>
-      <div className=" bg-white h-1/4 rounded-b-xl p-2">
-        <span className="tracking-tight text-zinc-800 font-bold text-lg">
-          Chandigarh
+      <div className="p-2 bg-white h-1/4 rounded-b-xl">
+        <span className="text-lg font-bold tracking-tight text-zinc-800">
+          {data.name}
         </span>
       </div>
     </div>
