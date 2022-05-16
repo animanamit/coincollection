@@ -27,6 +27,7 @@ const AddCoin = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -57,6 +58,9 @@ const AddCoin = () => {
     setDoc(doc(database, "coins", id), obj).then(() =>
       console.log("added to firestore!")
     );
+
+    alert("Successfully uploaded!");
+    reset();
   };
 
   const handleObs = (e: React.ChangeEvent) => {
@@ -74,18 +78,18 @@ const AddCoin = () => {
   };
 
   return (
-    <div className="bg-slate-50 h-full flex flex-col items-center py-4">
-      <h2 className="tracking-tight text-zinc-800 font-bold text-4xl p-4">
+    <div className="flex flex-col items-center h-full py-4 bg-slate-50">
+      <h2 className="p-4 text-4xl font-bold tracking-tight text-zinc-800">
         Add a new coin
       </h2>
 
-      <div className="flex flex-col p-8 shadow-md bg-white w-2/5">
+      <div className="flex flex-col w-2/5 p-8 bg-white shadow-md">
         <form className="flex flex-col " onSubmit={handleSubmit(onSubmit)}>
           {/* register your input into the hook by invoking the "register" function */}
 
           {/* include validation with required or other standard HTML validation rules */}
-          <div className="mb-2 flex flex-col">
-            <label className="font-bold text-zinc-800 mb-1">Ruler</label>
+          <div className="flex flex-col mb-2">
+            <label className="mb-1 font-bold text-zinc-800">Ruler</label>
             <input
               // defaultValue="Name"
               type="text"
@@ -98,8 +102,8 @@ const AddCoin = () => {
               <span className="text-red-500">This field is required</span>
             )}
           </div>
-          <div className="mb-2 flex flex-col">
-            <label className="font-bold text-zinc-800 mb-1">Type</label>
+          <div className="flex flex-col mb-2">
+            <label className="mb-1 font-bold text-zinc-800">Type</label>
             <input
               // defaultValue="Name"
               type="text"
@@ -112,8 +116,8 @@ const AddCoin = () => {
               <span className="text-red-500">This field is required</span>
             )}
           </div>
-          <div className="mb-2 flex flex-col p-1">
-            <label className="font-bold text-zinc-800 mb-1">Class</label>
+          <div className="flex flex-col p-1 mb-2">
+            <label className="mb-1 font-bold text-zinc-800">Class</label>
             <input
               // defaultValue="Class"
               type="text"
@@ -126,8 +130,8 @@ const AddCoin = () => {
               <span className="text-red-500">This field is required</span>
             )}
           </div>
-          <div className="mb-2 flex flex-col">
-            <label className="font-bold text-zinc-800 mb-1">Variation</label>
+          <div className="flex flex-col mb-2">
+            <label className="mb-1 font-bold text-zinc-800">Variation</label>
             <input
               // defaultValue="Name"
               type="text"
@@ -141,8 +145,8 @@ const AddCoin = () => {
             )}
           </div>
 
-          <div className="mb-2 flex flex-col">
-            <label className="font-bold text-zinc-800 mb-1">Weight</label>
+          <div className="flex flex-col mb-2">
+            <label className="mb-1 font-bold text-zinc-800">Weight</label>
             <input
               // defaultValue="Name"
               type="text"
@@ -155,8 +159,8 @@ const AddCoin = () => {
               <span className="text-red-500">This field is required</span>
             )}
           </div>
-          <div className="mb-2 flex flex-col">
-            <label className="font-bold text-zinc-800 mb-1">Page</label>
+          <div className="flex flex-col mb-2">
+            <label className="mb-1 font-bold text-zinc-800">Page</label>
             <input
               // defaultValue="Name"
               type="text"
@@ -169,8 +173,8 @@ const AddCoin = () => {
               <span className="text-red-500">This field is required</span>
             )}
           </div>
-          <div className="mb-2 flex flex-col">
-            <label className="font-bold text-zinc-800 mb-1">Obs</label>
+          <div className="flex flex-col mb-2">
+            <label className="mb-1 font-bold text-zinc-800">Obs</label>
             <textarea
               // defaultValue="Name"
               //   type="textarea"
@@ -183,8 +187,8 @@ const AddCoin = () => {
               <span className="text-red-500">This field is required</span>
             )}
           </div>
-          <div className="mb-2 flex flex-col">
-            <label className="font-bold text-zinc-800 mb-1">Rev</label>
+          <div className="flex flex-col mb-2">
+            <label className="mb-1 font-bold text-zinc-800">Rev</label>
             <textarea
               // defaultValue="Name"
               //   type="text"
@@ -199,7 +203,7 @@ const AddCoin = () => {
           </div>
           <div className="p-1 mb-2">
             <label
-              className=" text-zinc-800 font-bold block mb-2"
+              className="block mb-2 font-bold  text-zinc-800"
               htmlFor="user_avatar"
             >
               Upload Obs Photo
@@ -208,13 +212,13 @@ const AddCoin = () => {
               type="file"
               aria-describedby="user_avatar_help"
               id="user_avatar"
-              className="text-zinc-600 bg-zinc-200 text-base rounded focus:outline-none focus:border-transparent"
+              className="text-base rounded text-zinc-600 bg-zinc-200 focus:outline-none focus:border-transparent"
               onChange={handleObs}
             />
           </div>
           <div className="p-1 mb-2">
             <label
-              className=" text-zinc-800 font-bold block mb-2"
+              className="block mb-2 font-bold  text-zinc-800"
               htmlFor="user_avatar"
             >
               Upload Rev Photo
@@ -223,14 +227,14 @@ const AddCoin = () => {
               type="file"
               aria-describedby="user_avatar_help"
               id="user_avatar"
-              className="text-zinc-600 bg-zinc-200 text-base rounded focus:outline-none focus:border-transparent"
+              className="text-base rounded text-zinc-600 bg-zinc-200 focus:outline-none focus:border-transparent"
               onChange={handleRev}
             />
           </div>
 
           <input
             type="submit"
-            className="py-2 px-3 shadow-sm  rounded bg-slate-200 uppercase tracking-loose"
+            className="px-3 py-2 uppercase rounded shadow-sm bg-slate-200 tracking-loose"
           />
         </form>
       </div>
