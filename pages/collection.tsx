@@ -5,12 +5,16 @@ import CoinCard from "../components/coin-card/coin-card.component";
 const Collection = ({ coins }) => {
   console.log(coins);
   return (
-    <div className="grid grid-cols-3 row-auto p-8 gap-y-4 gap-x-2 bg-zinc-200">
-      {/* <div className="flex flex-col"> */}
-      {coins.map((coin) => (
-        <CoinCard key={coin.coinId} data={coin} />
-      ))}
-      {/* </div> */}
+    <div className="p-8">
+      <div>
+        <label className="mx-1">Grid</label>
+        <input type="checkbox" />
+      </div>
+      <div className="grid grid-cols-3 row-auto gap-y-4 gap-x-2 bg-zinc-200">
+        {coins.map((coin) => (
+          <CoinCard key={coin.coinId} data={coin} />
+        ))}
+      </div>
     </div>
   );
 };
