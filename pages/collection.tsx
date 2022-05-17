@@ -10,7 +10,7 @@ const Collection = ({ coins }) => {
         <label className="mx-1">Grid</label>
         <input type="checkbox" />
       </div>
-      <div className="grid grid-cols-3 row-auto gap-y-4 gap-x-2 bg-zinc-200">
+      <div className="grid grid-cols-3 row-auto gap-y-4 gap-x-4 ">
         {coins.map((coin) => (
           <CoinCard key={coin.coinId} data={coin} />
         ))}

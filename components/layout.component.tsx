@@ -4,7 +4,7 @@ const Layout = ({ children }: any) => {
   return (
     <>
       <NavBar />
-      <main>{children}</main>
+      <main className="bg-zinc-200">{children}</main>
     </>
   );
 };
