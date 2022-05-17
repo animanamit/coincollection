@@ -20,15 +20,17 @@ const CoinCard = ({ data }) => {
           width={300}
         />
       </div>
-      <div className="flex flex-col p-4 text-white bg-black h-1/4 rounded-b-xl">
-        <span className="text-lg font-bold tracking-tight ">{data.name}</span>
-        <span className="text-lg font-semibold tracking-tight ">
+      <div className="flex flex-col p-4 bg-white h-1/4 rounded-b-xl">
+        <span className="text-lg font-bold tracking-tight text-zinc-800">
+          {data.name}
+        </span>
+        <span className="text-lg font-semibold tracking-tight text-zinc-800">
           {data.type}
         </span>
-        <span className="text-lg font-semibold tracking-tight ">
+        <span className="text-lg font-semibold tracking-tight text-zinc-800">
           {data.class}
         </span>
-        <span className="text-lg font-semibold tracking-tight ">
+        <span className="text-lg font-semibold tracking-tight text-zinc-800">
           {`Variety ${data.variation}`}
         </span>
       </div>
