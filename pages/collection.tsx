@@ -3,13 +3,14 @@ import { collection, getDocs } from "firebase/firestore";
 import CoinCard from "../components/coin-card/coin-card.component";
 
 const Collection = ({ coins }) => {
+  console.log(coins);
   return (
-    <div className="grid grid-cols-2 row-auto px-4 py-8 gap-y-4">
-      <div className="flex flex-col">
-        {coins.map((coin) => (
-          <CoinCard key={coin.coinId} data={coin} />
-        ))}
-      </div>
+    <div className="grid grid-cols-3 row-auto p-8 gap-y-4 gap-x-2 bg-zinc-200">
+      {/* <div className="flex flex-col"> */}
+      {coins.map((coin) => (
+        <CoinCard key={coin.coinId} data={coin} />
+      ))}
+      {/* </div> */}
     </div>
   );
 };
