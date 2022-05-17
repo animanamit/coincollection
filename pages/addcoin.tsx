@@ -203,7 +203,7 @@ const AddCoin = () => {
           </div>
           <div className="p-1 mb-2">
             <label
-              className="block mb-2 font-bold  text-zinc-800"
+              className="block mb-2 font-bold text-zinc-800"
               htmlFor="user_avatar"
             >
               Upload Obs Photo
@@ -218,7 +218,7 @@ const AddCoin = () => {
           </div>
           <div className="p-1 mb-2">
             <label
-              className="block mb-2 font-bold  text-zinc-800"
+              className="block mb-2 font-bold text-zinc-800"
               htmlFor="user_avatar"
             >
               Upload Rev Photo
@@ -235,6 +235,7 @@ const AddCoin = () => {
           <input
             type="submit"
             className="px-3 py-2 uppercase rounded shadow-sm bg-slate-200 tracking-loose"
+            placeholder="Submit"
           />
         </form>
       </div>

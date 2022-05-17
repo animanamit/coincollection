@@ -2,8 +2,8 @@ import Link from "next/link";
 
 const NavBar = () => {
   return (
-    <div className="flex justify-between w-screen bg-zinc-200">
-      <div className="p-2 mx-2">
+    <div className="flex justify-between w-screen p-6 bg-zinc-200">
+      <div className="mx-2">
         <ul className="flex">
           <li className="mx-1">
             <Link href="/">Home</Link>
