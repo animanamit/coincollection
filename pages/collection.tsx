@@ -19,7 +19,7 @@ const Collection = ({ coins }) => {
   );
 };
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const docRef = collection(database, "coins");
   const docSnap = await getDocs(docRef);
 
