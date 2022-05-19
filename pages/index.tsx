@@ -4,6 +4,8 @@ import Image from "next/image";
 // import RecentlyAdded from "../components/recently-added/recently-added.component";
 import styles from "../styles/Home.module.css";
 
+// import { GlassMagnifier } from "react-image-magnifiers";
+
 const Home: NextPage = () => {
   return (
     <div className="h-screen antialiased bg-zinc-200">
@@ -14,6 +16,27 @@ const Home: NextPage = () => {
       </Head>
 
       {/* <RecentlyAdded /> */}
+
+      {/* <GlassMagnifier
+        // imageSrc={
+        //   "https://firebasestorage.googleapis.com/v0/b/coincollection-44595.appspot.com/o/coins%2Fobs-0674b654-8a58-4d71-8d95-f2885009036f?alt=media&token=f4af701e-5dce-4068-82d1-a0aaadcac116"
+        // }
+        // largeImageSrc={
+        //   "https://firebasestorage.googleapis.com/v0/b/coincollection-44595.appspot.com/o/coins%2Fobs-0674b654-8a58-4d71-8d95-f2885009036f?alt=media&token=f4af701e-5dce-4068-82d1-a0aaadcac116"
+        // }
+        imageSrc={
+          "https://media.gettyimages.com/photos/kai-havertz-of-germany-talks-to-his-team-mates-ahead-of-the-2022-fifa-picture-id1352722528?s=2048x2048"
+        }
+        largeImageSrc={
+          "https://media.gettyimages.com/photos/kai-havertz-of-germany-talks-to-his-team-mates-ahead-of-the-2022-fifa-picture-id1352722528?s=2048x2048"
+        }
+        imageAlt="Example"
+        allowOverflow={false}
+        magnifierBorderSize={1}
+        magnifierSize={"30%"}
+        square={false}
+        style={{ width: "500px", height: "400px" }}
+      /> */}
       <footer className={styles.footer}>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"

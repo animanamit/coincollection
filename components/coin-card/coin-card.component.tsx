@@ -1,4 +1,5 @@
 import Image from "next/image";
+
 const CoinCard = ({ data }) => {
   return (
     <div className="bg-black shadow-2xl m-1 rounded-xl h-[500px] w-[600px] flex flex-col">

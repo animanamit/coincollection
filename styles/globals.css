@@ -18,3 +18,7 @@ a {
 * {
   box-sizing: border-box;
 }
+
+img {
+  max-width: unset !important;
+}
