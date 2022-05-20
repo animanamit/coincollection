@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const CoinCard = ({ data }) => {
   return (
-    <div className="bg-black shadow-2xl m-1 rounded-xl h-[500px] w-[600px] flex flex-col">
+    <div className="bg-black shadow-2xl m-1 rounded-xl md:h-[500px] md:w-[600px] sm:width=[200px] flex flex-col">
       <div className="relative flex w-auto h-[333px] rounded-t-xl">
         <Image
           src={data.url[0]}

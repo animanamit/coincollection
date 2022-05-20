@@ -212,7 +212,7 @@ const AddCoin = () => {
               type="file"
               aria-describedby="user_avatar_help"
               id="user_avatar"
-              className="text-base rounded text-zinc-600 bg-zinc-200 focus:outline-none focus:border-transparent"
+              className="w-full text-base rounded text-zinc-600 bg-zinc-200 focus:outline-none focus:border-transparent"
               onChange={handleObs}
             />
           </div>
@@ -227,7 +227,7 @@ const AddCoin = () => {
               type="file"
               aria-describedby="user_avatar_help"
               id="user_avatar"
-              className="text-base rounded text-zinc-600 bg-zinc-200 focus:outline-none focus:border-transparent"
+              className="w-full text-base rounded text-zinc-600 bg-zinc-200 focus:outline-none focus:border-transparent"
               onChange={handleRev}
             />
           </div>
