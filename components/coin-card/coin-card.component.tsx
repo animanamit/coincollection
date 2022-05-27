@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import Link from "next/link";
+
 const CoinCard = ({ data }) => {
   return (
     <div className="bg-black shadow-2xl m-1 rounded-xl md:h-[500px] md:w-[600px] sm:width=[200px] flex flex-col">
@@ -22,9 +24,11 @@ const CoinCard = ({ data }) => {
         />
       </div>
       <div className="flex flex-col h-full px-8 py-4 bg-white rounded-b-xl">
-        <span className="text-2xl font-bold tracking-tight text-zinc-800">
-          {data.name}
-        </span>
+        <Link href={`/coin/${data.coinId}`}>
+          <span className="text-2xl font-bold tracking-tight text-zinc-800">
+            {data.name}
+          </span>
+        </Link>
         <span className="text-lg font-semibold tracking-tight text-zinc-800">
           {data.type}
         </span>
