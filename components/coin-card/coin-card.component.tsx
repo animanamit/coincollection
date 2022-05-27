@@ -24,8 +24,8 @@ const CoinCard = ({ data }) => {
         />
       </div>
       <div className="flex flex-col h-full px-8 py-4 bg-white rounded-b-xl">
-        <Link href={`/coin/${data.coinId}`}>
-          <span className="text-2xl font-bold tracking-tight text-zinc-800">
+        <Link href={`/coin/${data.name}`}>
+          <span className="text-2xl font-bold tracking-tight cursor-pointer text-zinc-800 hover:text-zinc-500">
             {data.name}
           </span>
         </Link>
