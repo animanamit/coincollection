@@ -7,15 +7,12 @@ import Image from "next/image";
 
 const Coin = () => {
   const router = useRouter();
+  let { id } = router.query;
 
   const [coinData, setCoinData] = useState(null);
 
   useEffect(() => {
     const getCoinData = async () => {
-      let { id } = router.query;
-
-      console.log(id);
-
       const docRef = doc(database, "coins", id as string);
       const docSnap = await getDoc(docRef);
 
@@ -28,14 +25,14 @@ const Coin = () => {
       }
     };
 
-    getCoinData();
-  }, []);
+    if (router.isReady) getCoinData();
+  }, [router.isReady]);
 
   return (
-    <div className="content-center h-screen p-4 bg-zinc-100">
+    <div className="content-center h-screen p-4 bg-slate-50">
       {coinData ? (
         <>
-          <h1 className="mx-auto text-3xl font-bold tracking-tighter text-center uppercase">
+          <h1 className="mx-auto text-4xl font-bold tracking-tight text-center uppercase text-zinc-800">
             {coinData.name}
           </h1>
           <div className="flex my-4 justify-evenly">
@@ -56,9 +53,19 @@ const Coin = () => {
               width={400}
             />
           </div>
+          <div className="flex my-4 justify-evenly">
+            <div className="w-[400px] p-2">
+              <p>{coinData.obs}</p>
+            </div>
+            <div className="w-[400px] p-2">
+              <p>{coinData.rev}</p>
+            </div>
+          </div>
         </>
       ) : (
-        <></>
+        <h1 className="text-4xl font-bold tracking-tight text-center text-zinc-800">
+          Loading...
+        </h1>
       )}
     </div>
   );
