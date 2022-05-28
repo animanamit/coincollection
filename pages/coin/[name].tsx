@@ -58,7 +58,7 @@ const Coin = () => {
                   src={coin.url[1]}
                   alt="example coin"
                   objectFit="contain"
-                  className="mx-1 rounded-xl"
+                  className="rounded-2xl"
                   height={200}
                   width={200}
                 />

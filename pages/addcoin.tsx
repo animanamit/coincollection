@@ -17,6 +17,7 @@ type Inputs = {
   type: string;
   collection: string;
   url?: string;
+  remarks: string;
 };
 
 const AddCoin = () => {
@@ -198,6 +199,20 @@ const AddCoin = () => {
               {...register("rev", { required: true })}
             />
             {errors.rev && (
+              <span className="text-red-500">This field is required</span>
+            )}
+          </div>
+          <div className="flex flex-col mb-2">
+            <label className="mb-1 font-bold text-zinc-800">Remarks</label>
+            <textarea
+              // defaultValue="Name"
+              //   type="text"
+              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
+                errors.rev && `border-red-500`
+              }`}
+              {...register("remarks", { required: true })}
+            />
+            {errors.remarks && (
               <span className="text-red-500">This field is required</span>
             )}
           </div>
