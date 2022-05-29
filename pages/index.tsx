@@ -4,7 +4,7 @@ import Image from "next/image";
 // import RecentlyAdded from "../components/recently-added/recently-added.component";
 import styles from "../styles/Home.module.css";
 
-import { GlassMagnifier } from "react-image-magnifiers";
+// import { GlassMagnifier } from "react-image-magnifiers";
 
 const Home: NextPage = () => {
   return (
@@ -17,7 +17,7 @@ const Home: NextPage = () => {
 
       {/* <RecentlyAdded /> */}
 
-      <GlassMagnifier
+      {/* <GlassMagnifier
         imageSrc={
           "https://firebasestorage.googleapis.com/v0/b/coincollection-44595.appspot.com/o/coins%2Fobs-8486d356-850f-4c2a-9320-6dd6fea48684?alt=media&token=ab6da8cc-d6a0-49b7-8377-9626ddb6ea4e"
         }
@@ -30,7 +30,7 @@ const Home: NextPage = () => {
         magnifierSize={"30%"}
         square={false}
         style={{ width: "500px", height: "500px" }}
-      />
+      /> */}
       <footer className={styles.footer}>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
