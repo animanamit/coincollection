@@ -43,9 +43,9 @@ const Coin = () => {
           {coinData.map((coin) => (
             <div
               key={coin.coinId}
-              className="flex py-8 my-4 shadow-xl bg-slate-100 rounded-2xl"
+              className="flex px-4 py-8 my-4 shadow-xl bg-slate-100 rounded-2xl"
             >
-              <div className="flex p-4 justify-evenly">
+              <div className="flex justify-evenly">
                 <Image
                   src={coin.url[0]}
                   alt="example coin"
@@ -61,13 +61,13 @@ const Coin = () => {
                   width={200}
                 />
               </div>
-              <div className="flex flex-col mx-4 my-4">
-                <p className="font-bold">{coin.type}</p>
+              <div className="flex flex-col mx-3 my-4 min-w-min whitespace-nowrap ">
+                <p className="inline font-bold">{coin.type}</p>
                 <p>{coin.class}</p>
                 <p>{coin.variation}</p>
                 <p>{coin.weight}</p>
               </div>
-              <div className="flex flex-col mx-4 my-4">
+              <div className="flex flex-col px-4 my-4 overflow-scroll">
                 <div>
                   <p className="font-bold">Obverse</p>
                   <p>{coin.obs}</p>
