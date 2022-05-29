@@ -45,7 +45,7 @@ const Coin = () => {
               key={coin.coinId}
               className="flex px-4 py-8 my-4 shadow-xl bg-slate-100 rounded-2xl"
             >
-              <div className="flex justify-evenly">
+              <div className="flex bg-black justify-evenly">
                 <Image
                   src={coin.url[0]}
                   alt="example coin"
