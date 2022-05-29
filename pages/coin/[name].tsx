@@ -50,7 +50,6 @@ const Coin = () => {
                   src={coin.url[0]}
                   alt="example coin"
                   objectFit="contain"
-                  className="rounded-2xl"
                   height={200}
                   width={200}
                 />
@@ -58,27 +57,26 @@ const Coin = () => {
                   src={coin.url[1]}
                   alt="example coin"
                   objectFit="contain"
-                  className="rounded-2xl"
                   height={200}
                   width={200}
                 />
               </div>
-              <div className="flex flex-col mx-2 my-4">
+              <div className="flex flex-col mx-4 my-4">
                 <p className="font-bold">{coin.type}</p>
                 <p>{coin.class}</p>
                 <p>{coin.variation}</p>
                 <p>{coin.weight}</p>
               </div>
-              <div className="flex flex-col mx-2 my-4">
-                <div className="w-[400px]">
+              <div className="flex flex-col mx-4 my-4">
+                <div>
                   <p className="font-bold">Obverse</p>
                   <p>{coin.obs}</p>
                 </div>
-                <div className="w-[400px]">
+                <div>
                   <p className="font-bold">Reverse</p>
                   <p>{coin.rev}</p>
                 </div>
-                <div className="w-[400px]">
+                <div>
                   <p className="font-bold">Remarks</p>
                   <p>{coin.remarks}</p>
                 </div>
