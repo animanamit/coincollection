@@ -1,25 +1,17 @@
 import Link from "next/link";
 import { GlassMagnifier } from "react-image-magnifiers";
 
-const CoinCard = ({ data }) => {
+const CoinCard = ({ data, magnifierSize }) => {
   return (
     <div className="bg-black shadow-2xl m-1 rounded-xl md:h-[500px] md:w-[600px] sm:width=[200px] flex flex-col">
       <div className="relative flex w-auto h-[310px] rounded-t-xl bg-black">
-        {/* <Image
-          src={data.url[1]}
-          alt="example coin"
-          objectFit="contain"
-          className="rounded-t-xl"
-          height={500}
-          width={300}
-        /> */}
         <GlassMagnifier
           imageSrc={data.url[0]}
           largeImageSrc={data.url[0]}
           imageAlt="Example"
           allowOverflow={false}
           magnifierBorderSize={1}
-          magnifierSize={"25%"}
+          magnifierSize={`${magnifierSize}%`}
           square={false}
           style={{ width: "300px" }}
           className="rounded-t-xl"
@@ -30,7 +22,7 @@ const CoinCard = ({ data }) => {
           imageAlt="Example"
           allowOverflow={false}
           magnifierBorderSize={1}
-          magnifierSize={"25%"}
+          magnifierSize={`${magnifierSize}%`}
           square={false}
           style={{ width: "300px" }}
           className="rounded-t-xl"
