@@ -66,7 +66,7 @@ const Coin = () => {
               <div className="flex flex-col p-4 my-4">
                 <p>{coin.type}</p>
                 <p>{coin.class}</p>
-                <p>{`Page ${coin.page}`}</p>
+                <p>{coin.variety}</p>
                 <p>{coin.weight}</p>
               </div>
               <div className="flex flex-col my-4 justify-evenly">
