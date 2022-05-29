@@ -63,18 +63,24 @@ const Coin = () => {
                   width={200}
                 />
               </div>
-              <div className="flex flex-col p-4 my-4">
-                <p>{coin.type}</p>
+              <div className="flex flex-col mx-2 my-4">
+                <p className="font-bold">{coin.type}</p>
                 <p>{coin.class}</p>
-                <p>{coin.variety}</p>
+                <p>{coin.variation}</p>
                 <p>{coin.weight}</p>
               </div>
-              <div className="flex flex-col my-4 justify-evenly">
-                <div className="w-[400px] p-2">
+              <div className="flex flex-col mx-2 my-4">
+                <div className="w-[400px]">
+                  <p className="font-bold">Obverse</p>
                   <p>{coin.obs}</p>
                 </div>
-                <div className="w-[400px] p-2">
+                <div className="w-[400px]">
+                  <p className="font-bold">Reverse</p>
                   <p>{coin.rev}</p>
+                </div>
+                <div className="w-[400px]">
+                  <p className="font-bold">Remarks</p>
+                  <p>{coin.remarks}</p>
                 </div>
               </div>
             </div>

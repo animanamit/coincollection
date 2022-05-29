@@ -208,7 +208,7 @@ const AddCoin = () => {
               // defaultValue="Name"
               //   type="text"
               className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
-                errors.rev && `border-red-500`
+                errors.remarks && `border-red-500`
               }`}
               {...register("remarks", { required: true })}
             />
