@@ -1,10 +1,16 @@
 import { useRouter } from "next/router";
-// import { setDoc, doc } from "firebase/firestore";
 // import { uploadBytes, ref } from "firebase/storage";
 import { useState, useEffect } from "react";
 
 import { useForm, SubmitHandler } from "react-hook-form";
-import { database } from "../../firebase/firebase";
+import { database, storageRef } from "../../firebase/firebase";
+
+import {
+  ref,
+  deleteObject,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
 
 import {
   collection,
@@ -35,11 +41,10 @@ const Edit = () => {
 
   const [coin, setCoin] = useState(null);
 
-  //   const [obs, setObs] = useState<File>();
-  //   const [rev, setRev] = useState<File>();
+  const [obs, setObs] = useState<File>();
+  const [rev, setRev] = useState<File>();
 
   useEffect(() => {
-    console.log(id);
     const getCoinData = async () => {
       const q = query(collection(database, "coins"), where("coinId", "==", id));
 
@@ -61,24 +66,40 @@ const Edit = () => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    // const fileRefObs = ref(storageRef, `coins/obs-${id}`);
-    // const fileRefRev = ref(storageRef, `coins/rev-${id}`);
-    // if (obs) {
-    //   await uploadBytes(fileRefObs, obs as Blob);
-    // }
+    const fileRefObs = ref(storageRef, `coins/obs-${id}`);
+    const fileRefRev = ref(storageRef, `coins/rev-${id}`);
+    if (obs) {
+      deleteObject(fileRefObs)
+        .then(() => {
+          // File deleted successfully
+          uploadBytes(fileRefObs, obs as Blob);
+        })
+        .catch((error) => {
+          // Uh-oh, an error occurred!
+          console.log(error);
+        });
+    }
 
-    // if (rev) {
-    //   await uploadBytes(fileRefRev, rev as Blob);
-    // }
+    if (rev) {
+      deleteObject(fileRefRev)
+        .then(() => {
+          // File deleted successfully
+          uploadBytes(fileRefRev, rev as Blob);
+        })
+        .catch((error) => {
+          // Uh-oh, an error occurred!
+          console.log(error);
+        });
+    }
 
-    // let urls = await Promise.all([
-    //   getDownloadURL(ref(storageRef, `coins/obs-${id}`)),
-    //   getDownloadURL(ref(storageRef, `coins/rev-${id}`)),
-    // ]);
+    let urls = await Promise.all([
+      getDownloadURL(ref(storageRef, `coins/obs-${id}`)),
+      getDownloadURL(ref(storageRef, `coins/rev-${id}`)),
+    ]);
     let obj = {
       ...data,
       coinId: coin.coinId,
-      url: coin.url,
+      url: urls.length > 0 ? urls : coin.url,
       dateAdded: coin.dateAdded,
     };
 
@@ -96,19 +117,19 @@ const Edit = () => {
     router.reload();
   };
 
-  //   const handleObs = (e: React.ChangeEvent) => {
-  //     const target = e.currentTarget as HTMLInputElement;
-  //     const image = (target.files as FileList)[0];
-  //     console.log(target.files);
-  //     setObs(image);
-  //   };
+  const handleObs = (e: React.ChangeEvent) => {
+    const target = e.currentTarget as HTMLInputElement;
+    const image = (target.files as FileList)[0];
+    console.log(target.files);
+    setObs(image);
+  };
 
-  //   const handleRev = (e: React.ChangeEvent) => {
-  //     const target = e.currentTarget as HTMLInputElement;
-  //     const image = (target.files as FileList)[0];
-  //     console.log(target.files);
-  //     setRev(image);
-  //   };
+  const handleRev = (e: React.ChangeEvent) => {
+    const target = e.currentTarget as HTMLInputElement;
+    const image = (target.files as FileList)[0];
+    console.log(target.files);
+    setRev(image);
+  };
 
   return (
     <div className="flex flex-col items-center py-4 h-vh bg-slate-50">
@@ -247,7 +268,7 @@ const Edit = () => {
                 <span className="text-red-500">This field is required</span>
               )}
             </div>
-            {/* <div className="p-1 mb-2">
+            <div className="p-1 mb-2">
               <label
                 className="block mb-2 font-bold text-zinc-800"
                 htmlFor="user_avatar"
@@ -276,7 +297,7 @@ const Edit = () => {
                 className="w-full text-base rounded text-zinc-600 bg-zinc-200 focus:outline-none focus:border-transparent"
                 onChange={handleRev}
               />
-            </div> */}
+            </div>
 
             <input
               type="submit"
