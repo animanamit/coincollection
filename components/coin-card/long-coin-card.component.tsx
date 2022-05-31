@@ -1,14 +1,31 @@
 import Image from "next/image";
 
+import { useRouter } from "next/router";
+
 import { PencilIcon, TrashIcon } from "@heroicons/react/outline";
 
 import { Dialog, Transition } from "@headlessui/react";
 import { useRef, useState } from "react";
 
+import Link from "next/link";
+
+import { doc, deleteDoc } from "firebase/firestore";
+import { database } from "../../firebase/firebase";
+
 const LongCoinCard = ({ coin }) => {
   let [isOpen, setIsOpen] = useState(false);
 
   let completeButtonRef = useRef(null);
+
+  const router = useRouter();
+
+  const deleteCoin = async () => {
+    await deleteDoc(doc(database, "coins", coin.coinId));
+
+    alert("You have successfully deleted this coin.");
+
+    router.reload();
+  };
 
   return (
     <div
@@ -56,7 +73,9 @@ const LongCoinCard = ({ coin }) => {
           onClick={() => setIsOpen(true)}
           className="w-5 h-5 transition-transform duration-150 ease-out cursor-pointer hover:scale-150"
         />
-        <PencilIcon className="w-5 h-5 transition-transform duration-150 ease-out cursor-pointer hover:scale-150" />
+        <Link href={`/edit/${coin.coinId}`}>
+          <PencilIcon className="w-5 h-5 transition-transform duration-150 ease-out cursor-pointer hover:scale-150" />
+        </Link>
       </div>
 
       <Transition
@@ -92,6 +111,7 @@ const LongCoinCard = ({ coin }) => {
 
               <div className="flex mt-4 space-x-2">
                 <button
+                  onClick={deleteCoin}
                   type="button"
                   className="inline-flex justify-center px-4 py-2 text-sm font-medium text-red-900 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                 >

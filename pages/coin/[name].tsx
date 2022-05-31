@@ -25,14 +25,12 @@ const Coin = () => {
 
   useEffect(() => {
     const getCoinData = async () => {
-      console.log(name);
       const q = query(collection(database, "coins"), where("name", "==", name));
 
       let coins = [];
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data());
         coins.push(doc.data());
       });
 
