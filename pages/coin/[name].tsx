@@ -3,13 +3,25 @@ import { useEffect, useState } from "react";
 
 import { database } from "../../firebase/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
-import Image from "next/image";
+import LongCoinCard from "../../components/coin-card/long-coin-card.component";
+
+import { Switch } from "@headlessui/react";
+import CoinCard from "../../components/coin-card/coin-card.component";
 
 const Coin = () => {
   const router = useRouter();
   let { name } = router.query;
 
   const [coinData, setCoinData] = useState(null);
+
+  const [enabled, setEnabled] = useState(false);
+
+  const [magnifierSize, setMagnifierSize] = useState(30);
+
+  const handleSize = (e) => {
+    const value = e.target.value;
+    setMagnifierSize(value);
+  };
 
   useEffect(() => {
     const getCoinData = async () => {
@@ -37,52 +49,63 @@ const Coin = () => {
       {/* {coinData ? <h1>Loaded</h1> : <h1>Loading...</h1>} */}
       {coinData ? (
         <>
-          <h1 className="text-4xl font-bold tracking-tight text-center uppercase text-zinc-800">
-            {coinData[0].name}
-          </h1>
-          {coinData.map((coin) => (
-            <div
-              key={coin.coinId}
-              className="flex px-4 py-8 my-4 shadow-xl bg-slate-100 rounded-2xl"
-            >
-              <div className="flex bg-black justify-evenly">
-                <Image
-                  src={coin.url[0]}
-                  alt="example coin"
-                  objectFit="contain"
-                  height={200}
-                  width={200}
+          <div>
+            <h1 className="text-4xl font-bold tracking-tight text-center uppercase text-zinc-800">
+              {coinData[0].name}
+            </h1>
+          </div>
+
+          <Switch
+            checked={enabled}
+            onChange={setEnabled}
+            className={`${
+              enabled ? "bg-blue-600" : "bg-gray-200"
+            } relative inline-flex h-6 w-11 items-center rounded-full`}
+          >
+            <span className="sr-only">Enable notifications</span>
+            <span
+              className={`${
+                enabled ? "translate-x-6" : "translate-x-1"
+              } inline-block h-4 w-4 transform rounded-full bg-white`}
+            />
+          </Switch>
+
+          {enabled ? (
+            <></>
+          ) : (
+            <label className="label-left">
+              Magnifier Size:
+              <select defaultValue="30" onChange={handleSize}>
+                <option value="15">15%</option>
+                <option value="20">20%</option>
+                <option value="25">25%</option>
+                <option value="30">30%</option>
+                <option value="35">35%</option>
+                <option value="40">40%</option>
+                <option value="45">45%</option>
+                <option value="50">50%</option>
+              </select>
+            </label>
+          )}
+          <div
+            className={
+              enabled
+                ? ""
+                : "sm:flex sm:flex-col lg:grid-cols-2 lg:grid lg:row-auto lg:gap-y-4 lg:gap-x-2 2xl:grid 2xl:grid-cols-3 2xl:row-auto 2xl:gap-y-4 2xl:gap-x-2"
+            }
+          >
+            {coinData.map((coin) =>
+              enabled ? (
+                <LongCoinCard coin={coin} key={coin.coinId} />
+              ) : (
+                <CoinCard
+                  data={coin}
+                  key={coin.coinId}
+                  magnifierSize={magnifierSize}
                 />
-                <Image
-                  src={coin.url[1]}
-                  alt="example coin"
-                  objectFit="contain"
-                  height={200}
-                  width={200}
-                />
-              </div>
-              <div className="flex flex-col mx-3 my-4 min-w-min whitespace-nowrap ">
-                <p className="inline font-bold">{coin.type}</p>
-                <p>{coin.class}</p>
-                <p>{coin.variation}</p>
-                <p>{coin.weight}</p>
-              </div>
-              <div className="flex flex-col px-4 my-4 overflow-scroll">
-                <div>
-                  <p className="font-bold">Obverse</p>
-                  <p>{coin.obs}</p>
-                </div>
-                <div>
-                  <p className="font-bold">Reverse</p>
-                  <p>{coin.rev}</p>
-                </div>
-                <div>
-                  <p className="font-bold">Remarks</p>
-                  <p>{coin.remarks}</p>
-                </div>
-              </div>
-            </div>
-          ))}
+              )
+            )}
+          </div>
         </>
       ) : (
         <h1 className="text-4xl font-bold tracking-tight text-center text-zinc-800">

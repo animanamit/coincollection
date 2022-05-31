@@ -28,7 +28,7 @@ const Collection = ({ coins }) => {
           </select>
         </label>
       </div>
-      <div className="sm:flex sm:flex-col lg:grid-cols-2 lg:grid lg:row-auto lg:gap-y-4 lg: gap-x-2 2xl:grid 2xl:grid-cols-3 2xl:row-auto 2xl:gap-y-4 2xl:gap-x-4">
+      <div className="sm:flex sm:flex-col lg:grid-cols-2 lg:grid lg:row-auto lg:gap-y-4 lg:gap-x-2 2xl:grid 2xl:grid-cols-3 2xl:row-auto 2xl:gap-y-4 2xl:gap-x-2">
         {coins.map((coin) => (
           <CoinCard
             key={coin.coinId}
