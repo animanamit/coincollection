@@ -33,7 +33,7 @@ const AddCoin = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     let id = uuidv4();
-
+    let urls;
     const fileRefObs = ref(storageRef, `coins/obs-${id}`);
     const fileRefRev = ref(storageRef, `coins/rev-${id}`);
     if (obs) {
@@ -44,14 +44,17 @@ const AddCoin = () => {
       await uploadBytes(fileRefRev, rev as Blob);
     }
 
-    let urls = await Promise.all([
-      getDownloadURL(ref(storageRef, `coins/obs-${id}`)),
-      getDownloadURL(ref(storageRef, `coins/rev-${id}`)),
-    ]);
+    if (obs || rev) {
+      urls = await Promise.all([
+        getDownloadURL(ref(storageRef, `coins/obs-${id}`)),
+        getDownloadURL(ref(storageRef, `coins/rev-${id}`)),
+      ]);
+    }
+
     let obj = {
       ...data,
       coinId: id,
-      url: urls,
+      url: urls.length > 0 ? urls : [],
       dateAdded: Date(),
     };
 
