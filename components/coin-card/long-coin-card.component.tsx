@@ -1,15 +1,10 @@
-import Image from "next/image";
-
-import { useRouter } from "next/router";
-
-import { PencilIcon, TrashIcon } from "@heroicons/react/outline";
-
 import { Dialog, Transition } from "@headlessui/react";
-import { useRef, useState } from "react";
-
+import { PencilIcon, StarIcon, TrashIcon } from "@heroicons/react/outline";
+import { deleteDoc, doc } from "firebase/firestore";
+import Image from "next/image";
 import Link from "next/link";
-
-import { doc, deleteDoc } from "firebase/firestore";
+import { useRouter } from "next/router";
+import { useRef, useState } from "react";
 import { database } from "../../firebase/firebase";
 
 const LongCoinCard = ({ coin }) => {
@@ -51,8 +46,17 @@ const LongCoinCard = ({ coin }) => {
       <div className="flex flex-col mx-3 my-4 min-w-min whitespace-nowrap ">
         <p className="inline font-bold">{coin.type}</p>
         <p>{coin.class}</p>
-        <p>{coin.variation}</p>
+        <p>Variety {coin.variation}</p>
         <p>{coin.weight}</p>
+        {coin.rating ? (
+          <div className="flex">
+            {new Array(coin.rating).fill(1).map((_, index) => (
+              <StarIcon key={index} className="w-4 h-4 " />
+            ))}
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
       <div className="flex flex-col flex-1 px-4 my-4 overflow-scroll">
         <div>

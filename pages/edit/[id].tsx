@@ -1,25 +1,23 @@
-import { useRouter } from "next/router";
-// import { uploadBytes, ref } from "firebase/storage";
-import { useState, useEffect } from "react";
-
-import { useForm, SubmitHandler } from "react-hook-form";
-import { database, storageRef } from "../../firebase/firebase";
-
-import {
-  ref,
-  deleteObject,
-  uploadBytes,
-  getDownloadURL,
-} from "firebase/storage";
-
+import { StarIcon } from "@heroicons/react/outline";
 import {
   collection,
-  query,
-  where,
-  getDocs,
   doc,
+  getDocs,
+  query,
   updateDoc,
+  where,
 } from "firebase/firestore";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
+import { useRouter } from "next/router";
+// import { uploadBytes, ref } from "firebase/storage";
+import { useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { database, storageRef } from "../../firebase/firebase";
 
 type Inputs = {
   name: string;
@@ -33,6 +31,8 @@ type Inputs = {
   collection: string;
   url?: string;
   remarks: string;
+  rating: number;
+  rarity: string;
 };
 
 const Edit = () => {
@@ -40,6 +40,7 @@ const Edit = () => {
   let { id } = router.query;
 
   const [coin, setCoin] = useState(null);
+  const [rating, setRating] = useState<number>(0);
 
   const [obs, setObs] = useState<File>();
   const [rev, setRev] = useState<File>();
@@ -101,6 +102,7 @@ const Edit = () => {
       coinId: coin.coinId,
       url: urls.length > 0 ? urls : coin.url,
       dateAdded: coin.dateAdded,
+      rating: rating <= 3 ? rating : 0,
     };
 
     const updateRef = doc(database, `coins/${id}`);
@@ -267,6 +269,43 @@ const Edit = () => {
               {errors.remarks && (
                 <span className="text-red-500">This field is required</span>
               )}
+            </div>
+            <div className="flex flex-col mb-2">
+              <label className="mb-1 font-bold text-zinc-800">Rarity</label>
+              <textarea
+                // defaultValue="Name"
+                //   type="text"
+                className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
+                  errors.remarks && `border-red-500`
+                }`}
+                {...register("rarity", { required: true })}
+              />
+              {errors.rarity && (
+                <span className="text-red-500">This field is required</span>
+              )}
+            </div>
+            <div className="flex flex-col mb-2">
+              <label className="mb-1 font-bold text-zinc-800">Rating</label>
+              <div className="flex">
+                <StarIcon
+                  className={`w-4 h-4  cursor-pointer transition-transform ease-out hover:scale-120 ${
+                    rating >= 1 ? "fill-yellow-500" : "hover:fill-yellow-500"
+                  }`}
+                  onClick={() => setRating(1)}
+                />
+                <StarIcon
+                  className={`w-4 h-4  cursor-pointer transition-transform ease-out hover:scale-120 ${
+                    rating >= 2 ? "fill-yellow-500" : "hover:fill-yellow-500"
+                  }`}
+                  onClick={() => setRating(2)}
+                />
+                <StarIcon
+                  className={`w-4 h-4  cursor-pointer transition-transform ease-out hover:scale-120 ${
+                    rating >= 3 ? "fill-yellow-500" : "hover:fill-yellow-500"
+                  }`}
+                  onClick={() => setRating(3)}
+                />
+              </div>
             </div>
             <div className="p-1 mb-2">
               <label

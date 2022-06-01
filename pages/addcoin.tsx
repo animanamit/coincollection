@@ -1,10 +1,10 @@
-import { database, storageRef } from "../firebase/firebase";
-import { setDoc, doc } from "firebase/firestore";
-import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { StarIcon } from "@heroicons/react/outline";
+import { doc, setDoc } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useState } from "react";
-
-import { useForm, SubmitHandler } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
+import { database, storageRef } from "../firebase/firebase";
 
 type Inputs = {
   name: string;
@@ -18,11 +18,14 @@ type Inputs = {
   collection: string;
   url?: string;
   remarks: string;
+  rating: number;
+  rarity: string;
 };
 
 const AddCoin = () => {
   const [obs, setObs] = useState<File>();
   const [rev, setRev] = useState<File>();
+  const [rating, setRating] = useState<number>(0);
 
   const {
     register,
@@ -56,6 +59,7 @@ const AddCoin = () => {
       coinId: id,
       url: urls.length > 0 ? urls : [],
       dateAdded: Date(),
+      rating: rating <= 3 ? rating : 0,
     };
 
     console.log(obj);
@@ -218,6 +222,43 @@ const AddCoin = () => {
             {errors.remarks && (
               <span className="text-red-500">This field is required</span>
             )}
+          </div>
+          <div className="flex flex-col mb-2">
+            <label className="mb-1 font-bold text-zinc-800">Rarity</label>
+            <textarea
+              // defaultValue="Name"
+              //   type="text"
+              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
+                errors.remarks && `border-red-500`
+              }`}
+              {...register("rarity", { required: true })}
+            />
+            {errors.rarity && (
+              <span className="text-red-500">This field is required</span>
+            )}
+          </div>
+          <div className="flex flex-col mb-2">
+            <label className="mb-1 font-bold text-zinc-800">Rating</label>
+            <div className="flex">
+              <StarIcon
+                className={`w-4 h-4  cursor-pointer transition-transform ease-out hover:scale-120 ${
+                  rating >= 1 ? "fill-yellow-500" : "hover:fill-yellow-500"
+                }`}
+                onClick={() => setRating(1)}
+              />
+              <StarIcon
+                className={`w-4 h-4  cursor-pointer transition-transform ease-out hover:scale-120 ${
+                  rating >= 2 ? "fill-yellow-500" : "hover:fill-yellow-500"
+                }`}
+                onClick={() => setRating(2)}
+              />
+              <StarIcon
+                className={`w-4 h-4  cursor-pointer transition-transform ease-out hover:scale-120 ${
+                  rating >= 3 ? "fill-yellow-500" : "hover:fill-yellow-500"
+                }`}
+                onClick={() => setRating(3)}
+              />
+            </div>
           </div>
           <div className="p-1 mb-2">
             <label
