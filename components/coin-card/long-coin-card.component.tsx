@@ -64,11 +64,12 @@ const LongCoinCard = ({ coin }: Inputs) => {
         />
       </div>
       <div className="flex flex-col mx-3 my-4 min-w-min whitespace-nowrap ">
-        <p className="inline font-bold">{coin.type}</p>
-        <p>{coin.class}</p>
-        <p>Variety {coin.variation}</p>
-        <p>{coin.weight}</p>
-        <p>Rarity {coin.rarity}</p>
+        {coin.name && <p className="inline font-bold ">{coin.name}</p>}
+        {coin.type && <p className="inline font-bold">{coin.type}</p>}
+        {coin.class && <p>{coin.class}</p>}
+        {coin.variation && <p>Variety {coin.variation}</p>}
+        {coin.weight && <p>{coin.weight}</p>}
+        {coin.rarity && <p>Rarity {coin.rarity}</p>}
         {coin.rating ? (
           <div className="flex items-center">
             <p className="mr-1">Condition</p>
@@ -81,18 +82,24 @@ const LongCoinCard = ({ coin }: Inputs) => {
         )}
       </div>
       <div className="flex flex-col flex-1 px-4 my-4 overflow-scroll">
-        <div>
-          <p className="font-bold">Obverse</p>
-          <p>{coin.obs}</p>
-        </div>
-        <div>
-          <p className="font-bold">Reverse</p>
-          <p>{coin.rev}</p>
-        </div>
-        <div>
-          <p className="font-bold">Remarks</p>
-          <p>{coin.remarks}</p>
-        </div>
+        {coin.obs && (
+          <div>
+            <p className="font-bold">Obverse</p>
+            <p>{coin.obs}</p>
+          </div>
+        )}
+        {coin.rev && (
+          <div>
+            <p className="font-bold">Reverse</p>
+            <p>{coin.rev}</p>
+          </div>
+        )}
+        {coin.remarks && (
+          <div>
+            <p className="font-bold">Remarks</p>
+            <p>{coin.remarks}</p>
+          </div>
+        )}
       </div>
       <div className="flex flex-col justify-center px-4 py-4 space-y-4 text-zinc-600">
         <TrashIcon
