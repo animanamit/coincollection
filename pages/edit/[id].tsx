@@ -153,7 +153,7 @@ const Edit = () => {
                 className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
                   errors.name && `border-red-500`
                 }`}
-                {...register("name", { required: true })}
+                {...register("name")}
               />
               {errors.name && (
                 <span className="text-red-500">This field is required</span>
@@ -167,7 +167,7 @@ const Edit = () => {
                 className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
                   errors.type && `border-red-500`
                 }`}
-                {...register("type", { required: true })}
+                {...register("type")}
               />
               {errors.type && (
                 <span className="text-red-500">This field is required</span>
@@ -181,7 +181,7 @@ const Edit = () => {
                 className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
                   errors.class && `border-red-500`
                 }`}
-                {...register("class", { required: true })}
+                {...register("class")}
               />
               {errors.class && (
                 <span className="text-red-500">This field is required</span>
@@ -195,7 +195,7 @@ const Edit = () => {
                 className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
                   errors.variation && `border-red-500`
                 }`}
-                {...register("variation", { required: true })}
+                {...register("variation")}
               />
               {errors.variation && (
                 <span className="text-red-500">This field is required</span>
@@ -210,7 +210,7 @@ const Edit = () => {
                 className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
                   errors.weight && `border-red-500`
                 }`}
-                {...register("weight", { required: true })}
+                {...register("weight")}
               />
               {errors.weight && (
                 <span className="text-red-500">This field is required</span>
@@ -224,7 +224,7 @@ const Edit = () => {
                 className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
                   errors.page && `border-red-500`
                 }`}
-                {...register("page", { required: true })}
+                {...register("page")}
               />
               {errors.page && (
                 <span className="text-red-500">This field is required</span>
@@ -238,7 +238,7 @@ const Edit = () => {
                 className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
                   errors.obs && `border-red-500`
                 }`}
-                {...register("obs", { required: true })}
+                {...register("obs")}
               />
               {errors.obs && (
                 <span className="text-red-500">This field is required</span>
@@ -251,7 +251,7 @@ const Edit = () => {
                 className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
                   errors.rev && `border-red-500`
                 }`}
-                {...register("rev", { required: true })}
+                {...register("rev")}
               />
               {errors.rev && (
                 <span className="text-red-500">This field is required</span>
@@ -278,7 +278,7 @@ const Edit = () => {
                 className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
                   errors.remarks && `border-red-500`
                 }`}
-                {...register("rarity", { required: true })}
+                {...register("rarity")}
               />
               {errors.rarity && (
                 <span className="text-red-500">This field is required</span>

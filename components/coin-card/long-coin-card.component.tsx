@@ -48,6 +48,7 @@ const LongCoinCard = ({ coin }) => {
         <p>{coin.class}</p>
         <p>Variety {coin.variation}</p>
         <p>{coin.weight}</p>
+        <p>{coin.rarity}</p>
         {coin.rating ? (
           <div className="flex">
             {new Array(coin.rating).fill(1).map((_, index) => (
