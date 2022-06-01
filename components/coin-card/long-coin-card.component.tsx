@@ -7,7 +7,27 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { database } from "../../firebase/firebase";
 
-const LongCoinCard = ({ coin }) => {
+type Inputs = {
+  coin: {
+    name: string;
+    class: string;
+    obs: string;
+    rev: string;
+    page: string;
+    weight: string;
+    variation: string;
+    type: string;
+    collection: string;
+    url: string;
+    remarks: string;
+    rating: number;
+    rarity: string;
+    coinId: string;
+    dateAdded: string;
+  };
+};
+
+const LongCoinCard = ({ coin }: Inputs) => {
   let [isOpen, setIsOpen] = useState(false);
 
   let completeButtonRef = useRef(null);

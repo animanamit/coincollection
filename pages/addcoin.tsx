@@ -36,7 +36,7 @@ const AddCoin = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     let id = uuidv4();
-    let urls;
+    let urls: string[] = [];
     const fileRefObs = ref(storageRef, `coins/obs-${id}`);
     const fileRefRev = ref(storageRef, `coins/rev-${id}`);
     if (obs) {

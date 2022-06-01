@@ -14,7 +14,6 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import { useRouter } from "next/router";
-// import { uploadBytes, ref } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { database, storageRef } from "../../firebase/firebase";
@@ -33,13 +32,15 @@ type Inputs = {
   remarks: string;
   rating: number;
   rarity: string;
+  coinId: string;
+  dateAdded: string;
 };
 
 const Edit = () => {
   const router = useRouter();
   let { id } = router.query;
 
-  const [coin, setCoin] = useState(null);
+  const [coin, setCoin] = useState<Inputs>();
   const [rating, setRating] = useState<number>(0);
 
   const [obs, setObs] = useState<File>();
@@ -53,7 +54,7 @@ const Edit = () => {
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
         console.log(doc.id, " => ", doc.data());
-        setCoin(doc.data());
+        setCoin(doc.data() as Inputs);
       });
     };
     if (router.isReady) getCoinData();
@@ -99,9 +100,9 @@ const Edit = () => {
     ]);
     let obj = {
       ...data,
-      coinId: coin.coinId,
-      url: urls.length > 0 ? urls : coin.url,
-      dateAdded: coin.dateAdded,
+      coinId: coin?.coinId,
+      url: urls.length > 0 ? urls : coin?.url,
+      dateAdded: coin?.dateAdded,
       rating: rating <= 3 ? rating : 0,
     };
 
