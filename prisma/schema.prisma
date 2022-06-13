@@ -10,9 +10,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model State {
+  id Int @id @default(autoincrement())
+  name String
+  rulers Ruler[]
+}
+
 model Ruler {
   id Int @id @default(autoincrement())
   coins Coin[]
+  name String
+  state State @relation(fields: [stateId], references: [id])
+  stateId Int
 }
 
 model Coin {
