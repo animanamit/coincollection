@@ -21,33 +21,41 @@ const Collection = ({ coins }) => {
     <div className="p-8 bg-slate-50">
       <div className="my-2">
         <div className="flex  mx-2 justify-between">
-          <Switch
-            checked={enabled}
-            onChange={setEnabled}
-            className={`${
-              enabled ? "bg-blue-600" : "bg-gray-500"
-            } relative inline-flex h-6 w-11 items-center rounded-full`}
-          >
-            <span
-              className={`${
-                enabled ? "translate-x-6" : "translate-x-1"
-              } inline-block h-4 w-4 transform rounded-full bg-white`}
-            />
-          </Switch>
           <div className="flex space-x-2">
-            <Switch
-              checked={startMagnifying}
-              onChange={setStartMagnifying}
-              className={`${
-                startMagnifying ? "bg-blue-600" : "bg-gray-500"
-              } relative inline-flex h-6 w-11 items-center rounded-full`}
-            >
-              <span
+            <Switch.Group>
+              <Switch.Label>View</Switch.Label>
+              <Switch
+                checked={enabled}
+                onChange={setEnabled}
                 className={`${
-                  startMagnifying ? "translate-x-6" : "translate-x-1"
-                } inline-block h-4 w-4 transform rounded-full bg-white`}
-              />
-            </Switch>
+                  enabled ? "bg-blue-600" : "bg-gray-500"
+                } relative inline-flex h-6 w-11 items-center rounded-full`}
+              >
+                <span
+                  className={`${
+                    enabled ? "translate-x-6" : "translate-x-1"
+                  } inline-block h-4 w-4 transform rounded-full bg-white`}
+                />
+              </Switch>
+            </Switch.Group>
+          </div>
+          <div className="flex space-x-2">
+            <Switch.Group>
+              <Switch.Label>Magnifier</Switch.Label>
+              <Switch
+                checked={startMagnifying}
+                onChange={setStartMagnifying}
+                className={`${
+                  startMagnifying ? "bg-blue-600" : "bg-gray-500"
+                } relative inline-flex h-6 w-11 items-center rounded-full`}
+              >
+                <span
+                  className={`${
+                    startMagnifying ? "translate-x-6" : "translate-x-1"
+                  } inline-block h-4 w-4 transform rounded-full bg-white`}
+                />
+              </Switch>
+            </Switch.Group>
 
             {startMagnifying ? (
               <label className="label-left">
