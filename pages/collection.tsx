@@ -8,6 +8,8 @@ import LongCoinCard from "../components/coin-card/long-coin-card.component";
 const Collection = ({ coins }) => {
   const [enabled, setEnabled] = useState(false);
 
+  const [startMagnifying, setStartMagnifying] = useState(false);
+
   const [magnifierSize, setMagnifierSize] = useState(30);
 
   const handleSize = (e) => {
@@ -18,7 +20,7 @@ const Collection = ({ coins }) => {
   return (
     <div className="p-8 bg-slate-50">
       <div className="my-2">
-        <div className="flex justify-between mx-2">
+        <div className="flex  mx-2 justify-between">
           <Switch
             checked={enabled}
             onChange={setEnabled}
@@ -32,24 +34,39 @@ const Collection = ({ coins }) => {
               } inline-block h-4 w-4 transform rounded-full bg-white`}
             />
           </Switch>
+          <div className="flex space-x-2">
+            <Switch
+              checked={startMagnifying}
+              onChange={setStartMagnifying}
+              className={`${
+                startMagnifying ? "bg-blue-600" : "bg-gray-500"
+              } relative inline-flex h-6 w-11 items-center rounded-full`}
+            >
+              <span
+                className={`${
+                  startMagnifying ? "translate-x-6" : "translate-x-1"
+                } inline-block h-4 w-4 transform rounded-full bg-white`}
+              />
+            </Switch>
 
-          {enabled ? (
-            <></>
-          ) : (
-            <label className="label-left">
-              Magnifier Size:
-              <select defaultValue="30" onChange={handleSize}>
-                <option value="15">15%</option>
-                <option value="20">20%</option>
-                <option value="25">25%</option>
-                <option value="30">30%</option>
-                <option value="35">35%</option>
-                <option value="40">40%</option>
-                <option value="45">45%</option>
-                <option value="50">50%</option>
-              </select>
-            </label>
-          )}
+            {startMagnifying ? (
+              <label className="label-left">
+                Magnifier Size:
+                <select defaultValue="30" onChange={handleSize}>
+                  <option value="15">15%</option>
+                  <option value="20">20%</option>
+                  <option value="25">25%</option>
+                  <option value="30">30%</option>
+                  <option value="35">35%</option>
+                  <option value="40">40%</option>
+                  <option value="45">45%</option>
+                  <option value="50">50%</option>
+                </select>
+              </label>
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
       </div>
       <div
@@ -67,6 +84,7 @@ const Collection = ({ coins }) => {
               data={coin}
               key={coin.coinId}
               magnifierSize={magnifierSize}
+              startMagnifying={startMagnifying}
             />
           )
         )}

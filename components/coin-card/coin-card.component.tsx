@@ -5,7 +5,7 @@ import { GlassMagnifier } from "react-image-magnifiers";
 import { Dialog } from "@headlessui/react";
 import { useState } from "react";
 
-const CoinCard = ({ data, magnifierSize }) => {
+const CoinCard = ({ data, magnifierSize, startMagnifying }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const [dialogImageURL, setDialogImageURL] = useState("");
@@ -19,17 +19,21 @@ const CoinCard = ({ data, magnifierSize }) => {
             setIsOpen(true);
           }}
         >
-          <GlassMagnifier
-            imageSrc={data.url[0]}
-            largeImageSrc={data.url[0]}
-            imageAlt="Example"
-            allowOverflow={false}
-            magnifierBorderSize={1}
-            magnifierSize={`${magnifierSize}%`}
-            square={false}
-            style={{ width: "300px" }}
-            className="rounded-t-xl"
-          />
+          {startMagnifying ? (
+            <GlassMagnifier
+              imageSrc={data.url[0]}
+              largeImageSrc={data.url[0]}
+              imageAlt="Example"
+              allowOverflow={false}
+              magnifierBorderSize={1}
+              magnifierSize={`${magnifierSize}%`}
+              square={false}
+              style={{ width: "300px" }}
+              className="rounded-t-xl"
+            />
+          ) : (
+            <img src={data.url[0]} className="w-[300px]" />
+          )}
         </div>
         <div
           onClick={() => {
@@ -37,17 +41,21 @@ const CoinCard = ({ data, magnifierSize }) => {
             setIsOpen(true);
           }}
         >
-          <GlassMagnifier
-            imageSrc={data.url[1]}
-            largeImageSrc={data.url[1]}
-            imageAlt="Example"
-            allowOverflow={false}
-            magnifierBorderSize={1}
-            magnifierSize={`${magnifierSize}%`}
-            square={false}
-            style={{ width: "300px" }}
-            className="rounded-t-xl"
-          />
+          {startMagnifying ? (
+            <GlassMagnifier
+              imageSrc={data.url[1]}
+              largeImageSrc={data.url[1]}
+              imageAlt="Example"
+              allowOverflow={false}
+              magnifierBorderSize={1}
+              magnifierSize={`${magnifierSize}%`}
+              square={false}
+              style={{ width: "300px" }}
+              className="rounded-t-xl"
+            />
+          ) : (
+            <img src={data.url[1]} className="w-[300px]" />
+          )}
         </div>
       </div>
       <div className="flex flex-col h-full px-8 py-4 bg-white rounded-b-xl">
