@@ -1,32 +1,53 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { GlassMagnifier } from "react-image-magnifiers";
 
+import { Dialog } from "@headlessui/react";
+import { useState } from "react";
+
 const CoinCard = ({ data, magnifierSize }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const [dialogImageURL, setDialogImageURL] = useState("");
   return (
     <div className="bg-black shadow-2xl m-1 rounded-xl md:h-[500px] md:w-[600px] sm:width=[200px] flex flex-col">
       <div className="relative flex w-auto h-[310px] rounded-t-xl bg-black">
-        <GlassMagnifier
-          imageSrc={data.url[0]}
-          largeImageSrc={data.url[0]}
-          imageAlt="Example"
-          allowOverflow={false}
-          magnifierBorderSize={1}
-          magnifierSize={`${magnifierSize}%`}
-          square={false}
-          style={{ width: "300px" }}
-          className="rounded-t-xl"
-        />
-        <GlassMagnifier
-          imageSrc={data.url[1]}
-          largeImageSrc={data.url[1]}
-          imageAlt="Example"
-          allowOverflow={false}
-          magnifierBorderSize={1}
-          magnifierSize={`${magnifierSize}%`}
-          square={false}
-          style={{ width: "300px" }}
-          className="rounded-t-xl"
-        />
+        <div
+          onClick={() => {
+            setDialogImageURL(data.url[0]);
+            setIsOpen(true);
+          }}
+        >
+          <GlassMagnifier
+            imageSrc={data.url[0]}
+            largeImageSrc={data.url[0]}
+            imageAlt="Example"
+            allowOverflow={false}
+            magnifierBorderSize={1}
+            magnifierSize={`${magnifierSize}%`}
+            square={false}
+            style={{ width: "300px" }}
+            className="rounded-t-xl"
+          />
+        </div>
+        <div
+          onClick={() => {
+            setDialogImageURL(data.url[1]);
+            setIsOpen(true);
+          }}
+        >
+          <GlassMagnifier
+            imageSrc={data.url[1]}
+            largeImageSrc={data.url[1]}
+            imageAlt="Example"
+            allowOverflow={false}
+            magnifierBorderSize={1}
+            magnifierSize={`${magnifierSize}%`}
+            square={false}
+            style={{ width: "300px" }}
+            className="rounded-t-xl"
+          />
+        </div>
       </div>
       <div className="flex flex-col h-full px-8 py-4 bg-white rounded-b-xl">
         <Link href={`/coin/${data.name}`}>
@@ -47,6 +68,22 @@ const CoinCard = ({ data, magnifierSize }) => {
           {data.weight}
         </span>
       </div>
+      <Dialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="relative z-50"
+      >
+        <div className="fixed inset-0 flex items-center justify-center">
+          <Dialog.Panel className="w-full  rounded bg-black/30">
+            <img
+              src={dialogImageURL}
+              className="mx-auto my-2"
+              alt="large coin image"
+              onClick={() => setIsOpen(false)}
+            />
+          </Dialog.Panel>
+        </div>
+      </Dialog>
     </div>
   );
 };
