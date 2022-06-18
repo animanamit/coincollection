@@ -9,6 +9,7 @@ const CoinCard = ({ data, magnifierSize }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const [dialogImageURL, setDialogImageURL] = useState("");
+
   return (
     <div className="bg-black shadow-2xl m-1 rounded-xl md:h-[500px] md:w-[600px] sm:width=[200px] flex flex-col">
       <div className="relative flex w-auto h-[310px] rounded-t-xl bg-black">
@@ -71,10 +72,10 @@ const CoinCard = ({ data, magnifierSize }) => {
       <Dialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
-        className="relative z-50"
+        className="relative z-50 bg-backdrop-blur"
       >
-        <div className="fixed inset-0 flex items-center justify-center">
-          <Dialog.Panel className="w-full  rounded bg-black/30">
+        <div className="fixed inset-0 flex items-center justify-center w-full bg-backdrop-blur ">
+          <Dialog.Panel className="w-full  rounded bg-black/70 ">
             <img
               src={dialogImageURL}
               className="mx-auto my-2"
