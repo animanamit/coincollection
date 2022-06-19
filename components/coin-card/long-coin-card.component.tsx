@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Dialog, Transition } from "@headlessui/react";
 import { PencilIcon, StarIcon, TrashIcon } from "@heroicons/react/outline";
 import { deleteDoc, doc } from "firebase/firestore";
@@ -30,6 +31,10 @@ type Inputs = {
 const LongCoinCard = ({ coin }: Inputs) => {
   let [isOpen, setIsOpen] = useState(false);
 
+  const [dialogImageURL, setDialogImageURL] = useState("");
+
+  const [isCoinDisplayOpen, setIsCoinDisplayOpen] = useState(false);
+
   let completeButtonRef = useRef(null);
 
   const router = useRouter();
@@ -48,20 +53,34 @@ const LongCoinCard = ({ coin }: Inputs) => {
       className="flex px-4 py-8 my-4 shadow-xl bg-slate-100 rounded-2xl"
     >
       <div className="flex bg-black justify-evenly">
-        <Image
-          src={coin.url[0]}
-          alt="example coin"
-          objectFit="contain"
-          height={200}
-          width={200}
-        />
-        <Image
-          src={coin.url[1]}
-          alt="example coin"
-          objectFit="contain"
-          height={200}
-          width={200}
-        />
+        <div
+          onClick={() => {
+            setDialogImageURL(coin.url[0]);
+            setIsCoinDisplayOpen(true);
+          }}
+        >
+          <Image
+            src={coin.url[0]}
+            alt="example coin"
+            objectFit="contain"
+            height={200}
+            width={200}
+          />
+        </div>
+        <div
+          onClick={() => {
+            setDialogImageURL(coin.url[1]);
+            setIsCoinDisplayOpen(true);
+          }}
+        >
+          <Image
+            src={coin.url[1]}
+            alt="example coin"
+            objectFit="contain"
+            height={200}
+            width={200}
+          />
+        </div>
       </div>
       <div className="flex flex-col mx-3 my-4 min-w-min whitespace-nowrap ">
         {coin.name && <p className="inline font-bold ">{coin.name}</p>}
@@ -162,6 +181,22 @@ const LongCoinCard = ({ coin }: Inputs) => {
           </div>
         </Dialog>
       </Transition>
+      <Dialog
+        open={isCoinDisplayOpen}
+        onClose={() => setIsCoinDisplayOpen(false)}
+        className="relative z-50 bg-backdrop-blur"
+      >
+        <div className="fixed inset-0 flex items-center justify-center w-full bg-backdrop-blur ">
+          <Dialog.Panel className="w-full  rounded bg-black/70 ">
+            <img
+              src={dialogImageURL}
+              className="mx-auto my-2 max-w-3/4 max-h-screen"
+              alt="large coin image"
+              onClick={() => setIsCoinDisplayOpen(false)}
+            />
+          </Dialog.Panel>
+        </div>
+      </Dialog>
     </div>
   );
 };
