@@ -86,7 +86,7 @@ const CoinCard = ({ data, magnifierSize, startMagnifying }) => {
           <Dialog.Panel className="w-full  rounded bg-black/70 ">
             <img
               src={dialogImageURL}
-              className="mx-auto my-2"
+              className="mx-auto my-2 max-w-3/4 max-h-screen"
               alt="large coin image"
               onClick={() => setIsOpen(false)}
             />
