@@ -46,6 +46,9 @@ const Edit = () => {
   const [obs, setObs] = useState<File>();
   const [rev, setRev] = useState<File>();
 
+  const [obs2, setObs2] = useState<File>();
+  const [rev2, setRev2] = useState<File>();
+
   useEffect(() => {
     const getCoinData = async () => {
       const q = query(collection(database, "coins"), where("coinId", "==", id));
@@ -70,11 +73,27 @@ const Edit = () => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const fileRefObs = ref(storageRef, `coins/obs-${id}`);
     const fileRefRev = ref(storageRef, `coins/rev-${id}`);
+
+    const fileRefObs2 = ref(storageRef, `coins/obs-remark-${id}`);
+    const fileRefRev2 = ref(storageRef, `coins/rev-remark-${id}`);
+
     if (obs) {
       deleteObject(fileRefObs)
         .then(() => {
           // File deleted successfully
           uploadBytes(fileRefObs, obs as Blob);
+        })
+        .catch((error) => {
+          // Uh-oh, an error occurred!
+          console.log(error);
+        });
+    }
+
+    if (obs2) {
+      deleteObject(fileRefObs2)
+        .then(() => {
+          // File deleted successfully
+          uploadBytes(fileRefObs2, obs2 as Blob);
         })
         .catch((error) => {
           // Uh-oh, an error occurred!
@@ -94,9 +113,23 @@ const Edit = () => {
         });
     }
 
+    if (rev2) {
+      deleteObject(fileRefRev2)
+        .then(() => {
+          // File deleted successfully
+          uploadBytes(fileRefRev2, rev2 as Blob);
+        })
+        .catch((error) => {
+          // Uh-oh, an error occurred!
+          console.log(error);
+        });
+    }
+
     let urls = await Promise.all([
       getDownloadURL(ref(storageRef, `coins/obs-${id}`)),
       getDownloadURL(ref(storageRef, `coins/rev-${id}`)),
+      getDownloadURL(ref(storageRef, `coins/obs-remark-${id}`)),
+      getDownloadURL(ref(storageRef, `coins/rev-remark-${id}`)),
     ]);
     let obj = {
       ...data,
@@ -127,6 +160,13 @@ const Edit = () => {
     setObs(image);
   };
 
+  const handleObs2 = (e: React.ChangeEvent) => {
+    const target = e.currentTarget as HTMLInputElement;
+    const image = (target.files as FileList)[0];
+    console.log(target.files);
+    setObs2(image);
+  };
+
   const handleRev = (e: React.ChangeEvent) => {
     const target = e.currentTarget as HTMLInputElement;
     const image = (target.files as FileList)[0];
@@ -134,6 +174,12 @@ const Edit = () => {
     setRev(image);
   };
 
+  const handleRev2 = (e: React.ChangeEvent) => {
+    const target = e.currentTarget as HTMLInputElement;
+    const image = (target.files as FileList)[0];
+    console.log(target.files);
+    setRev2(image);
+  };
   return (
     <div className="flex flex-col items-center py-4 h-vh bg-slate-50">
       <h2 className="p-4 text-4xl font-bold tracking-tight text-zinc-800">
@@ -336,6 +382,37 @@ const Edit = () => {
                 id="user_avatar"
                 className="w-full text-base rounded text-zinc-600 bg-zinc-200 focus:outline-none focus:border-transparent"
                 onChange={handleRev}
+              />
+            </div>
+            <div className="p-1 mb-2">
+              <label
+                className="block mb-2 font-bold text-zinc-800"
+                htmlFor="user_avatar"
+              >
+                Upload Obs Remark Photo
+              </label>
+              <input
+                type="file"
+                aria-describedby="user_avatar_help"
+                id="user_avatar"
+                className="w-full text-base rounded text-zinc-600 bg-zinc-200 focus:outline-none focus:border-transparent"
+                onChange={handleObs2}
+              />
+            </div>
+
+            <div className="p-1 mb-2">
+              <label
+                className="block mb-2 font-bold text-zinc-800"
+                htmlFor="user_avatar"
+              >
+                Upload Rev Remark Photo
+              </label>
+              <input
+                type="file"
+                aria-describedby="user_avatar_help"
+                id="user_avatar"
+                className="w-full text-base rounded text-zinc-600 bg-zinc-200 focus:outline-none focus:border-transparent"
+                onChange={handleRev2}
               />
             </div>
 

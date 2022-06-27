@@ -100,6 +100,38 @@ const LongCoinCard = ({ coin }: Inputs) => {
           <></>
         )}
       </div>
+      {!!coin.url[2] && (
+        <div className="flex flex-col bg-black">
+          <div
+            onClick={() => {
+              setDialogImageURL(coin.url[0]);
+              setIsCoinDisplayOpen(true);
+            }}
+          >
+            <Image
+              src={coin.url[2]}
+              alt="example coin"
+              objectFit="contain"
+              height={100}
+              width={100}
+            />
+          </div>
+          <div
+            onClick={() => {
+              setDialogImageURL(coin.url[1]);
+              setIsCoinDisplayOpen(true);
+            }}
+          >
+            <Image
+              src={coin.url[3]}
+              alt="example coin"
+              objectFit="contain"
+              height={100}
+              width={100}
+            />
+          </div>
+        </div>
+      )}
       <div className="flex flex-col flex-1 px-4 my-4 overflow-scroll">
         {coin.obs && (
           <div>
@@ -187,10 +219,10 @@ const LongCoinCard = ({ coin }: Inputs) => {
         className="relative z-50 bg-backdrop-blur"
       >
         <div className="fixed inset-0 flex items-center justify-center w-full bg-backdrop-blur ">
-          <Dialog.Panel className="w-full  rounded bg-black/70 ">
+          <Dialog.Panel className="w-full rounded bg-black/70 ">
             <img
               src={dialogImageURL}
-              className="mx-auto my-2 max-w-3/4 max-h-screen"
+              className="max-h-screen mx-auto my-2 max-w-3/4"
               alt="large coin image"
               onClick={() => setIsCoinDisplayOpen(false)}
             />
