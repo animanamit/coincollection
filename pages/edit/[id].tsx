@@ -78,10 +78,10 @@ const Edit = () => {
     const fileRefRev2 = ref(storageRef, `coins/rev-remark-${id}`);
 
     if (obs) {
-      deleteObject(fileRefObs)
-        .then(() => {
+      await deleteObject(fileRefObs)
+        .then(async () => {
           // File deleted successfully
-          uploadBytes(fileRefObs, obs as Blob);
+          await uploadBytes(fileRefObs, obs as Blob);
         })
         .catch((error) => {
           // Uh-oh, an error occurred!
@@ -93,7 +93,7 @@ const Edit = () => {
       // deleteObject(fileRefObs2)
       //   .then(() => {
       // File deleted successfully
-      uploadBytes(fileRefObs2, obs2 as Blob);
+      await uploadBytes(fileRefObs2, obs2 as Blob);
       // })
       // .catch((error) => {
       //   // Uh-oh, an error occurred!
@@ -102,10 +102,10 @@ const Edit = () => {
     }
 
     if (rev) {
-      deleteObject(fileRefRev)
-        .then(() => {
+      await deleteObject(fileRefRev)
+        .then(async () => {
           // File deleted successfully
-          uploadBytes(fileRefRev, rev as Blob);
+          await uploadBytes(fileRefRev, rev as Blob);
         })
         .catch((error) => {
           // Uh-oh, an error occurred!
@@ -117,7 +117,7 @@ const Edit = () => {
       // deleteObject(fileRefRev2)
       //   .then(() => {
       // File deleted successfully
-      uploadBytes(fileRefRev2, rev2 as Blob);
+      await uploadBytes(fileRefRev2, rev2 as Blob);
       // })
       // .catch((error) => {
       //   // Uh-oh, an error occurred!
@@ -131,6 +131,7 @@ const Edit = () => {
       getDownloadURL(ref(storageRef, `coins/obs-remark-${id}`)),
       getDownloadURL(ref(storageRef, `coins/rev-remark-${id}`)),
     ]);
+
     let obj = {
       ...data,
       coinId: coin?.coinId,

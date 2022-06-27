@@ -66,17 +66,22 @@ const AddCoin = () => {
       urls = await Promise.all([
         getDownloadURL(ref(storageRef, `coins/obs-${id}`)),
         getDownloadURL(ref(storageRef, `coins/rev-${id}`)),
+        getDownloadURL(ref(storageRef, `coins/obs-remark-${id}`)),
+        getDownloadURL(ref(storageRef, `coins/rev-remark-${id}`)),
       ]);
     }
 
-    if (obs2 || rev2) {
-      let remarkUrls = await Promise.all([
-        getDownloadURL(ref(storageRef, `coins/obs-${id}`)),
-        getDownloadURL(ref(storageRef, `coins/rev-${id}`)),
-      ]);
+    // if (obs2 || rev2) {
+    //   console.log("getting remark URLs");
+    //   urls.concat(
+    //     await Promise.all([
+    // getDownloadURL(ref(storageRef, `coins/obs-remark-${id}`)),
+    //   getDownloadURL(ref(storageRef, `coins/rev-remark-${id}`)),
+    //     ])
+    //   );
+    // }
 
-      urls.concat(remarkUrls);
-    }
+    console.log(urls);
 
     let obj = {
       ...data,
@@ -98,7 +103,7 @@ const AddCoin = () => {
   const handleObs = (e: React.ChangeEvent) => {
     const target = e.currentTarget as HTMLInputElement;
     const image = (target.files as FileList)[0];
-    console.log(target.files);
+
     setObs(image);
   };
 

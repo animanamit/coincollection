@@ -82,6 +82,38 @@ const LongCoinCard = ({ coin }: Inputs) => {
           />
         </div>
       </div>
+      {coin.url.length > 2 && (
+        <div className="flex flex-col mx-3 bg-black">
+          <div
+            onClick={() => {
+              setDialogImageURL(coin.url[2]);
+              setIsCoinDisplayOpen(true);
+            }}
+          >
+            <Image
+              src={coin.url[2]}
+              alt="example coin"
+              objectFit="contain"
+              height={100}
+              width={100}
+            />
+          </div>
+          <div
+            onClick={() => {
+              setDialogImageURL(coin.url[3]);
+              setIsCoinDisplayOpen(true);
+            }}
+          >
+            <Image
+              src={coin.url[3]}
+              alt="example coin"
+              objectFit="contain"
+              height={100}
+              width={100}
+            />
+          </div>
+        </div>
+      )}
       <div className="flex flex-col mx-3 my-4 min-w-min whitespace-nowrap ">
         {coin.name && <p className="inline font-bold ">{coin.name}</p>}
         {coin.type && <p className="inline font-bold">{coin.type}</p>}
@@ -100,38 +132,7 @@ const LongCoinCard = ({ coin }: Inputs) => {
           <></>
         )}
       </div>
-      {!!coin.url[2] && (
-        <div className="flex flex-col bg-black">
-          <div
-            onClick={() => {
-              setDialogImageURL(coin.url[0]);
-              setIsCoinDisplayOpen(true);
-            }}
-          >
-            <Image
-              src={coin.url[2]}
-              alt="example coin"
-              objectFit="contain"
-              height={100}
-              width={100}
-            />
-          </div>
-          <div
-            onClick={() => {
-              setDialogImageURL(coin.url[1]);
-              setIsCoinDisplayOpen(true);
-            }}
-          >
-            <Image
-              src={coin.url[3]}
-              alt="example coin"
-              objectFit="contain"
-              height={100}
-              width={100}
-            />
-          </div>
-        </div>
-      )}
+
       <div className="flex flex-col flex-1 px-4 my-4 overflow-scroll">
         {coin.obs && (
           <div>
