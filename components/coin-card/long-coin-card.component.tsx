@@ -83,7 +83,7 @@ const LongCoinCard = ({ coin }: Inputs) => {
         </div>
       </div>
       {coin.url.length > 2 && (
-        <div className="flex flex-col mx-3 bg-black">
+        <div className="flex flex-col ml-3 bg-black">
           <div
             onClick={() => {
               setDialogImageURL(coin.url[2]);
@@ -114,7 +114,7 @@ const LongCoinCard = ({ coin }: Inputs) => {
           </div>
         </div>
       )}
-      <div className="flex flex-col mx-3 my-4 min-w-min whitespace-nowrap ">
+      <div className="flex flex-col my-4 ml-3 min-w-min whitespace-nowrap ">
         {coin.name && <p className="inline font-bold ">{coin.name}</p>}
         {coin.type && <p className="inline font-bold">{coin.type}</p>}
         {coin.class && <p>{coin.class}</p>}
@@ -133,7 +133,7 @@ const LongCoinCard = ({ coin }: Inputs) => {
         )}
       </div>
 
-      <div className="flex flex-col flex-1 px-4 my-4 overflow-scroll">
+      <div className="flex flex-col flex-1 my-4 ml-3 overflow-scroll">
         {coin.obs && (
           <div>
             <p className="font-bold">Obverse</p>
