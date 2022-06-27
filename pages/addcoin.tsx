@@ -25,6 +25,9 @@ type Inputs = {
 const AddCoin = () => {
   const [obs, setObs] = useState<File>();
   const [rev, setRev] = useState<File>();
+
+  const [obs2, setObs2] = useState<File>();
+  const [rev2, setRev2] = useState<File>();
   const [rating, setRating] = useState<number>(0);
 
   const {
@@ -39,6 +42,10 @@ const AddCoin = () => {
     let urls: string[] = [];
     const fileRefObs = ref(storageRef, `coins/obs-${id}`);
     const fileRefRev = ref(storageRef, `coins/rev-${id}`);
+
+    const fileRefObs2 = ref(storageRef, `coins/obs-remark-${id}`);
+    const fileRefRev2 = ref(storageRef, `coins/rev-remark-${id}`);
+
     if (obs) {
       await uploadBytes(fileRefObs, obs as Blob);
     }
@@ -47,11 +54,28 @@ const AddCoin = () => {
       await uploadBytes(fileRefRev, rev as Blob);
     }
 
+    if (obs2) {
+      await uploadBytes(fileRefObs2, obs2 as Blob);
+    }
+
+    if (rev2) {
+      await uploadBytes(fileRefRev2, rev2 as Blob);
+    }
+
     if (obs || rev) {
       urls = await Promise.all([
         getDownloadURL(ref(storageRef, `coins/obs-${id}`)),
         getDownloadURL(ref(storageRef, `coins/rev-${id}`)),
       ]);
+    }
+
+    if (obs2 || rev2) {
+      let remarkUrls = await Promise.all([
+        getDownloadURL(ref(storageRef, `coins/obs-${id}`)),
+        getDownloadURL(ref(storageRef, `coins/rev-${id}`)),
+      ]);
+
+      urls.concat(remarkUrls);
     }
 
     let obj = {
@@ -78,11 +102,25 @@ const AddCoin = () => {
     setObs(image);
   };
 
+  const handleObs2 = (e: React.ChangeEvent) => {
+    const target = e.currentTarget as HTMLInputElement;
+    const image = (target.files as FileList)[0];
+    console.log(target.files);
+    setObs2(image);
+  };
+
   const handleRev = (e: React.ChangeEvent) => {
     const target = e.currentTarget as HTMLInputElement;
     const image = (target.files as FileList)[0];
     console.log(target.files);
     setRev(image);
+  };
+
+  const handleRev2 = (e: React.ChangeEvent) => {
+    const target = e.currentTarget as HTMLInputElement;
+    const image = (target.files as FileList)[0];
+    console.log(target.files);
+    setRev2(image);
   };
 
   return (
@@ -272,6 +310,7 @@ const AddCoin = () => {
               onChange={handleObs}
             />
           </div>
+
           <div className="p-1 mb-2">
             <label
               className="block mb-2 font-bold text-zinc-800"
@@ -285,6 +324,37 @@ const AddCoin = () => {
               id="user_avatar"
               className="w-full text-base rounded text-zinc-600 bg-zinc-200 focus:outline-none focus:border-transparent"
               onChange={handleRev}
+            />
+          </div>
+          <div className="p-1 mb-2">
+            <label
+              className="block mb-2 font-bold text-zinc-800"
+              htmlFor="user_avatar"
+            >
+              Upload Obs Remark Photo
+            </label>
+            <input
+              type="file"
+              aria-describedby="user_avatar_help"
+              id="user_avatar"
+              className="w-full text-base rounded text-zinc-600 bg-zinc-200 focus:outline-none focus:border-transparent"
+              onChange={handleObs2}
+            />
+          </div>
+
+          <div className="p-1 mb-2">
+            <label
+              className="block mb-2 font-bold text-zinc-800"
+              htmlFor="user_avatar"
+            >
+              Upload Rev Remark Photo
+            </label>
+            <input
+              type="file"
+              aria-describedby="user_avatar_help"
+              id="user_avatar"
+              className="w-full text-base rounded text-zinc-600 bg-zinc-200 focus:outline-none focus:border-transparent"
+              onChange={handleRev2}
             />
           </div>
 
