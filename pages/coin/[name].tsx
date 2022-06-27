@@ -108,7 +108,7 @@ const Coin = () => {
         </>
       ) : (
         <h1 className="text-4xl font-bold tracking-tight text-center text-zinc-800">
-          Loading...
+          Loading..
         </h1>
       )}
     </div>
