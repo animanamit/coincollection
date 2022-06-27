@@ -50,9 +50,9 @@ const LongCoinCard = ({ coin }: Inputs) => {
   return (
     <div
       key={coin.coinId}
-      className="flex px-4 py-8 my-4 shadow-xl bg-slate-100 rounded-2xl"
+      className="flex px-4 py-8 my-4 overflow-x-scroll shadow-xl bg-slate-100 rounded-2xl h-[276px]"
     >
-      <div className="flex bg-black justify-evenly">
+      <div className="flex bg-black justify-evenly max-h-fit">
         <div
           onClick={() => {
             setDialogImageURL(coin.url[0]);
@@ -133,7 +133,7 @@ const LongCoinCard = ({ coin }: Inputs) => {
         )}
       </div>
 
-      <div className="flex flex-col flex-1 my-4 ml-3 overflow-scroll">
+      <div className="flex flex-col flex-1 my-4 ml-3 overflow-scroll min-w-min">
         {coin.obs && (
           <div>
             <p className="font-bold">Obverse</p>
