@@ -90,15 +90,15 @@ const Edit = () => {
     }
 
     if (obs2) {
-      deleteObject(fileRefObs2)
-        .then(() => {
-          // File deleted successfully
-          uploadBytes(fileRefObs2, obs2 as Blob);
-        })
-        .catch((error) => {
-          // Uh-oh, an error occurred!
-          console.log(error);
-        });
+      // deleteObject(fileRefObs2)
+      //   .then(() => {
+      // File deleted successfully
+      uploadBytes(fileRefObs2, obs2 as Blob);
+      // })
+      // .catch((error) => {
+      //   // Uh-oh, an error occurred!
+      //   console.log(error);
+      // });
     }
 
     if (rev) {
@@ -114,15 +114,15 @@ const Edit = () => {
     }
 
     if (rev2) {
-      deleteObject(fileRefRev2)
-        .then(() => {
-          // File deleted successfully
-          uploadBytes(fileRefRev2, rev2 as Blob);
-        })
-        .catch((error) => {
-          // Uh-oh, an error occurred!
-          console.log(error);
-        });
+      // deleteObject(fileRefRev2)
+      //   .then(() => {
+      // File deleted successfully
+      uploadBytes(fileRefRev2, rev2 as Blob);
+      // })
+      // .catch((error) => {
+      //   // Uh-oh, an error occurred!
+      //   console.log(error);
+      // });
     }
 
     let urls = await Promise.all([
