@@ -56,7 +56,7 @@ const Edit = () => {
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data());
+
         setCoin(doc.data() as Inputs);
       });
     };
@@ -157,28 +157,28 @@ const Edit = () => {
   const handleObs = (e: React.ChangeEvent) => {
     const target = e.currentTarget as HTMLInputElement;
     const image = (target.files as FileList)[0];
-    console.log(target.files);
+
     setObs(image);
   };
 
   const handleObs2 = (e: React.ChangeEvent) => {
     const target = e.currentTarget as HTMLInputElement;
     const image = (target.files as FileList)[0];
-    console.log(target.files);
+
     setObs2(image);
   };
 
   const handleRev = (e: React.ChangeEvent) => {
     const target = e.currentTarget as HTMLInputElement;
     const image = (target.files as FileList)[0];
-    console.log(target.files);
+
     setRev(image);
   };
 
   const handleRev2 = (e: React.ChangeEvent) => {
     const target = e.currentTarget as HTMLInputElement;
     const image = (target.files as FileList)[0];
-    console.log(target.files);
+
     setRev2(image);
   };
   return (

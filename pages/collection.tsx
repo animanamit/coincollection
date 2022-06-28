@@ -20,7 +20,7 @@ const Collection = ({ coins }) => {
   return (
     <div className="p-8 bg-slate-50">
       <div className="my-2">
-        <div className="flex  mx-2 justify-between">
+        <div className="flex justify-between mx-2">
           <div className="flex space-x-2">
             <Switch.Group>
               <Switch.Label>View</Switch.Label>
@@ -108,7 +108,6 @@ export async function getServerSideProps() {
   const coins = [];
   if (docSnap) {
     docSnap.forEach((doc) => {
-      console.log(doc);
       coins.push({
         ...doc.data(),
       });

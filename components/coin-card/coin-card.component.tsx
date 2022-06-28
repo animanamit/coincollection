@@ -4,6 +4,7 @@ import { GlassMagnifier } from "react-image-magnifiers";
 
 import { Dialog } from "@headlessui/react";
 import { useState } from "react";
+import Image from "next/image";
 
 const CoinCard = ({ data, magnifierSize, startMagnifying }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +12,7 @@ const CoinCard = ({ data, magnifierSize, startMagnifying }) => {
   const [dialogImageURL, setDialogImageURL] = useState("");
 
   return (
-    <div className="bg-black shadow-2xl m-1 rounded-xl md:h-[500px] md:w-[600px] sm:width=[200px] flex flex-col">
+    <div className="bg-black shadow-2xl m-1 rounded-xl md:h-[500px] md:w-[600px] sm:width-[200px] flex flex-col">
       <div className="relative flex w-auto h-[310px] rounded-t-xl bg-black">
         <div
           onClick={() => {
@@ -32,7 +33,7 @@ const CoinCard = ({ data, magnifierSize, startMagnifying }) => {
               className="rounded-t-xl"
             />
           ) : (
-            <img src={data.url[0]} className="w-[300px]" />
+            <Image src={data.url[0]} alt="coin" width={300} height={300} />
           )}
         </div>
         <div
@@ -54,7 +55,7 @@ const CoinCard = ({ data, magnifierSize, startMagnifying }) => {
               className="rounded-t-xl"
             />
           ) : (
-            <img src={data.url[1]} className="w-[300px]" />
+            <Image src={data.url[1]} height={300} width={300} alt="coin" />
           )}
         </div>
       </div>
@@ -83,13 +84,17 @@ const CoinCard = ({ data, magnifierSize, startMagnifying }) => {
         className="relative z-50 bg-backdrop-blur"
       >
         <div className="fixed inset-0 flex items-center justify-center w-full bg-backdrop-blur ">
-          <Dialog.Panel className="w-full  rounded bg-black/70 ">
-            <img
-              src={dialogImageURL}
-              className="mx-auto my-2 max-w-3/4 max-h-screen"
-              alt="large coin image"
-              onClick={() => setIsOpen(false)}
-            />
+          <Dialog.Panel className="w-full h-full rounded bg-black/70">
+            <div className="h-full w-fit">
+              <Image
+                src={dialogImageURL}
+                className="max-h-screen mx-auto my-2 max-w-3/4"
+                alt="large coin image"
+                onClick={() => setIsOpen(false)}
+                objectFit="contain"
+                layout="fill"
+              />
+            </div>
           </Dialog.Panel>
         </div>
       </Dialog>
