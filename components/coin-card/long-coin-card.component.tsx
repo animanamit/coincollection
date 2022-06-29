@@ -41,7 +41,7 @@ const LongCoinCard = ({ coin }: Inputs) => {
   const deleteCoin = async () => {
     await deleteDoc(doc(database, "coins", coin.coinId));
 
-    alert("You have successfully deleted this coin.");
+    alert("You have deleted this coin.");
 
     router.reload();
   };
