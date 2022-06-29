@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { Dialog, Transition } from "@headlessui/react";
 import { PencilIcon, StarIcon, TrashIcon } from "@heroicons/react/outline";
 import { deleteDoc, doc } from "firebase/firestore";
@@ -220,13 +219,16 @@ const LongCoinCard = ({ coin }: Inputs) => {
         className="relative z-50 bg-backdrop-blur"
       >
         <div className="fixed inset-0 flex items-center justify-center w-full bg-backdrop-blur ">
-          <Dialog.Panel className="w-full rounded bg-black/70 ">
-            <img
-              src={dialogImageURL}
-              className="max-h-screen mx-auto my-2 max-w-3/4"
-              alt="large coin image"
-              onClick={() => setIsCoinDisplayOpen(false)}
-            />
+          <Dialog.Panel className="w-full h-full rounded bg-black/70 ">
+            <div className="h-full w-fit">
+              <Image
+                src={dialogImageURL}
+                alt="large coin image"
+                onClick={() => setIsCoinDisplayOpen(false)}
+                layout="fill"
+                objectFit="contain"
+              />
+            </div>
           </Dialog.Panel>
         </div>
       </Dialog>

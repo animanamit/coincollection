@@ -91,7 +91,6 @@ const AddCoin = () => {
       rating: rating <= 3 ? rating : 0,
     };
 
-    console.log(obj);
     setDoc(doc(database, "coins", id), obj).then(() =>
       console.log("added to firestore!")
     );
@@ -110,21 +109,18 @@ const AddCoin = () => {
   const handleObs2 = (e: React.ChangeEvent) => {
     const target = e.currentTarget as HTMLInputElement;
     const image = (target.files as FileList)[0];
-    console.log(target.files);
     setObs2(image);
   };
 
   const handleRev = (e: React.ChangeEvent) => {
     const target = e.currentTarget as HTMLInputElement;
     const image = (target.files as FileList)[0];
-    console.log(target.files);
     setRev(image);
   };
 
   const handleRev2 = (e: React.ChangeEvent) => {
     const target = e.currentTarget as HTMLInputElement;
     const image = (target.files as FileList)[0];
-    console.log(target.files);
     setRev2(image);
   };
 
