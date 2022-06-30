@@ -74,8 +74,10 @@ const Edit = () => {
     const fileRefObs = ref(storageRef, `coins/obs-${id}`);
     const fileRefRev = ref(storageRef, `coins/rev-${id}`);
 
-    const fileRefObs2 = ref(storageRef, `coins/obs-remark-${id}`);
-    const fileRefRev2 = ref(storageRef, `coins/rev-remark-${id}`);
+    const fileRefObsRemark = ref(storageRef, `coins/obs_remark-${id}`);
+    const fileRefRevRemark = ref(storageRef, `coins/rev_remark-${id}`);
+
+    console.log("got all refs");
 
     if (obs) {
       await deleteObject(fileRefObs)
@@ -93,7 +95,8 @@ const Edit = () => {
       // deleteObject(fileRefObs2)
       //   .then(() => {
       // File deleted successfully
-      await uploadBytes(fileRefObs2, obs2 as Blob);
+      console.log("at obs remark");
+      await uploadBytes(fileRefObsRemark, obs2 as Blob);
       // })
       // .catch((error) => {
       //   // Uh-oh, an error occurred!
@@ -117,7 +120,7 @@ const Edit = () => {
       // deleteObject(fileRefRev2)
       //   .then(() => {
       // File deleted successfully
-      await uploadBytes(fileRefRev2, rev2 as Blob);
+      await uploadBytes(fileRefRevRemark, rev2 as Blob);
       // })
       // .catch((error) => {
       //   // Uh-oh, an error occurred!
