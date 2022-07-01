@@ -51,7 +51,7 @@ const LongCoinCard = ({ coin }: Inputs) => {
       key={coin.coinId}
       className="flex px-4 py-8 my-4 overflow-x-scroll shadow-xl bg-slate-100 rounded-2xl h-[276px]"
     >
-      <div className="flex bg-black justify-evenly max-h-fit">
+      <div className="flex bg-black justify-evenly h-[200px]">
         <div
           onClick={() => {
             setDialogImageURL(coin.url[0]);
@@ -82,13 +82,13 @@ const LongCoinCard = ({ coin }: Inputs) => {
         </div>
       </div>
       {coin.url.length > 2 && (
-        <div className="flex flex-col ml-3 ">
+        <div className="flex flex-col ml-3 h-[200px]">
           <div
             onClick={() => {
               setDialogImageURL(coin.url[2]);
               setIsCoinDisplayOpen(true);
             }}
-            className="bg-black"
+            className="bg-black h-[100px]"
           >
             <Image
               src={coin.url[2]}
@@ -104,7 +104,7 @@ const LongCoinCard = ({ coin }: Inputs) => {
                 setDialogImageURL(coin.url[3]);
                 setIsCoinDisplayOpen(true);
               }}
-              className="bg-black"
+              className="bg-black h-[100px]"
             >
               <Image
                 src={coin.url[3]}
