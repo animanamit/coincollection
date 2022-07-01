@@ -97,20 +97,22 @@ const LongCoinCard = ({ coin }: Inputs) => {
               width={100}
             />
           </div>
-          <div
-            onClick={() => {
-              setDialogImageURL(coin.url[3]);
-              setIsCoinDisplayOpen(true);
-            }}
-          >
-            <Image
-              src={coin.url[3]}
-              alt="example coin"
-              objectFit="contain"
-              height={100}
-              width={100}
-            />
-          </div>
+          {!!coin.url[3] && (
+            <div
+              onClick={() => {
+                setDialogImageURL(coin.url[3]);
+                setIsCoinDisplayOpen(true);
+              }}
+            >
+              <Image
+                src={coin.url[3]}
+                alt="example coin"
+                objectFit="contain"
+                height={100}
+                width={100}
+              />
+            </div>
+          )}
         </div>
       )}
       <div className="flex flex-col my-4 ml-3 min-w-min whitespace-nowrap ">

@@ -46,8 +46,8 @@ const Edit = () => {
   const [obs, setObs] = useState<File>();
   const [rev, setRev] = useState<File>();
 
-  const [obs2, setObs2] = useState<File>();
-  const [rev2, setRev2] = useState<File>();
+  const [obs2, setObs2] = useState<File | null>(null);
+  const [rev2, setRev2] = useState<File | null>(null);
 
   useEffect(() => {
     const getCoinData = async () => {
@@ -92,17 +92,58 @@ const Edit = () => {
     }
 
     if (obs2) {
-      // deleteObject(fileRefObs2)
-      //   .then(() => {
-      // File deleted successfully
-      console.log("at obs remark");
-      await uploadBytes(fileRefObsRemark, obs2 as Blob);
-      // })
-      // .catch((error) => {
-      //   // Uh-oh, an error occurred!
+      // try {
+      //   deleteObject(fileRefObsRemark);
+      // } catch (error) {
       //   console.log(error);
-      // });
+      // } finally {
+      //   // .then(async () => {
+      //   // File deleted successfully
+      //   console.log("at obs remark");
+      //   await uploadBytes(fileRefObsRemark, obs2 as Blob);
+      //   // })
+      //   // .catch((error) => {
+      //   //   // Uh-oh, an error occurred!
+      //   //   console.log(error);
+      //   // });`
+      // }
+      console.log("obs2 was added");
+
+      let url = await getDownloadURL(
+        ref(storageRef, `coins/obs_remark-${id}`)
+      ).catch((error) => {
+        console.log("no download url");
+        console.log(error);
+        return null;
+      });
+
+      if (url) {
+        console.log("url exists, going to delete");
+        await deleteObject(fileRefObsRemark).then(async () => {
+          await uploadBytes(fileRefObsRemark, obs2 as Blob);
+        });
+      } else {
+        await uploadBytes(fileRefObsRemark, obs2 as Blob);
+      }
     }
+
+    // getDownloadURL(ref(storageRef, `coins/obs_remark-${id}`))
+    //   .then(() => {
+    //     deleteObject(fileRefObsRemark).then(async () => {
+    //       await uploadBytes(fileRefObsRemark, obs2 as Blob);
+    //     });
+    //   })
+    //   .catch(async (error) => {
+    //     // A full list of error codes is available at
+    //     // https://firebase.google.com/docs/storage/web/handle-errors
+    //     switch (error.code) {
+    //       case "storage/object-not-found":
+    //         // File doesn't exist
+    //         console.log("Object was not found");
+    //         await uploadBytes(fileRefObsRemark, obs2 as Blob);
+    //         break;
+    //     }
+    //   });
 
     if (rev) {
       await deleteObject(fileRefRev)
@@ -117,23 +158,48 @@ const Edit = () => {
     }
 
     if (rev2) {
-      // deleteObject(fileRefRev2)
-      //   .then(() => {
-      // File deleted successfully
-      await uploadBytes(fileRefRevRemark, rev2 as Blob);
-      // })
-      // .catch((error) => {
-      //   // Uh-oh, an error occurred!
-      //   console.log(error);
-      // });
+      // deleteObject(fileRefRevRemark)
+      //   .then(async () => {
+      //     // File deleted successfully
+      //     console.log("at rev remark");
+      //     await uploadBytes(fileRefRevRemark, rev2 as Blob);
+      //   })
+      //   .catch((error) => {
+      //     // Uh-oh, an error occurred!
+      //     console.log(error);
+      //   });
+      console.log("rev2 was added");
+      let url = await getDownloadURL(
+        ref(storageRef, `coins/rev_remark-${id}`)
+      ).catch((error) => {
+        console.log(error);
+        return null;
+      });
+      if (url) {
+        await deleteObject(fileRefRevRemark).then(async () => {
+          await uploadBytes(fileRefRevRemark, rev2 as Blob);
+        });
+      } else {
+        await uploadBytes(fileRefRevRemark, rev2 as Blob);
+      }
     }
 
     let urls = await Promise.all([
       getDownloadURL(ref(storageRef, `coins/obs-${id}`)),
       getDownloadURL(ref(storageRef, `coins/rev-${id}`)),
-      getDownloadURL(ref(storageRef, `coins/obs-remark-${id}`)),
-      getDownloadURL(ref(storageRef, `coins/rev-remark-${id}`)),
     ]);
+
+    if (obs2 || coin.url[2]) {
+      console.log("getting download link for obs2");
+      let url = await getDownloadURL(ref(storageRef, `coins/obs_remark-${id}`));
+      urls.push(url);
+    }
+
+    if (rev2 || coin.url[3]) {
+      console.log("getting download link for rev2");
+      let url = await getDownloadURL(ref(storageRef, `coins/rev_remark-${id}`));
+      urls.push(url);
+    }
 
     let obj = {
       ...data,

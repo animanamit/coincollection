@@ -43,43 +43,40 @@ const AddCoin = () => {
     const fileRefObs = ref(storageRef, `coins/obs-${id}`);
     const fileRefRev = ref(storageRef, `coins/rev-${id}`);
 
-    const fileRefObs2 = ref(storageRef, `coins/obs-remark-${id}`);
-    const fileRefRev2 = ref(storageRef, `coins/rev-remark-${id}`);
+    const fileRefObs2 = ref(storageRef, `coins/obs_remark-${id}`);
+    const fileRefRev2 = ref(storageRef, `coins/rev_remark-${id}`);
 
     if (obs) {
-      await uploadBytes(fileRefObs, obs as Blob);
+      await uploadBytes(fileRefObs, obs as Blob).then(async () => {
+        let URL = await getDownloadURL(ref(storageRef, `coins/obs-${id}`));
+        urls.push(URL);
+      });
     }
 
     if (rev) {
-      await uploadBytes(fileRefRev, rev as Blob);
+      await uploadBytes(fileRefRev, rev as Blob).then(async () => {
+        let URL = await getDownloadURL(ref(storageRef, `coins/rev-${id}`));
+        urls.push(URL);
+      });
     }
 
     if (obs2) {
-      await uploadBytes(fileRefObs2, obs2 as Blob);
+      await uploadBytes(fileRefObs2, obs2 as Blob).then(async () => {
+        let URL = await getDownloadURL(
+          ref(storageRef, `coins/obs_remark-${id}`)
+        );
+        urls.push(URL);
+      });
     }
 
     if (rev2) {
-      await uploadBytes(fileRefRev2, rev2 as Blob);
+      await uploadBytes(fileRefRev2, rev2 as Blob).then(async () => {
+        let URL = await getDownloadURL(
+          ref(storageRef, `coins/rev_remark-${id}`)
+        );
+        urls.push(URL);
+      });
     }
-
-    if (obs || rev) {
-      urls = await Promise.all([
-        getDownloadURL(ref(storageRef, `coins/obs-${id}`)),
-        getDownloadURL(ref(storageRef, `coins/rev-${id}`)),
-        getDownloadURL(ref(storageRef, `coins/obs-remark-${id}`)),
-        getDownloadURL(ref(storageRef, `coins/rev-remark-${id}`)),
-      ]);
-    }
-
-    // if (obs2 || rev2) {
-    //   console.log("getting remark URLs");
-    //   urls.concat(
-    //     await Promise.all([
-    // getDownloadURL(ref(storageRef, `coins/obs-remark-${id}`)),
-    //   getDownloadURL(ref(storageRef, `coins/rev-remark-${id}`)),
-    //     ])
-    //   );
-    // }
 
     console.log(urls);
 
