@@ -82,12 +82,13 @@ const LongCoinCard = ({ coin }: Inputs) => {
         </div>
       </div>
       {coin.url.length > 2 && (
-        <div className="flex flex-col ml-3 bg-black">
+        <div className="flex flex-col ml-3 ">
           <div
             onClick={() => {
               setDialogImageURL(coin.url[2]);
               setIsCoinDisplayOpen(true);
             }}
+            className="bg-black"
           >
             <Image
               src={coin.url[2]}
@@ -103,6 +104,7 @@ const LongCoinCard = ({ coin }: Inputs) => {
                 setDialogImageURL(coin.url[3]);
                 setIsCoinDisplayOpen(true);
               }}
+              className="bg-black"
             >
               <Image
                 src={coin.url[3]}
