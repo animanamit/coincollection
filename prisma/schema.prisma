@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Coin {
+  id Int @id @default(autoincrement())
+  coinId String
+  name String
+  coinage String
+  ruler String
+  period String
+  type String
+  year String
+  class String
+  denomination String
+  variety String
+  catalogueNumber String
+  weight String
+  grade String
+  rarity String
+  page String
+  remarks String
+  rating String
+  obs String
+  rev String
+  obsPhoto String
+  revPhoto String
+  obsRemarkPhoto String
+  revRemarkPhoto String
+}
+

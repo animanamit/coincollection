@@ -1,17 +1,25 @@
-export interface ICoin {
+export default interface ICoin {
+  dateAdded: string;
   name: string;
+  coinage: string;
+  ruler: string;
+  period: string;
+  type: string;
+  year: string;
   class: string;
+  denomination: string;
+  variety: string;
+  catalogueNumber: string;
+  weight: string;
+  grade: string;
+  rarity: string;
+  page: string;
+  remarks: string;
+  rating: string;
   obs: string;
   rev: string;
-  page: string;
-  weight: string;
-  variation: string;
-  type: string;
-  collection: string;
-  url: string;
-  remarks: string;
-  rating: number;
-  rarity: string;
-  coinId: string;
-  dateAdded: string;
+  obsPhoto: string;
+  revPhoto: string;
+  obsRemarkPhoto: string;
+  revRemarkPhoto: string;
 }
