@@ -7,57 +7,42 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { newData } = req.body;
-  let coinId = newData.coinId;
-
-  const currData = await prisma.coin.findUnique({
-    where: {
-      coinId: coinId,
-    },
-  });
-
-  let updatedData = {
-    ...currData,
-    newData,
-  };
-
+  const { updatedData } = req.body;
   console.log(updatedData);
-
-  // try {
-  //   const allCoins = await prisma.coin.update({
-  //     where: {
-  //       id: id,
-  //     },
-  //     data: {
-  //       name: updatedData.name,
-  //       coinage: updatedData.coinage,
-  //       ruler: updatedData.ruler,
-  //       period: updatedData.period,
-  //       type: updatedData.type,
-  //       year: updatedData.year,
-  //       class: updatedData.class,
-  //       denomination: updatedData.denomination,
-  //       variety: updatedData.variety,
-  //       catalogueNumber: updatedData.catalogueNumber,
-  //       weight: updatedData.weight,
-  //       grade: updatedData.grade,
-  //       rarity: updatedData.rarity,
-  //       page: updatedData.page,
-  //       remarks: updatedData.remarks,
-  //       rating: updatedData.rating,
-  //       obs: updatedData.obs,
-  //       rev: updatedData.rev,
-  //       obsPhoto: updatedData.obsPhoto,
-  //       revPhoto: updatedData.revPhoto,
-  //       obsRemarkPhoto: updatedData.obsRemarkPhoto,
-  //       revRemarkPhoto: updatedData.revRemarkPhoto,
-  //     },
-  //   });
-  //   console.log("success!!!!!");
-  //   return res.status(200).json({ success: true });
+  try {
+    const updatedCoin = await prisma.coin.update({
+      where: {
+        coinId: updatedData.coinId,
+      },
+      data: {
+        name: updatedData.name,
+        coinage: updatedData.coinage,
+        ruler: updatedData.ruler,
+        period: updatedData.period,
+        type: updatedData.type,
+        year: updatedData.year,
+        class: updatedData.class,
+        denomination: updatedData.denomination,
+        variety: updatedData.variety,
+        catalogueNumber: updatedData.catalogueNumber,
+        weight: updatedData.weight,
+        grade: updatedData.grade,
+        rarity: updatedData.rarity,
+        page: updatedData.page,
+        remarks: updatedData.remarks,
+        rating: updatedData.rating,
+        obs: updatedData.obs,
+        rev: updatedData.rev,
+        obsPhoto: updatedData.obsPhoto,
+        revPhoto: updatedData.revPhoto,
+        obsRemarkPhoto: updatedData.obsRemarkPhoto,
+        revRemarkPhoto: updatedData.revRemarkPhoto,
+      },
+    });
+    console.log("success!!!!!");
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    console.error("Request error", error);
+    return res.status(500).json({ error, success: false });
+  }
 }
-// catch (error) {
-//   console.error("Request error", error);
-//   return res.status(500).json({ error, success: false });
-// }
-// }

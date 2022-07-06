@@ -1,5 +1,6 @@
 import { GetStaticProps } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import LongCoinCard from "../components/coin-card/long-coin-card";
 import { prisma } from "../utils/prisma-client";
 
@@ -8,8 +9,33 @@ export const getStaticProps: GetStaticProps = async () => {
   return { props: { allCoins } };
 };
 
+const getAllCoins = async () => {
+  let allCoins = await fetch("/api/getAllCoins", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((res) => res.json());
+
+  console.log(allCoins);
+  return allCoins;
+};
+
 const Collection = ({ allCoins }: { allCoins: any }) => {
   // console.log(allCoins);
+
+  const { isLoading, isError, isSuccess, data } = useQuery(
+    "getAllCoins",
+    () => getAllCoins(),
+    { refetchOnWindowFocus: false }
+  );
+
+  useEffect(() => {
+    if (data) {
+      setCoins(data.allCoins);
+    }
+  }, [data]);
+
   const [coins, setCoins] = useState<any>(allCoins);
 
   const filter = async () => {

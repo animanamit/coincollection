@@ -126,7 +126,7 @@ const AddCoin = () => {
     }
 
     setUrls(urls);
-    return urls;
+    return { imageURLs: urls, coinId: coinId };
   };
 
   const submitData = async (data: any) => {
@@ -177,19 +177,19 @@ const AddCoin = () => {
           duration: 7000,
         }
       )
-      .then((imageURLs) => {
-        console.log();
+      .then((res) => {
+        console.log(res);
         // if (res.success) {
-        if (imageURLs) {
+        if (res) {
           let dataObj = {
             ...exampleCoin,
             ...data,
-            coinId: coinId,
+            coinId: res.coinId,
             rating: rating > 0 ? String(rating) : "",
-            obsPhoto: imageURLs[0] ? imageURLs[0] : "",
-            revPhoto: imageURLs[1] ? imageURLs[1] : "",
-            obsRemarkPhoto: imageURLs[2] ? imageURLs[2] : "",
-            revRemarkPhoto: imageURLs[3] ? imageURLs[3] : "",
+            obsPhoto: res.imageURLs[0] ? res.imageURLs[0] : "",
+            revPhoto: res.imageURLs[1] ? res.imageURLs[1] : "",
+            obsRemarkPhoto: res.imageURLs[2] ? res.imageURLs[2] : "",
+            revRemarkPhoto: res.imageURLs[3] ? res.imageURLs[3] : "",
           };
 
           toast

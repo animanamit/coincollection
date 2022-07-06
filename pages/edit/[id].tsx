@@ -2,17 +2,41 @@ import { StarIcon } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { useQuery } from "react-query";
+import { supabase } from "../../utils/supabase";
 
-const getCoinDataToEdit = async (id: any) => {
+const exampleCoin = {
+  name: "",
+  coinage: "",
+  ruler: "",
+  period: "",
+  type: "",
+  year: "",
+  class: "",
+  denomination: "",
+  variety: "",
+  catalogueNumber: "",
+  weight: "",
+  grade: "",
+  rarity: "",
+  page: "",
+  remarks: "",
+  rating: "",
+  obs: "",
+  rev: "",
+  obsPhoto: "",
+  revPhoto: "",
+  obsRemarkPhoto: "",
+  revRemarkPhoto: "",
+};
+
+const getCoinDataToEdit = async (coinId: any) => {
   try {
     let { coinToEdit } = await fetch(`/api/getCoinById`, {
       method: "POST",
-      body: JSON.stringify({ coinId: id }),
+      body: JSON.stringify({ coinId: coinId }),
     }).then((res) => res.json());
-
-    console.log(coinToEdit);
 
     return coinToEdit;
   } catch (error) {
@@ -27,7 +51,8 @@ const EditCoin = () => {
 
   const { isLoading, isError, isSuccess, data } = useQuery(
     ["getCoinDataToEdit", id],
-    () => getCoinDataToEdit(id)
+    () => getCoinDataToEdit(id),
+    { refetchOnWindowFocus: false }
   );
 
   const [coin, setCoin] = useState<any>();
@@ -85,13 +110,260 @@ const EditCoin = () => {
     setRev2(image);
   };
 
-  const submitData = () => {
-    console.log("hi");
+  const updateImages = async (coinId: string) => {
+    let newImageURLs = [];
+
+    if (obs) {
+      console.log("updating oBS");
+      if (data.obsPhoto !== "") {
+        const { data, error } = await supabase.storage
+          .from("coins")
+          .update(`coins/obs-${coinId}`, obs);
+        if (error) {
+          console.log(error);
+        }
+      } else {
+        const { data, error } = await supabase.storage
+          .from("coins")
+          .upload(`coins/obs-${coinId}`, obs);
+
+        let { publicURL } = await supabase.storage
+          .from("coins")
+          .getPublicUrl(`coins/obs-${coinId}`);
+
+        console.log(publicURL);
+        if (publicURL) {
+          newImageURLs[0] = publicURL;
+        }
+      }
+    }
+
+    if (rev) {
+      if (data.revPhoto !== "") {
+        const { data, error } = await supabase.storage
+          .from("coins")
+          .update(`coins/rev-${coinId}`, rev);
+        if (error) {
+          console.log(error);
+        }
+      } else {
+        const { data, error } = await supabase.storage
+          .from("coins")
+          .upload(`coins/rev-${coinId}`, rev);
+        let { publicURL } = await supabase.storage
+          .from("coins")
+          .getPublicUrl(`coins/rev-${coinId}`);
+
+        console.log(publicURL);
+        if (publicURL) {
+          newImageURLs[1] = publicURL;
+        }
+      }
+    }
+
+    if (obs2) {
+      if (data.obsRemarkPhoto !== "") {
+        const { data, error } = await supabase.storage
+          .from("coins")
+          .update(`coins/obs-remark-${coinId}`, obs2);
+        if (error) {
+          console.log(error);
+        }
+      } else {
+        const { data, error } = await supabase.storage
+          .from("coins")
+          .upload(`coins/obs-remark-${coinId}`, obs2);
+
+        let { publicURL } = await supabase.storage
+          .from("coins")
+          .getPublicUrl(`coins/obs-remark-${coinId}`);
+
+        console.log(publicURL);
+        if (publicURL) {
+          newImageURLs[2] = publicURL;
+        }
+      }
+    }
+    if (rev2) {
+      if (data.revRemarkPhoto !== "") {
+        const { data, error } = await supabase.storage
+          .from("coins")
+          .update(`coins/rev-remark-${coinId}`, rev2);
+        if (error) {
+          console.log(error);
+        }
+      } else {
+        const { data, error } = await supabase.storage
+          .from("coins")
+          .upload(`coins/rev-remark-${coinId}`, rev2);
+
+        let { publicURL } = await supabase.storage
+          .from("coins")
+          .getPublicUrl(`coins/rev-remark-${coinId}`);
+
+        console.log(publicURL);
+        if (publicURL) {
+          newImageURLs[3] = publicURL;
+        }
+      }
+    }
+
+    return newImageURLs;
+  };
+
+  const updateData = async (dataObj: any) => {
+    await fetch("/api/updateCoin", {
+      body: JSON.stringify({ updatedData: dataObj }),
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+  };
+
+  const submitData = async (formData: any) => {
+    // console.log(formData);
+
+    // console.log(data);
+    let dataObj = {
+      coinId: data.coinId,
+      id: data.id,
+      ruler:
+        formData.rule !== undefined && formData.ruler !== ""
+          ? formData.ruler
+          : data.ruler,
+      name:
+        formData.name !== undefined && formData.name !== ""
+          ? formData.name
+          : data.name,
+      coinage:
+        formData.coinage !== undefined && formData.coinage !== ""
+          ? formData.coinage
+          : data.coinage,
+
+      period:
+        formData.period !== undefined && formData.period !== ""
+          ? formData.period
+          : data.period,
+      type:
+        formData.type !== undefined && formData.type !== ""
+          ? formData.type
+          : data.type,
+      year:
+        formData.year !== undefined && formData.year !== ""
+          ? formData.year
+          : data.year,
+      class:
+        formData.class !== undefined && formData.class !== ""
+          ? formData.class
+          : data.class,
+      denomination:
+        formData.denomination !== undefined && formData.denomination !== ""
+          ? formData.denomination
+          : data.denomination,
+      variety:
+        formData.variety !== undefined && formData.variety !== ""
+          ? formData.variety
+          : data.variety,
+      catalogueNumber:
+        formData.catalogueNumber !== undefined &&
+        formData.catalogueNumber !== ""
+          ? formData.catalogueNumber
+          : data.catalogueNumber,
+      weight:
+        formData.weight !== undefined && formData.weight !== ""
+          ? formData.weight
+          : data.weight,
+      grade:
+        formData.grade !== undefined && formData.grade !== ""
+          ? formData.grade
+          : data.grade,
+      rarity:
+        formData.rarity !== undefined && formData.rarity !== ""
+          ? formData.rarity
+          : data.rarity,
+      page:
+        formData.page !== undefined && formData.page !== ""
+          ? formData.page
+          : data.page,
+      remarks:
+        formData.remarks !== undefined && formData.remarks !== ""
+          ? formData.remarks
+          : data.remarks,
+
+      obs:
+        formData.obs !== undefined && formData.obs !== ""
+          ? formData.obs
+          : data.obs,
+      rev:
+        formData.rev !== undefined && formData.rev !== ""
+          ? formData.rev
+          : data.rev,
+      rating: rating > 0 ? String(rating) : data.rating,
+      obsPhoto: data.obsPhoto,
+      revPhoto: data.revPhoto,
+      obsRemarkPhoto: data.obsRemarkPhoto,
+      revRemarkPhoto: data.revRemarkPhoto,
+    };
+
+    if (obs || rev || obs2 || rev2) {
+      console.log("a new image was added");
+      toast
+        .promise(
+          updateImages(String(data.coinId)),
+          {
+            loading: "Uploading new images, please wait...",
+            success: "Images uploaded successfully!",
+            error: "Error! Something went wrong.",
+          },
+          {
+            duration: 7000,
+          }
+        )
+        .then((res) => {
+          console.log(res);
+
+          dataObj.obsPhoto = res[0] ? res[0] : data.obsPhoto;
+          dataObj.revPhoto = res[1] ? res[1] : data.revPhoto;
+          dataObj.obsRemarkPhoto = res[2] ? res[2] : data.obsRemarkPhoto;
+          dataObj.revRemarkPhoto = res[3] ? res[3] : data.revRemarkPhoto;
+
+          toast
+            .promise(
+              updateData(dataObj),
+              {
+                loading: "Uploading new data, please wait...",
+                success: "Coin data updated successfully!",
+                error: "Error! Something went wrong.",
+              },
+              {
+                duration: 5000,
+              }
+            )
+            .then(() => {
+              // if (res.success) {
+              console.log("finished");
+            });
+        });
+    } else {
+      toast
+        .promise(
+          updateData(dataObj),
+          {
+            loading: "Uploading new data, please wait...",
+            success: "Coin data updated successfully!",
+            error: "Error! Something went wrong.",
+          },
+          {
+            duration: 5000,
+          }
+        )
+        .then(() => {
+          // if (res.success) {
+          console.log("finished");
+        });
+    }
   };
 
   if (data) {
-    console.log(data);
-
     return (
       <div className="px-12">
         <form
@@ -101,7 +373,7 @@ const EditCoin = () => {
           <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
             <div>
               <h3 className="text-xl font-medium leading-6 text-gray-900">
-                New Coin Form
+                Edit Coin Form
               </h3>
               {/* <p className="max-w-2xl mt-1 text-sm text-gray-500">
             This information will be displayed publicly so be careful what you

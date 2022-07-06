@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Dialog, Transition } from "@headlessui/react";
 import { PencilIcon, StarIcon, TrashIcon } from "@heroicons/react/outline";
 import Image from "next/image";
@@ -22,10 +23,10 @@ const LongCoinCard = ({ coin }: any) => {
               setIsCoinDisplayOpen(true);
             }}
           >
-            <Image
+            <img
               src={coin.obsPhoto}
               alt="example coin"
-              objectFit="contain"
+              // objectFit="contain"
               height={200}
               width={200}
             />

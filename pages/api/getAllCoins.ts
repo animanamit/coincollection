@@ -3,7 +3,10 @@ const prisma = new PrismaClient();
 
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
     const allCoins = await prisma.coin.findMany();
     console.log("success!!!!!");

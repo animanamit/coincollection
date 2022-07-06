@@ -9,13 +9,11 @@ export default async function handler(
 ) {
   const { coinId } = req.body;
   try {
-    const coinToEdit = await prisma.coin.findUnique({
+    const coinToEdit = await prisma.coin.findFirst({
       where: {
         coinId: coinId,
       },
     });
-    console.log("success!!!!!");
-    console.log(coinToEdit);
     return res.status(200).json({ coinToEdit });
   } catch (error) {
     console.error("Request error", error);
