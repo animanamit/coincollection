@@ -24,7 +24,7 @@ const Collection = ({ allCoins }: { allCoins: any }) => {
     setCoins(filteredCoins);
   };
   return (
-    <div className="px-8">
+    <div className="px-12">
       <div>
         <button onClick={filter}>Filter</button>
       </div>

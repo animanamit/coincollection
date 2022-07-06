@@ -13,7 +13,7 @@ const LongCoinCard = ({ coin }: any) => {
   let completeButtonRef = useRef(null);
 
   return (
-    <div className="bg-white rounded-xl hover:shadow-md flex">
+    <div className="bg-white rounded-xl hover:shadow-md flex px-4 py-8">
       <div className="flex bg-black justify-evenly h-[200px] w-[400px]">
         {coin.obsPhoto !== "" && (
           <div
@@ -48,42 +48,44 @@ const LongCoinCard = ({ coin }: any) => {
           </div>
         )}
       </div>
-      <div className="flex flex-col ml-3 h-[200px] w-[100px]">
-        {coin.obsRemarkPhoto !== "" && (
-          <div
-            onClick={() => {
-              setDialogImageURL(coin.obsRemarkPhoto);
-              setIsCoinDisplayOpen(true);
-            }}
-            className="bg-black h-[100px]"
-          >
-            <Image
-              src={coin.obsRemarkPhoto}
-              alt="example coin"
-              objectFit="contain"
-              height={100}
-              width={100}
-            />
-          </div>
-        )}
-        {coin.revRemarkPhoto !== "" && (
-          <div
-            onClick={() => {
-              setDialogImageURL(coin.revRemarkPhoto);
-              setIsCoinDisplayOpen(true);
-            }}
-            className="bg-black h-[100px]"
-          >
-            <Image
-              src={coin.revRemarkPhoto}
-              alt="example coin"
-              objectFit="contain"
-              height={100}
-              width={100}
-            />
-          </div>
-        )}
-      </div>
+      {(coin.obsRemarkPhoto !== "" || coin.revRemarkPhoto !== "") && (
+        <div className="flex flex-col ml-3 h-[200px] w-[100px]">
+          {coin.obsRemarkPhoto !== "" && (
+            <div
+              onClick={() => {
+                setDialogImageURL(coin.obsRemarkPhoto);
+                setIsCoinDisplayOpen(true);
+              }}
+              className="bg-black h-[100px]"
+            >
+              <Image
+                src={coin.obsRemarkPhoto}
+                alt="example coin"
+                objectFit="contain"
+                height={100}
+                width={100}
+              />
+            </div>
+          )}
+          {coin.revRemarkPhoto !== "" && (
+            <div
+              onClick={() => {
+                setDialogImageURL(coin.revRemarkPhoto);
+                setIsCoinDisplayOpen(true);
+              }}
+              className="bg-black h-[100px]"
+            >
+              <Image
+                src={coin.revRemarkPhoto}
+                alt="example coin"
+                objectFit="contain"
+                height={100}
+                width={100}
+              />
+            </div>
+          )}
+        </div>
+      )}
       <div className="flex flex-col my-4 ml-3 min-w-min whitespace-nowrap ">
         {coin.name && <p className="inline font-bold ">{coin.name}</p>}
         {coin.type && <p className="inline font-bold">{coin.type}</p>}

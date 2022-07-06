@@ -215,7 +215,7 @@ const AddCoin = () => {
   return (
     <>
       <form
-        className="px-8 space-y-8 bg-white divide-y divide-gray-200 px-1/3"
+        className="px-12 space-y-8 bg-white divide-y divide-gray-200 py-8"
         onSubmit={handleSubmit(submitData)}
       >
         <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
@@ -263,28 +263,6 @@ const AddCoin = () => {
                 </select>
               </div>
             </div>
-            {/* <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-              >
-                Username
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <div className="flex max-w-lg rounded-md shadow-sm">
-                  <span className="inline-flex items-center px-3 text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50 sm:text-sm">
-                    workcation.com/
-                  </span>
-                  <input
-                    type="text"
-                    name="username"
-                    id="username"
-                    autoComplete="username"
-                    className="flex-1 block w-full min-w-0 border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 rounded-r-md sm:text-sm"
-                  />
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
 
@@ -468,13 +446,6 @@ const AddCoin = () => {
                     Rating
                   </label>
                   <div className="mt-1 sm:mt-0 sm:col-span-2 flex">
-                    {/* <input
-                    type="text"
-                    name="postal-code"
-                    id="postal-code"
-                    autoComplete="postal-code"
-                    className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
-                  /> */}
                     <StarIcon
                       className={`w-4 h-4  cursor-pointer transition-transform ease-out hover:scale-120 ${
                         rating >= 1
