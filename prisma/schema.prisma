@@ -36,4 +36,3 @@ model Coin {
   obsRemarkPhoto String
   revRemarkPhoto String
 }
-

@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["cdn.sanity.io", "firebasestorage.googleapis.com"],
+    domains: ["pxqmxxjuewlpptvibnhg.supabase.co"],
   },
 };
 

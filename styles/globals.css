@@ -4,7 +4,6 @@
 
 html,
 body {
-  width: 100vw !important;
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
@@ -18,8 +17,4 @@ a {
 
 * {
   box-sizing: border-box;
-}
-
-img {
-  max-width: unset !important;
 }

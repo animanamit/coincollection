@@ -1,122 +1,89 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { PencilIcon, StarIcon, TrashIcon } from "@heroicons/react/outline";
-import { deleteDoc, doc } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useRef, useState } from "react";
-import { database } from "../../firebase/firebase";
 
-type Inputs = {
-  coin: {
-    name: string;
-    class: string;
-    obs: string;
-    rev: string;
-    page: string;
-    weight: string;
-    variation: string;
-    type: string;
-    collection: string;
-    url: string;
-    remarks: string;
-    rating: number;
-    rarity: string;
-    coinId: string;
-    dateAdded: string;
-  };
-};
-
-const LongCoinCard = ({ coin }: Inputs) => {
+const LongCoinCard = ({ coin }: any) => {
   let [isOpen, setIsOpen] = useState(false);
-
   const [dialogImageURL, setDialogImageURL] = useState("");
 
   const [isCoinDisplayOpen, setIsCoinDisplayOpen] = useState(false);
 
   let completeButtonRef = useRef(null);
 
-  const router = useRouter();
-
-  const deleteCoin = async () => {
-    await deleteDoc(doc(database, "coins", coin.coinId));
-
-    alert("You have deleted this coin.");
-
-    router.reload();
-  };
-
   return (
-    <div
-      key={coin.coinId}
-      className="flex px-4 py-8 my-4 overflow-x-scroll shadow-xl bg-slate-100 rounded-2xl h-[276px]"
-    >
-      <div className="flex bg-black justify-evenly h-[200px]">
-        <div
-          onClick={() => {
-            setDialogImageURL(coin.url[0]);
-            setIsCoinDisplayOpen(true);
-          }}
-        >
-          <Image
-            src={coin.url[0]}
-            alt="example coin"
-            objectFit="contain"
-            height={200}
-            width={200}
-          />
-        </div>
-        <div
-          onClick={() => {
-            setDialogImageURL(coin.url[1]);
-            setIsCoinDisplayOpen(true);
-          }}
-        >
-          <Image
-            src={coin.url[1]}
-            alt="example coin"
-            objectFit="contain"
-            height={200}
-            width={200}
-          />
-        </div>
-      </div>
-      {coin.url.length > 2 && (
-        <div className="flex flex-col ml-3 h-[200px]">
+    <div className="bg-white rounded-xl hover:shadow-md flex">
+      <div className="flex bg-black justify-evenly h-[200px] w-[400px]">
+        {coin.obsPhoto !== "" && (
           <div
             onClick={() => {
-              setDialogImageURL(coin.url[2]);
+              setDialogImageURL(coin.obsPhoto);
+              setIsCoinDisplayOpen(true);
+            }}
+          >
+            <Image
+              src={coin.obsPhoto}
+              alt="example coin"
+              objectFit="contain"
+              height={200}
+              width={200}
+            />
+          </div>
+        )}
+        {coin.revPhoto !== "" && (
+          <div
+            onClick={() => {
+              setDialogImageURL(coin.revPhoto);
+              setIsCoinDisplayOpen(true);
+            }}
+          >
+            <Image
+              src={coin.revPhoto}
+              alt="example coin"
+              objectFit="contain"
+              height={200}
+              width={200}
+            />
+          </div>
+        )}
+      </div>
+      <div className="flex flex-col ml-3 h-[200px] w-[100px]">
+        {coin.obsRemarkPhoto !== "" && (
+          <div
+            onClick={() => {
+              setDialogImageURL(coin.obsRemarkPhoto);
               setIsCoinDisplayOpen(true);
             }}
             className="bg-black h-[100px]"
           >
             <Image
-              src={coin.url[2]}
+              src={coin.obsRemarkPhoto}
               alt="example coin"
               objectFit="contain"
               height={100}
               width={100}
             />
           </div>
-          {!!coin.url[3] && (
-            <div
-              onClick={() => {
-                setDialogImageURL(coin.url[3]);
-                setIsCoinDisplayOpen(true);
-              }}
-              className="bg-black h-[100px]"
-            >
-              <Image
-                src={coin.url[3]}
-                alt="example coin"
-                objectFit="contain"
-                height={100}
-                width={100}
-              />
-            </div>
-          )}
-        </div>
-      )}
+        )}
+        {coin.revRemarkPhoto !== "" && (
+          <div
+            onClick={() => {
+              setDialogImageURL(coin.revRemarkPhoto);
+              setIsCoinDisplayOpen(true);
+            }}
+            className="bg-black h-[100px]"
+          >
+            <Image
+              src={coin.revRemarkPhoto}
+              alt="example coin"
+              objectFit="contain"
+              height={100}
+              width={100}
+            />
+          </div>
+        )}
+      </div>
       <div className="flex flex-col my-4 ml-3 min-w-min whitespace-nowrap ">
         {coin.name && <p className="inline font-bold ">{coin.name}</p>}
         {coin.type && <p className="inline font-bold">{coin.type}</p>}
@@ -135,7 +102,6 @@ const LongCoinCard = ({ coin }: Inputs) => {
           <></>
         )}
       </div>
-
       <div className="flex flex-col flex-1 my-4 ml-3 overflow-scroll min-w-min">
         {coin.obs && (
           <div>
@@ -199,7 +165,7 @@ const LongCoinCard = ({ coin }: Inputs) => {
 
               <div className="flex mt-4 space-x-2">
                 <button
-                  onClick={deleteCoin}
+                  // onClick={deleteCoin}
                   type="button"
                   className="inline-flex justify-center px-4 py-2 text-sm font-medium text-red-900 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                 >

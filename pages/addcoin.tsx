@@ -1,33 +1,40 @@
-import { StarIcon } from "@heroicons/react/outline";
-import { doc, setDoc } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { v4 as uuidv4 } from "uuid";
-import { database, storageRef } from "../firebase/firebase";
 
-type Inputs = {
-  name: string;
-  class: string;
-  obs: string;
-  rev: string;
-  page: string;
-  weight: string;
-  variation: string;
-  type: string;
-  collection: string;
-  url?: string;
-  remarks: string;
-  rating: number;
-  rarity: string;
+import { v4 as uuidv4 } from "uuid";
+import { useForm } from "react-hook-form";
+
+import toast, { Toaster } from "react-hot-toast";
+import { supabase } from "../utils/supabase";
+
+import { StarIcon } from "@heroicons/react/outline";
+
+const exampleCoin = {
+  name: "",
+  coinage: "",
+  ruler: "",
+  period: "",
+  type: "",
+  year: "",
+  class: "",
+  denomination: "",
+  variety: "",
+  catalogueNumber: "",
+  weight: "",
+  grade: "",
+  rarity: "",
+  page: "",
+  remarks: "",
+  rating: "",
+  obs: "",
+  rev: "",
+  obsPhoto: "",
+  revPhoto: "",
+  obsRemarkPhoto: "",
+  revRemarkPhoto: "",
 };
 
 const AddCoin = () => {
-  const [obs, setObs] = useState<File>();
-  const [rev, setRev] = useState<File>();
-
-  const [obs2, setObs2] = useState<File>();
-  const [rev2, setRev2] = useState<File>();
+  const [coinage, setCoinage] = useState("");
   const [rating, setRating] = useState<number>(0);
 
   const {
@@ -35,66 +42,17 @@ const AddCoin = () => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<Inputs>();
+  } = useForm();
+  const [obs, setObs] = useState<File>();
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    let id = uuidv4();
-    let urls: string[] = [];
-    const fileRefObs = ref(storageRef, `coins/obs-${id}`);
-    const fileRefRev = ref(storageRef, `coins/rev-${id}`);
+  const [rev, setRev] = useState<File>();
 
-    const fileRefObs2 = ref(storageRef, `coins/obs_remark-${id}`);
-    const fileRefRev2 = ref(storageRef, `coins/rev_remark-${id}`);
+  const [obs2, setObs2] = useState<File>();
+  const [rev2, setRev2] = useState<File>();
 
-    if (obs) {
-      await uploadBytes(fileRefObs, obs as Blob).then(async () => {
-        let URL = await getDownloadURL(ref(storageRef, `coins/obs-${id}`));
-        urls.push(URL);
-      });
-    }
+  const [urls, setUrls] = useState<string[]>([]);
 
-    if (rev) {
-      await uploadBytes(fileRefRev, rev as Blob).then(async () => {
-        let URL = await getDownloadURL(ref(storageRef, `coins/rev-${id}`));
-        urls.push(URL);
-      });
-    }
-
-    if (obs2) {
-      await uploadBytes(fileRefObs2, obs2 as Blob).then(async () => {
-        let URL = await getDownloadURL(
-          ref(storageRef, `coins/obs_remark-${id}`)
-        );
-        urls.push(URL);
-      });
-    }
-
-    if (rev2) {
-      await uploadBytes(fileRefRev2, rev2 as Blob).then(async () => {
-        let URL = await getDownloadURL(
-          ref(storageRef, `coins/rev_remark-${id}`)
-        );
-        urls.push(URL);
-      });
-    }
-
-    console.log(urls);
-
-    let obj = {
-      ...data,
-      coinId: id,
-      url: urls.length > 0 ? urls : [],
-      dateAdded: Date(),
-      rating: rating <= 3 ? rating : 0,
-    };
-
-    setDoc(doc(database, "coins", id), obj).then(() =>
-      console.log("added to firestore!")
-    );
-
-    alert("Successfully uploaded!");
-    reset();
-  };
+  const [coinId, setCoinId] = useState<string | null>("");
 
   const handleObs = (e: React.ChangeEvent) => {
     const target = e.currentTarget as HTMLInputElement;
@@ -121,249 +79,661 @@ const AddCoin = () => {
     setRev2(image);
   };
 
+  const add = async (dataObj: any) => {
+    await fetch("/api/addCoin", {
+      body: JSON.stringify(dataObj),
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+  };
+
+  const addImages = async () => {
+    let coinId = uuidv4();
+    setCoinId(coinId);
+
+    let images = [
+      { name: "obs", file: obs },
+      { name: "rev", file: rev },
+      { name: "obs-remark", file: obs2 },
+      { name: "rev-remark", file: rev2 },
+    ];
+
+    let urls: Array<string> = [];
+
+    for (let i = 0; i < images.length; i++) {
+      if (images[i].file instanceof File) {
+        const { data, error } = await supabase.storage
+          .from("coins")
+          .upload(`coins/${images[i].name}-${coinId}`, images[i].file as File);
+
+        if (error) {
+          console.log(error);
+          toast.error("Error uploading image");
+          return;
+        } else {
+          console.log(data);
+
+          let { publicURL } = await supabase.storage
+            .from("coins")
+            .getPublicUrl(`coins/obs-${coinId}`);
+
+          console.log(publicURL);
+          if (publicURL) {
+            urls.push(publicURL);
+          }
+        }
+      }
+    }
+
+    setUrls(urls);
+    return urls;
+  };
+
+  const submitData = async (data: any) => {
+    // let images = [
+    //   { name: "obs", file: obs },
+    //   { name: "rev", file: rev },
+    //   { name: "obs-remark", file: obs2 },
+    //   { name: "rev-remark", file: rev2 },
+    // ];
+
+    // let urls = [];
+
+    // for (let i = 0; i < images.length; i++) {
+    //   if (images[i].file instanceof File) {
+    //     const { data, error } = await supabase.storage
+    //       .from("coins")
+    //       .upload(
+    //         `coins/${images[i].name}-${coinId}`,
+    //         images[i].file as File
+    //       );
+
+    //     if (error) {
+    //       console.log(error);
+    //       toast.error("Error uploading image");
+    //       return;
+    //     } else {
+    //       console.log(data);
+
+    //       let { publicURL } = await supabase.storage
+    //         .from("coins")
+    //         .getPublicUrl(`coins/obs-${coinId}`);
+
+    //       console.log(publicURL);
+    //       urls.push(publicURL);
+    //     }
+    //   }
+    // }
+
+    toast
+      .promise(
+        addImages(),
+        {
+          loading: "Uploading images, please wait...",
+          success: "Images uploaded successfully!",
+          error: "Error! Something went wrong.",
+        },
+        {
+          duration: 7000,
+        }
+      )
+      .then((imageURLs) => {
+        console.log();
+        // if (res.success) {
+        if (imageURLs) {
+          let dataObj = {
+            ...exampleCoin,
+            ...data,
+            coinId: coinId,
+            rating: rating > 0 ? String(rating) : "",
+            obsPhoto: imageURLs[0] ? imageURLs[0] : "",
+            revPhoto: imageURLs[1] ? imageURLs[1] : "",
+            obsRemarkPhoto: imageURLs[2] ? imageURLs[2] : "",
+            revRemarkPhoto: imageURLs[3] ? imageURLs[3] : "",
+          };
+
+          toast
+            .promise(
+              add(dataObj),
+              {
+                loading: "Uploading data, please wait...",
+                success: "Coin uploaded successfully!",
+                error: "Error! Something went wrong.",
+              },
+              {
+                duration: 5000,
+              }
+            )
+            .then(() => {
+              // if (res.success) {
+              console.log("finished");
+            });
+        }
+      });
+  };
+
   return (
-    <div className="flex flex-col items-center h-full py-4 bg-slate-50">
-      <h2 className="p-4 text-4xl font-bold tracking-tight text-zinc-800">
-        Add a new coin
-      </h2>
-
-      <div className="flex flex-col w-2/5 p-8 bg-white shadow-md">
-        <form className="flex flex-col " onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col mb-2">
-            <label className="mb-1 font-bold text-zinc-800">Ruler</label>
-            <input
-              // defaultValue="Name"
-              type="text"
-              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
-                errors.name && `border-red-500`
-              }`}
-              {...register("name")}
-            />
-            {errors.name && (
-              <span className="text-red-500">This field is required</span>
-            )}
-          </div>
-          <div className="flex flex-col mb-2">
-            <label className="mb-1 font-bold text-zinc-800">Type</label>
-            <input
-              // defaultValue="Name"
-              type="text"
-              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
-                errors.type && `border-red-500`
-              }`}
-              {...register("type")}
-            />
-            {errors.type && (
-              <span className="text-red-500">This field is required</span>
-            )}
-          </div>
-          <div className="flex flex-col p-1 mb-2">
-            <label className="mb-1 font-bold text-zinc-800">Class</label>
-            <input
-              // defaultValue="Class"
-              type="text"
-              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
-                errors.class && `border-red-500`
-              }`}
-              {...register("class")}
-            />
-            {errors.class && (
-              <span className="text-red-500">This field is required</span>
-            )}
-          </div>
-          <div className="flex flex-col mb-2">
-            <label className="mb-1 font-bold text-zinc-800">Variation</label>
-            <input
-              // defaultValue="Name"
-              type="text"
-              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
-                errors.variation && `border-red-500`
-              }`}
-              {...register("variation")}
-            />
-            {errors.variation && (
-              <span className="text-red-500">This field is required</span>
-            )}
+    <>
+      <form
+        className="px-8 space-y-8 bg-white divide-y divide-gray-200 px-1/3"
+        onSubmit={handleSubmit(submitData)}
+      >
+        <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+          <div>
+            <h3 className="text-xl font-medium leading-6 text-gray-900">
+              New Coin Form
+            </h3>
+            {/* <p className="max-w-2xl mt-1 text-sm text-gray-500">
+            This information will be displayed publicly so be careful what you
+            share.
+          </p> */}
           </div>
 
-          <div className="flex flex-col mb-2">
-            <label className="mb-1 font-bold text-zinc-800">Weight</label>
-            <input
-              // defaultValue="Name"
-              type="text"
-              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
-                errors.weight && `border-red-500`
-              }`}
-              {...register("weight")}
-            />
-            {errors.weight && (
-              <span className="text-red-500">This field is required</span>
-            )}
+          <div className="mt-6 space-y-6 sm:mt-5 sm:space-y-5">
+            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+              <label
+                htmlFor="coinage"
+                className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+              >
+                Coinage
+              </label>
+              <div className="mt-1 sm:mt-0 sm:col-span-2">
+                <select
+                  id="coinage"
+                  // autoComplete="country-name"
+                  {...register("coinage")}
+                  defaultValue="Select Coinage"
+                  onChange={(e) => setCoinage(e.target.value)}
+                  className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
+                >
+                  <option disabled>Select Coinage</option>
+                  <option>Assam</option>
+                  <option>Gupta</option>
+                  <option>British Gold</option>
+                  <option>British Circulation Rarities</option>
+                  <option>Awadh Gold</option>
+                  <option>Hyderabad Gold</option>
+                  <option>Baroda Gold</option>
+                  <option>Mughal Gold</option>
+                  <option>Kutch Gold</option>
+                  <option>Nawanagar Gold</option>
+                  <option>Rajkot</option>
+                  <option>Tripura</option>
+                  <option>Bengal Presidency</option>
+                </select>
+              </div>
+            </div>
+            {/* <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+              <label
+                htmlFor="username"
+                className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+              >
+                Username
+              </label>
+              <div className="mt-1 sm:mt-0 sm:col-span-2">
+                <div className="flex max-w-lg rounded-md shadow-sm">
+                  <span className="inline-flex items-center px-3 text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50 sm:text-sm">
+                    workcation.com/
+                  </span>
+                  <input
+                    type="text"
+                    name="username"
+                    id="username"
+                    autoComplete="username"
+                    className="flex-1 block w-full min-w-0 border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 rounded-r-md sm:text-sm"
+                  />
+                </div>
+              </div>
+            </div> */}
           </div>
-          <div className="flex flex-col mb-2">
-            <label className="mb-1 font-bold text-zinc-800">Page</label>
-            <input
-              // defaultValue="Name"
-              type="text"
-              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
-                errors.page && `border-red-500`
-              }`}
-              {...register("page")}
-            />
-            {errors.page && (
-              <span className="text-red-500">This field is required</span>
-            )}
+        </div>
+
+        <div className="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
+          <div>
+            <h3 className="text-lg font-medium leading-6 text-gray-900">
+              Details
+            </h3>
+            <p className="max-w-2xl mt-1 text-sm text-gray-500">
+              Fill in details of the new coin.
+            </p>
           </div>
-          <div className="flex flex-col mb-2">
-            <label className="mb-1 font-bold text-zinc-800">Obs</label>
-            <textarea
-              // defaultValue="Name"
-              //   type="textarea"
-              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
-                errors.obs && `border-red-500`
-              }`}
-              {...register("obs")}
-            />
-            {errors.obs && (
-              <span className="text-red-500">This field is required</span>
+          <div className="space-y-6 sm:space-y-5">
+            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+              <label
+                htmlFor="ruler"
+                className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+              >
+                Ruler
+              </label>
+              <div className="mt-1 sm:mt-0 sm:col-span-2">
+                <input
+                  type="text"
+                  {...register("ruler")}
+                  className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
+                />
+              </div>
+            </div>
+
+            {coinage !== "Gupta" && coinage !== "Tripura" && (
+              <>
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label
+                    htmlFor="period"
+                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                  >
+                    Period
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <input
+                      type="text"
+                      {...register("period")}
+                      className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label
+                    htmlFor="year"
+                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                  >
+                    Year
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <input
+                      type="text"
+                      {...register("year")}
+                      className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
+                    />
+                  </div>
+                </div>
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label
+                    htmlFor="denomination"
+                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                  >
+                    Denomination
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <input
+                      type="text"
+                      {...register("denomination")}
+                      className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
+                    />
+                  </div>
+                </div>
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label
+                    htmlFor="catalogno"
+                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                  >
+                    Catalog No.
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <input
+                      type="text"
+                      {...register("catalogueNumber")}
+                      className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
+                    />
+                  </div>
+                </div>
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label
+                    htmlFor="postal-code"
+                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                  >
+                    Grade
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <input
+                      type="text"
+                      {...register("grade")}
+                      className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
+                    />
+                  </div>
+                </div>
+              </>
             )}
-          </div>
-          <div className="flex flex-col mb-2">
-            <label className="mb-1 font-bold text-zinc-800">Rev</label>
-            <textarea
-              // defaultValue="Name"
-              //   type="text"
-              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
-                errors.rev && `border-red-500`
-              }`}
-              {...register("rev")}
-            />
-            {errors.rev && (
-              <span className="text-red-500">This field is required</span>
+
+            {(coinage === "Gupta" || coinage === "Tripura") && (
+              <>
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                  >
+                    Type
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <input
+                      type="text"
+                      {...register("type")}
+                      className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label
+                    htmlFor="city"
+                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                  >
+                    Class
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <input
+                      type="text"
+                      {...register("class")}
+                      className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
+                    />
+                  </div>
+                </div>
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label
+                    htmlFor="city"
+                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                  >
+                    Variation
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <input
+                      type="text"
+                      {...register("variety")}
+                      className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label
+                    htmlFor="postal-code"
+                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                  >
+                    Page
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <input
+                      type="text"
+                      {...register("page")}
+                      className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label
+                    htmlFor="postal-code"
+                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                  >
+                    Rating
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2 flex">
+                    {/* <input
+                    type="text"
+                    name="postal-code"
+                    id="postal-code"
+                    autoComplete="postal-code"
+                    className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
+                  /> */}
+                    <StarIcon
+                      className={`w-4 h-4  cursor-pointer transition-transform ease-out hover:scale-120 ${
+                        rating >= 1
+                          ? "fill-yellow-500"
+                          : "hover:fill-yellow-500"
+                      }`}
+                      onClick={() => setRating(1)}
+                    />
+                    <StarIcon
+                      className={`w-4 h-4  cursor-pointer transition-transform ease-out hover:scale-120 ${
+                        rating >= 2
+                          ? "fill-yellow-500"
+                          : "hover:fill-yellow-500"
+                      }`}
+                      onClick={() => setRating(2)}
+                    />
+                    <StarIcon
+                      className={`w-4 h-4  cursor-pointer transition-transform ease-out hover:scale-120 ${
+                        rating >= 3
+                          ? "fill-yellow-500"
+                          : "hover:fill-yellow-500"
+                      }`}
+                      onClick={() => setRating(3)}
+                    />
+                  </div>
+                </div>
+              </>
             )}
-          </div>
-          <div className="flex flex-col mb-2">
-            <label className="mb-1 font-bold text-zinc-800">Remarks</label>
-            <textarea
-              // defaultValue="Name"
-              //   type="text"
-              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
-                errors.remarks && `border-red-500`
-              }`}
-              {...register("remarks")}
-            />
-            {errors.remarks && (
-              <span className="text-red-500">This field is required</span>
-            )}
-          </div>
-          <div className="flex flex-col mb-2">
-            <label className="mb-1 font-bold text-zinc-800">Rarity</label>
-            <textarea
-              // defaultValue="Name"
-              //   type="text"
-              className={`py-2 px-3 shadow-sm border rounded focus:outline-none focus:shadow-outline appearance-none text-zinc-600 ${
-                errors.remarks && `border-red-500`
-              }`}
-              {...register("rarity")}
-            />
-            {errors.rarity && (
-              <span className="text-red-500">This field is required</span>
-            )}
-          </div>
-          <div className="flex flex-col mb-2">
-            <label className="mb-1 font-bold text-zinc-800">Rating</label>
-            <div className="flex">
-              <StarIcon
-                className={`w-4 h-4  cursor-pointer transition-transform ease-out hover:scale-120 ${
-                  rating >= 1 ? "fill-yellow-500" : "hover:fill-yellow-500"
-                }`}
-                onClick={() => setRating(1)}
-              />
-              <StarIcon
-                className={`w-4 h-4  cursor-pointer transition-transform ease-out hover:scale-120 ${
-                  rating >= 2 ? "fill-yellow-500" : "hover:fill-yellow-500"
-                }`}
-                onClick={() => setRating(2)}
-              />
-              <StarIcon
-                className={`w-4 h-4  cursor-pointer transition-transform ease-out hover:scale-120 ${
-                  rating >= 3 ? "fill-yellow-500" : "hover:fill-yellow-500"
-                }`}
-                onClick={() => setRating(3)}
-              />
+
+            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+              <label
+                htmlFor="postal-code"
+                className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+              >
+                Rarity
+              </label>
+              <div className="mt-1 sm:mt-0 sm:col-span-2">
+                <input
+                  type="text"
+                  {...register("rarity")}
+                  className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+              <label
+                htmlFor="about"
+                className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+              >
+                Remarks
+              </label>
+              <div className="mt-1 sm:mt-0 sm:col-span-2">
+                <textarea
+                  {...register("remarks")}
+                  rows={3}
+                  className="block w-full max-w-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  defaultValue={""}
+                />
+              </div>
             </div>
           </div>
-          <div className="p-1 mb-2">
-            <label
-              className="block mb-2 font-bold text-zinc-800"
-              htmlFor="user_avatar"
-            >
-              Upload Obs Photo
-            </label>
-            <input
-              type="file"
-              aria-describedby="user_avatar_help"
-              id="user_avatar"
-              className="w-full text-base rounded text-zinc-600 bg-zinc-200 focus:outline-none focus:border-transparent"
-              onChange={handleObs}
-            />
-          </div>
+        </div>
 
-          <div className="p-1 mb-2">
-            <label
-              className="block mb-2 font-bold text-zinc-800"
-              htmlFor="user_avatar"
-            >
-              Upload Rev Photo
-            </label>
-            <input
-              type="file"
-              aria-describedby="user_avatar_help"
-              id="user_avatar"
-              className="w-full text-base rounded text-zinc-600 bg-zinc-200 focus:outline-none focus:border-transparent"
-              onChange={handleRev}
-            />
+        <div className="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
+          <div>
+            <h3 className="text-lg font-medium leading-6 text-gray-900">
+              Photos
+            </h3>
+            <p className="max-w-2xl mt-1 text-sm text-gray-500">
+              Add photos of the coin to be uploaded here.
+            </p>
           </div>
-          <div className="p-1 mb-2">
-            <label
-              className="block mb-2 font-bold text-zinc-800"
-              htmlFor="user_avatar"
-            >
-              Upload Obs Remark Photo
+          <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+            <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+              Obs Photo
             </label>
-            <input
-              type="file"
-              aria-describedby="user_avatar_help"
-              id="user_avatar"
-              className="w-full text-base rounded text-zinc-600 bg-zinc-200 focus:outline-none focus:border-transparent"
-              onChange={handleObs2}
-            />
+            <div className="mt-1 sm:mt-0 sm:col-span-2">
+              <div className="flex justify-center max-w-lg px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                <div className="space-y-1 text-center">
+                  <svg
+                    className="w-12 h-12 mx-auto text-gray-400"
+                    stroke="currentColor"
+                    fill="none"
+                    viewBox="0 0 48 48"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <div className="flex text-sm text-gray-600 justify-center">
+                    <label className="relative font-medium text-indigo-600 bg-white rounded-md cursor-pointer hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                      <span>Upload a file</span>
+                      <input
+                        type="file"
+                        className="sr-only"
+                        onChange={handleObs}
+                      />
+                    </label>
+                    <p className="pl-1">or drag and drop</p>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    {obs ? obs.name : "PNG, JPG, GIF up to 10MB"}
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
+          <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+            <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+              Rev photo
+            </label>
+            <div className="mt-1 sm:mt-0 sm:col-span-2">
+              <div className="flex justify-center max-w-lg px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                <div className="space-y-1 text-center">
+                  <svg
+                    className="w-12 h-12 mx-auto text-gray-400"
+                    stroke="currentColor"
+                    fill="none"
+                    viewBox="0 0 48 48"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <div className="flex text-sm text-gray-600 justify-center">
+                    <label className="relative font-medium text-indigo-600 bg-white rounded-md cursor-pointer hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                      <span>Upload a file</span>
+                      <input
+                        type="file"
+                        className="sr-only"
+                        onChange={handleRev}
+                      />
+                    </label>
+                    <p className="pl-1">or drag and drop</p>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    {rev ? rev.name : "PNG, JPG, GIF up to 10MB"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+            <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+              Obs Remark Photo
+            </label>
+            <div className="mt-1 sm:mt-0 sm:col-span-2">
+              <div className="flex justify-center max-w-lg px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                <div className="space-y-1 text-center">
+                  <svg
+                    className="w-12 h-12 mx-auto text-gray-400"
+                    stroke="currentColor"
+                    fill="none"
+                    viewBox="0 0 48 48"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <div className="flex text-sm text-gray-600 text-center justify-center">
+                    <label className="relative font-medium text-indigo-600 bg-white rounded-md cursor-pointer hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                      <span>Upload a file</span>
+                      <input
+                        type="file"
+                        className="sr-only"
+                        onChange={handleObs2}
+                      />
+                    </label>
+                    <p className="pl-1">or drag and drop</p>
+                  </div>
+                  <p className="text-xs text-gray-500 w-full overflow-x-hidden">
+                    {obs2 ? obs2.name : "PNG, JPG, GIF up to 10MB"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+            <label className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+              Rev Remark Photo
+            </label>
+            <div className="mt-1 sm:mt-0 sm:col-span-2">
+              <div className="flex justify-center max-w-lg px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                <div className="space-y-1 text-center">
+                  <svg
+                    className="w-12 h-12 mx-auto text-gray-400"
+                    stroke="currentColor"
+                    fill="none"
+                    viewBox="0 0 48 48"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <div className="flex text-sm text-gray-600 justify-center">
+                    <label className="relative font-medium text-indigo-600 bg-white rounded-md cursor-pointer hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                      <span>Upload a file</span>
+                      <input
+                        type="file"
+                        className="sr-only"
+                        onChange={handleRev2}
+                      />
+                    </label>
+                    <p className="pl-1">or drag and drop</p>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    {rev2 ? rev2.name : "PNG, JPG, GIF up to 10MB"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-          <div className="p-1 mb-2">
-            <label
-              className="block mb-2 font-bold text-zinc-800"
-              htmlFor="user_avatar"
+        {/* SUBMIT BUTTONS  */}
+        <div className="pt-5">
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={() => {
+                reset();
+                setObs(undefined);
+                setObs2(undefined);
+                setRev(undefined);
+                setRev2(undefined);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Upload Rev Remark Photo
-            </label>
-            <input
-              type="file"
-              aria-describedby="user_avatar_help"
-              id="user_avatar"
-              className="w-full text-base rounded text-zinc-600 bg-zinc-200 focus:outline-none focus:border-transparent"
-              onChange={handleRev2}
-            />
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="inline-flex justify-center px-4 py-2 ml-3 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Submit
+            </button>
           </div>
-
-          <input
-            type="submit"
-            className="px-3 py-2 uppercase rounded shadow-sm bg-slate-200 tracking-loose"
-            placeholder="Submit"
-          />
-        </form>
-      </div>
-    </div>
+        </div>
+      </form>
+      <Toaster />
+    </>
   );
 };
 
