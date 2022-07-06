@@ -9,7 +9,7 @@ export default async function handler(
 ) {
   const { coinId } = req.body;
   try {
-    const coinToEdit = await prisma.coin.findFirst({
+    const coinToEdit = await prisma.coin.findUnique({
       where: {
         coinId: coinId,
       },

@@ -8,11 +8,11 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { newData } = req.body;
-  let id = newData.id;
+  let coinId = newData.coinId;
 
   const currData = await prisma.coin.findUnique({
     where: {
-      id: id,
+      coinId: coinId,
     },
   });
 

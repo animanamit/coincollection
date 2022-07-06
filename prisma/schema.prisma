@@ -12,7 +12,7 @@ datasource db {
 
 model Coin {
   id Int @id @default(autoincrement())
-  coinId String
+  coinId String @unique
   name String
   coinage String
   ruler String
