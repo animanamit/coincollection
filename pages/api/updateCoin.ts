@@ -12,7 +12,7 @@ export default async function handler(
   try {
     const updatedCoin = await prisma.coin.update({
       where: {
-        coinId: updatedData.coinId,
+        id: updatedData.id,
       },
       data: {
         name: updatedData.name,
