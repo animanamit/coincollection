@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 
 const LongCoinCard = ({ coin }: any) => {
-  let [isOpen, setIsOpen] = useState(false);
+  let [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [dialogImageURL, setDialogImageURL] = useState("");
 
   const [isCoinDisplayOpen, setIsCoinDisplayOpen] = useState(false);
@@ -127,7 +127,7 @@ const LongCoinCard = ({ coin }: any) => {
       </div>
       <div className="flex flex-col justify-center px-4 py-4 space-y-4 text-zinc-600">
         <TrashIcon
-          onClick={() => setIsOpen(true)}
+          onClick={() => setIsDeleteDialogOpen(true)}
           className="w-5 h-5 transition-transform duration-150 ease-out cursor-pointer hover:scale-150"
         />
         <Link href={`/edit/${coin.coinId}`}>
@@ -136,7 +136,7 @@ const LongCoinCard = ({ coin }: any) => {
       </div>
 
       <Transition
-        show={isOpen}
+        show={isDeleteDialogOpen}
         enter="ease-out duration-300"
         enterFrom="opacity-0"
         enterTo="opacity-100"
@@ -146,8 +146,8 @@ const LongCoinCard = ({ coin }: any) => {
       >
         <Dialog
           className="relative z-50"
-          open={isOpen}
-          onClose={() => setIsOpen(false)}
+          open={isDeleteDialogOpen}
+          onClose={() => setIsDeleteDialogOpen(false)}
           initialFocus={completeButtonRef}
         >
           <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
@@ -177,7 +177,7 @@ const LongCoinCard = ({ coin }: any) => {
                 <button
                   type="button"
                   className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => setIsDeleteDialogOpen(false)}
                 >
                   Cancel
                 </button>

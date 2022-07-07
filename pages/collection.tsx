@@ -49,18 +49,26 @@ const Collection = ({ allCoins }: { allCoins: any }) => {
     console.log(filteredCoins[0]);
     setCoins(filteredCoins);
   };
-  return (
-    <div className="px-12">
-      <div>
-        <button onClick={filter}>Filter</button>
+
+  if (data) {
+    return (
+      <div className="px-12">
+        <div>
+          <button onClick={filter}>Filter</button>
+        </div>
+        <div className="flex flex-col space-y-4 mb-8">
+          {coins.map((coin: any, index: number) => (
+            <LongCoinCard coin={coin} key={index} />
+          ))}
+        </div>
       </div>
-      <div className="flex flex-col space-y-4 mb-8">
-        {coins.map((coin: any, index: number) => (
-          <LongCoinCard coin={coin} key={index} />
-        ))}
+    );
+  } else
+    return (
+      <div className="px-12 py-12">
+        <h1 className="text-3xl">Loading...</h1>
       </div>
-    </div>
-  );
+    );
 };
 
 export default Collection;
