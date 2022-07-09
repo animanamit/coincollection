@@ -4,6 +4,9 @@ import { useQuery } from "react-query";
 import LongCoinCard from "../components/coin-card/long-coin-card";
 import { prisma } from "../utils/prisma-client";
 
+import { ViewListIcon, ViewGridIcon } from "@heroicons/react/outline";
+import CoinCard from "../components/coin-card/coin-card";
+
 export const getStaticProps: GetStaticProps = async () => {
   const allCoins = await prisma.coin.findMany();
   return { props: { allCoins } };
@@ -23,6 +26,8 @@ const getAllCoins = async () => {
 
 const Collection = ({ allCoins }: { allCoins: any }) => {
   // console.log(allCoins);
+
+  const [view, setView] = useState("grid");
 
   const { isLoading, isError, isSuccess, data } = useQuery(
     "getAllCoins",
@@ -53,14 +58,41 @@ const Collection = ({ allCoins }: { allCoins: any }) => {
   if (data) {
     return (
       <div className="px-12">
-        <div>
+        <div className="flex justify-between mx-12 my-4">
           <button onClick={filter}>Filter</button>
+          <div className="flex space-x-2">
+            <button
+              onClick={() => setView("grid")}
+              className={` border-[2px] text-gray-500  rounded-lg p-2  ${
+                view === "grid" ? "border-gray-500 " : ""
+              }`}
+            >
+              <ViewGridIcon className="h-6 w-6" />
+            </button>
+
+            <button
+              onClick={() => setView("long")}
+              className={`border-[2px] text-gray-500 rounded-lg p-2  ${
+                view === "long" ? "border-gray-500 " : ""
+              }`}
+            >
+              <ViewListIcon className="h-6 w-6" />
+            </button>
+          </div>
         </div>
-        <div className="flex flex-col space-y-4 mb-8">
-          {coins.map((coin: any, index: number) => (
-            <LongCoinCard coin={coin} key={index} />
-          ))}
-        </div>
+
+        {coins.map((coin: any, index: number) =>
+          view === "grid" ? (
+            <div className="flex flex-col space-y-4 mb-8">
+              {" "}
+              <CoinCard coin={coin} key={index} />{" "}
+            </div>
+          ) : (
+            <div className="flex flex-col space-y-4 mb-8">
+              <LongCoinCard coin={coin} key={index} />
+            </div>
+          )
+        )}
       </div>
     );
   } else
