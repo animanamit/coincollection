@@ -35,4 +35,5 @@ model Coin {
   revPhoto String
   obsRemarkPhoto String
   revRemarkPhoto String
+  status String
 }

@@ -130,41 +130,6 @@ const AddCoin = () => {
   };
 
   const submitData = async (data: any) => {
-    // let images = [
-    //   { name: "obs", file: obs },
-    //   { name: "rev", file: rev },
-    //   { name: "obs-remark", file: obs2 },
-    //   { name: "rev-remark", file: rev2 },
-    // ];
-
-    // let urls = [];
-
-    // for (let i = 0; i < images.length; i++) {
-    //   if (images[i].file instanceof File) {
-    //     const { data, error } = await supabase.storage
-    //       .from("coins")
-    //       .upload(
-    //         `coins/${images[i].name}-${coinId}`,
-    //         images[i].file as File
-    //       );
-
-    //     if (error) {
-    //       console.log(error);
-    //       toast.error("Error uploading image");
-    //       return;
-    //     } else {
-    //       console.log(data);
-
-    //       let { publicURL } = await supabase.storage
-    //         .from("coins")
-    //         .getPublicUrl(`coins/obs-${coinId}`);
-
-    //       console.log(publicURL);
-    //       urls.push(publicURL);
-    //     }
-    //   }
-    // }
-
     toast
       .promise(
         addImages(),
@@ -552,6 +517,55 @@ const AddCoin = () => {
                   className="block w-full max-w-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   defaultValue={""}
                 />
+              </div>
+            </div>
+
+            <div className="pt-6 sm:pt-5">
+              <div role="group" aria-labelledby="label-notifications">
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-baseline">
+                  <div>
+                    <div
+                      className="text-base font-medium text-gray-900 sm:text-sm sm:text-gray-700"
+                      id="label-notifications"
+                    >
+                      Status
+                    </div>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <div className="max-w-lg">
+                      {/* <p className="text-sm text-gray-500">
+                        These are delivered via SMS to your mobile phone.
+                      </p> */}
+                      <div className="mt-4 space-y-4">
+                        <div className="flex items-center">
+                          <input
+                            {...register("status")}
+                            type="radio"
+                            value="purchased"
+                            className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+                          />
+                          <label className="block ml-3 text-sm font-medium text-gray-700">
+                            Purchased
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input
+                            {...register("status")}
+                            type="radio"
+                            value="wishlist"
+                            className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+                          />
+                          <label
+                            htmlFor="push-email"
+                            className="block ml-3 text-sm font-medium text-gray-700"
+                          >
+                            Wishlist
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
