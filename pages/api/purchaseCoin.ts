@@ -1,25 +1,25 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { coinageName } = req.body;
+  const { id } = req.body;
 
   try {
-    const filteredCoins = await prisma.coin.findMany({
+    const updatedCoin = await prisma.coin.update({
       where: {
-        coinage: coinageName,
+        id: id,
+      },
+      data: {
         status: "owned",
       },
     });
     console.log("success!!!!!");
-    console.log(filteredCoins);
-    console.log(req.body);
-    return res.status(200).json({ filteredCoins });
+    return res.status(200).json({ success: true });
   } catch (error) {
     console.error("Request error", error);
     return res.status(500).json({ error, success: false });

@@ -18,3 +18,13 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.tooltip {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 7px solid rgba(0, 0, 0, 0.7);
+}

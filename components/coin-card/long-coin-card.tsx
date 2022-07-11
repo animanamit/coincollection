@@ -1,17 +1,90 @@
 /* eslint-disable @next/next/no-img-element */
 import { Dialog, Transition } from "@headlessui/react";
-import { PencilIcon, StarIcon, TrashIcon } from "@heroicons/react/outline";
+import {
+  PencilIcon,
+  ShoppingCartIcon,
+  StarIcon,
+  TrashIcon,
+} from "@heroicons/react/outline";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+
+import { useRouter } from "next/router";
 
 const LongCoinCard = ({ coin }: any) => {
+  const router = useRouter();
+
   let [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  let [isPurchaseDialogOpen, setIsPurchaseDialogOpen] = useState(false);
+
   const [dialogImageURL, setDialogImageURL] = useState("");
 
   const [isCoinDisplayOpen, setIsCoinDisplayOpen] = useState(false);
 
   let completeButtonRef = useRef(null);
+
+  const purchaseCoin = async (id: string) => {
+    await fetch("/api/purchaseCoin", {
+      method: "POST",
+      body: JSON.stringify({ id: id }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
+
+  const setCoinAsPurchased = (id: string) => {
+    toast
+      .promise(
+        fetch("/api/purchaseCoin", {
+          method: "POST",
+          body: JSON.stringify({ id: id }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }),
+        {
+          loading: "Please wait...",
+          success: "Coin has been set as purchased!",
+          error: "Error! Something went wrong.",
+        },
+        {
+          duration: 5000,
+        }
+      )
+      .then(() => {
+        // if (res.success) {
+        console.log("finished");
+        router.reload();
+      });
+  };
+
+  const deleteCoin = (id: string) => {
+    toast
+      .promise(
+        fetch("/api/deleteCoin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: id }),
+        }),
+        {
+          loading: "Please wait...",
+          success: "Coin has been deleted!",
+          error: "Error! Something went wrong.",
+        },
+        {
+          duration: 5000,
+        }
+      )
+      .then(() => {
+        // if (res.success) {
+        console.log("finished");
+        router.reload();
+      });
+  };
 
   return (
     <div className="bg-white rounded-xl hover:shadow-md flex px-4 py-8">
@@ -133,6 +206,12 @@ const LongCoinCard = ({ coin }: any) => {
         <Link href={`/edit/${coin.coinId}`}>
           <PencilIcon className="w-5 h-5 transition-transform duration-150 ease-out cursor-pointer hover:scale-150" />
         </Link>
+        {coin.status === "wishlist" && (
+          <ShoppingCartIcon
+            onClick={() => setIsPurchaseDialogOpen(true)}
+            className="w-5 h-5 transition-transform duration-150 ease-out cursor-pointer hover:scale-150"
+          />
+        )}
       </div>
 
       <Transition
@@ -168,7 +247,7 @@ const LongCoinCard = ({ coin }: any) => {
 
               <div className="flex mt-4 space-x-2">
                 <button
-                  // onClick={deleteCoin}
+                  onClick={() => deleteCoin(coin.id)}
                   type="button"
                   className="inline-flex justify-center px-4 py-2 text-sm font-medium text-red-900 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                 >
@@ -178,6 +257,57 @@ const LongCoinCard = ({ coin }: any) => {
                   type="button"
                   className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                   onClick={() => setIsDeleteDialogOpen(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </Dialog.Panel>
+          </div>
+        </Dialog>
+      </Transition>
+      <Transition
+        show={isPurchaseDialogOpen}
+        enter="ease-out duration-300"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="ease-in duration-200"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <Dialog
+          className="relative z-50"
+          open={isPurchaseDialogOpen}
+          onClose={() => setIsPurchaseDialogOpen(false)}
+          initialFocus={completeButtonRef}
+        >
+          <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+
+          <div className="fixed inset-0 flex items-center justify-center px-6 py-4">
+            <Dialog.Panel className="w-full max-w-sm p-4 bg-white rounded-xl">
+              <Dialog.Title
+                as="h3"
+                className="text-lg font-medium leading-6 text-zinc-800"
+              >
+                Mark Coin as Owned
+              </Dialog.Title>
+              <div className="mt-2">
+                <p className="text-sm text-zinc-800">
+                  Do you want to mark this coin as owned?
+                </p>
+              </div>
+
+              <div className="flex mt-4 space-x-2">
+                <button
+                  onClick={() => setCoinAsPurchased(coin.id)}
+                  type="button"
+                  className="inline-flex justify-center px-4 py-2 text-sm font-medium text-red-900 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                >
+                  Yes
+                </button>
+                <button
+                  type="button"
+                  className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  onClick={() => setIsPurchaseDialogOpen(false)}
                 >
                   Cancel
                 </button>
@@ -205,6 +335,7 @@ const LongCoinCard = ({ coin }: any) => {
           </Dialog.Panel>
         </div>
       </Dialog>
+      <Toaster />
     </div>
   );
 };

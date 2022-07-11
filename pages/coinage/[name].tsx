@@ -1,14 +1,20 @@
+import { Popover } from "@headlessui/react";
 import {
   BookOpenIcon,
   ViewGridIcon,
   ViewListIcon,
   ClipboardListIcon,
+  SearchIcon,
+  AdjustmentsIcon,
 } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import CoinCard from "../../components/coin-card/coin-card";
 import LongCoinCard from "../../components/coin-card/long-coin-card";
+import Wishlist from "../../components/wishlist";
+
+import { usePopper } from "react-popper";
 
 const fetchCoinsFromCoinage = async (coinageName: string) => {
   try {
@@ -64,9 +70,9 @@ const Coinage = () => {
     switch (toggleView) {
       case "list":
         view = (
-          <div className="w-full p-4 flex flex-col space-y-4">
+          <div className="w-full flex flex-col px-6 space-y-4">
             {Object.entries(data).map(([key, value]) => (
-              <LongCoinCard coin={value} key={key} />
+              <LongCoinCard coin={value} key={`long-${key}`} />
             ))}
           </div>
         );
@@ -82,16 +88,18 @@ const Coinage = () => {
         break;
       case "history":
         view = (
-          <h1 className="text-xl font-bold tracking-tight text-center">
-            History
-          </h1>
+          <div className="flex justify-center w-full py-4">
+            <h1 className="text-xl font-bold tracking-tight  text-center">
+              History
+            </h1>
+          </div>
         );
         break;
       case "wishlist":
         view = (
-          <h1 className="text-xl font-bold tracking-tight text-center">
-            Wishlist
-          </h1>
+          <div className="flex flex-col justify-center w-full">
+            <Wishlist coinage={name as string} />
+          </div>
         );
         break;
       default:
@@ -104,7 +112,7 @@ const Coinage = () => {
           {name}
         </h1>
         <div className="flex">
-          <div className=" bg-white rounded-lg h-1/2 flex flex-col px-4 space-y-6 ">
+          <div className=" bg-white rounded-lg h-1/2 flex flex-col  space-y-6 my-4 ">
             <button
               onClick={() => setToggleView("history")}
               className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
@@ -129,6 +137,15 @@ const Coinage = () => {
             >
               <ClipboardListIcon />
             </button>
+            <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
+              <SearchIcon />
+            </button>
+
+            <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
+              <AdjustmentsIcon />
+            </button>
+
+            {/* <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"></button> */}
           </div>
           {
             // <div className="w-full p-4 grid">

@@ -10,16 +10,15 @@ export default async function handler(
   const { coinageName } = req.body;
 
   try {
-    const filteredCoins = await prisma.coin.findMany({
+    const watchListCoins = await prisma.coin.findMany({
       where: {
         coinage: coinageName,
-        status: "owned",
+        status: "wishlist",
       },
     });
     console.log("success!!!!!");
-    console.log(filteredCoins);
-    console.log(req.body);
-    return res.status(200).json({ filteredCoins });
+    console.log(watchListCoins);
+    return res.status(200).json({ watchListCoins });
   } catch (error) {
     console.error("Request error", error);
     return res.status(500).json({ error, success: false });

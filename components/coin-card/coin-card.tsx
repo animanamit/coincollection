@@ -30,13 +30,15 @@ const CoinCard = ({ coin }: any) => {
               className="rounded-t-xl"
             />
           ) : ( */}
-          <Image
-            src={coin.obsPhoto}
-            alt="coin"
-            className="rounded-tl-xl"
-            width={200}
-            height={200}
-          />
+          {coin.obsPhoto && (
+            <Image
+              src={coin.obsPhoto}
+              alt="coin"
+              className="rounded-tl-xl"
+              width={200}
+              height={200}
+            />
+          )}
           {/* // )} */}
         </div>
         <div
@@ -58,13 +60,15 @@ const CoinCard = ({ coin }: any) => {
               className="rounded-t-xl"
             />
           ) : ( */}
-          <Image
-            src={coin.revPhoto}
-            className="rounded-tr-xl"
-            height={200}
-            width={200}
-            alt="coin"
-          />
+          {coin.revPhoto && (
+            <Image
+              src={coin.revPhoto}
+              className="rounded-tr-xl"
+              height={200}
+              width={200}
+              alt="coin"
+            />
+          )}
           {/* )} */}
         </div>
       </div>

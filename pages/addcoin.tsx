@@ -115,7 +115,7 @@ const AddCoin = () => {
 
           let { publicURL } = await supabase.storage
             .from("coins")
-            .getPublicUrl(`coins/obs-${coinId}`);
+            .getPublicUrl(`coins/${images[i].name}-${coinId}`);
 
           console.log(publicURL);
           if (publicURL) {
@@ -541,11 +541,11 @@ const AddCoin = () => {
                           <input
                             {...register("status")}
                             type="radio"
-                            value="purchased"
+                            value="owned"
                             className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
                           />
                           <label className="block ml-3 text-sm font-medium text-gray-700">
-                            Purchased
+                            Owned
                           </label>
                         </div>
                         <div className="flex items-center">
