@@ -34,6 +34,7 @@ const LongCoinCard = ({ coin }: any) => {
         "Content-Type": "application/json",
       },
     });
+    // TODO delete this
   };
 
   const setCoinAsPurchased = (id: string) => {

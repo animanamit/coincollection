@@ -19,11 +19,11 @@ const Navbar = () => {
                 Add Coin
               </li>
             </Link>
-            <Link href="/collection">
+            {/* <Link href="/collection">
               <li className="cursor-pointer hover:text-black text-gray-700">
                 Collection
               </li>
-            </Link>
+            </Link> */}
           </ul>
         </div>
       </div>
