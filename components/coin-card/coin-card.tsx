@@ -75,17 +75,26 @@ const CoinCard = ({ coin }: any) => {
       <div className="flex flex-col h-full px-8 py-4 bg-white rounded-b-xl">
         <Link href={`/coin/${coin.name}`}>
           <span className="text-2xl font-bold tracking-tight cursor-pointer text-zinc-800 hover:text-zinc-500">
-            {coin.name}
+            {coin.ruler}
           </span>
         </Link>
         <span className="text-lg font-semibold tracking-tight text-zinc-800">
-          {coin.type}
+          {coin.denomination}
+        </span>
+        <span className="text-lg font-semibold tracking-tight text-zinc-800">
+          {coin.catalogueNumber}
+        </span>
+        <span className="text-lg font-semibold tracking-tight text-zinc-800">
+          {coin.grade}
         </span>
         <span className="text-lg font-semibold tracking-tight text-zinc-800">
           {coin.class}
         </span>
         <span className="text-lg font-semibold tracking-tight text-zinc-800">
-          {`Variety ${coin.variation}`}
+          {`Variety ${coin.variety}`}
+        </span>
+        <span className="text-lg font-semibold tracking-tight text-zinc-800">
+          {coin.rarity}
         </span>
         <span className="text-lg font-semibold tracking-tight text-zinc-800">
           {coin.weight}

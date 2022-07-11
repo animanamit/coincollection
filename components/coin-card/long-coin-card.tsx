@@ -34,7 +34,6 @@ const LongCoinCard = ({ coin }: any) => {
         "Content-Type": "application/json",
       },
     });
-    // TODO delete this
   };
 
   const setCoinAsPurchased = (id: string) => {
@@ -162,10 +161,13 @@ const LongCoinCard = ({ coin }: any) => {
         </div>
       )}
       <div className="flex flex-col my-4 ml-3 min-w-min whitespace-nowrap ">
-        {coin.name && <p className="inline font-bold ">{coin.name}</p>}
-        {coin.type && <p className="inline font-bold">{coin.type}</p>}
+        <p className="inline font-bold ">{coin.ruler}</p>
+        <p className="inline  ">{coin.denomination}</p>
+        <p className="inline  ">{coin.catalogueNumber}</p>
+        <p className="inline  ">{coin.grade}</p>
+        {coin.type && <p className="inline ">{coin.type}</p>}
         {coin.class && <p>{coin.class}</p>}
-        {coin.variation && <p>Variety {coin.variation}</p>}
+        {coin.variation && <p>Variety {coin.variety}</p>}
         {coin.weight && <p>{coin.weight}</p>}
         {coin.rarity && <p>Rarity {coin.rarity}</p>}
         {coin.rating ? (
