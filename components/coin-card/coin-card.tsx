@@ -9,7 +9,7 @@ const CoinCard = ({ coin }: any) => {
 
   const [dialogImageURL, setDialogImageURL] = useState("");
   return (
-    <div className="bg-black hover:shadow-lg rounded-xl h-[500px] md:w-[400px] flex flex-col">
+    <div className="bg-black hover:shadow-lg rounded-xl h-[380px] md:w-[400px] flex flex-col">
       <div className="relative flex w-auto h-[310px] rounded-t-xl bg-black">
         <div
           onClick={() => {
@@ -74,7 +74,7 @@ const CoinCard = ({ coin }: any) => {
       </div>
       <div className="flex flex-col h-full px-8 py-4 bg-white rounded-b-xl">
         <Link href={`/coin/${coin.name}`}>
-          <span className="text-2xl font-bold tracking-tight cursor-pointer text-zinc-800 hover:text-zinc-500">
+          <span className="text-xl font-bold tracking-tight cursor-pointer text-zinc-800 hover:text-zinc-500">
             {coin.ruler}
           </span>
         </Link>
@@ -91,7 +91,7 @@ const CoinCard = ({ coin }: any) => {
           {coin.class}
         </span>
         <span className="text-lg font-semibold tracking-tight text-zinc-800">
-          {`Variety ${coin.variety}`}
+          {coin.variety}
         </span>
         <span className="text-lg font-semibold tracking-tight text-zinc-800">
           {coin.rarity}

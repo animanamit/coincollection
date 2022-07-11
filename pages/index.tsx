@@ -36,7 +36,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/coin.png" />
       </Head>
 
-      <main className=" py-4 flex space-x-2 h-full">
+      <main className=" px-12 py-4 flex space-x-2 h-full">
         <div className="grid  grid-cols-2 gap-2 w-full pr-2 h-full">
           {coinages.map((item, index) => (
             <Link key={index} href={`coinage/${item}`}>

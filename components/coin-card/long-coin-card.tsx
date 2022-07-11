@@ -167,9 +167,9 @@ const LongCoinCard = ({ coin }: any) => {
         <p className="inline  ">{coin.grade}</p>
         {coin.type && <p className="inline ">{coin.type}</p>}
         {coin.class && <p>{coin.class}</p>}
-        {coin.variation && <p>Variety {coin.variety}</p>}
+        {coin.variation && <p>{coin.variety}</p>}
         {coin.weight && <p>{coin.weight}</p>}
-        {coin.rarity && <p>Rarity {coin.rarity}</p>}
+        {coin.rarity && <p>{coin.rarity}</p>}
         {coin.rating ? (
           <div className="flex items-center">
             <p className="mr-1">Condition</p>
