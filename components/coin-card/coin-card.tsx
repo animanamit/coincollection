@@ -9,7 +9,7 @@ const CoinCard = ({ coin }: any) => {
 
   const [dialogImageURL, setDialogImageURL] = useState("");
   return (
-    <div className="bg-black hover:shadow-lg rounded-xl h-[350px] md:w-[400px] flex flex-col">
+    <div className="bg-black hover:shadow-md rounded-xl h-[310px] md:w-[400px] flex flex-col">
       <div className="relative flex w-auto h-[310px] rounded-t-xl bg-black">
         <div
           onClick={() => {
@@ -74,16 +74,16 @@ const CoinCard = ({ coin }: any) => {
           {/* )} */}
         </div>
       </div>
-      <div className="flex flex-col h-full px-8 py-4 bg-white rounded-b-xl">
+      <div className="flex flex-col h-full px-4 py-2 bg-white rounded-b-xl">
         <Link href={`/coin/${coin.name}`}>
-          <span className="text-xl font-bold tracking-tight cursor-pointer text-zinc-800 hover:text-zinc-500">
+          <span className="text-lg font-bold tracking-tight cursor-pointer text-zinc-800 hover:text-zinc-500">
             {coin.ruler}
           </span>
         </Link>
-        <span className="text-lg font-semibold tracking-tight text-zinc-800">
+        <span className="text-md font-medium tracking-tight text-gray-500">
           {coin.denomination}
         </span>
-        <span className="text-lg font-semibold tracking-tight text-zinc-800">
+        <span className="text-md font-medium tracking-tight text-gray-500">
           {coin.catalogueNumber}
         </span>
         {/* <span className="text-lg font-semibold tracking-tight text-zinc-800">
@@ -92,7 +92,7 @@ const CoinCard = ({ coin }: any) => {
         <span className="text-lg font-semibold tracking-tight text-zinc-800">
           {coin.class}
         </span> */}
-        <span className="text-lg font-semibold tracking-tight text-zinc-800">
+        <span className="text-md font-medium tracking-tight text-gray-500">
           {coin.variety}
         </span>
         {/* <span className="text-lg font-semibold tracking-tight text-zinc-800">
