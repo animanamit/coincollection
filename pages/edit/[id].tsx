@@ -303,6 +303,10 @@ const EditCoin = () => {
         formData.rev !== undefined && formData.rev !== ""
           ? formData.rev
           : data.rev,
+      sequenceNumber:
+        formData.sequenceNumber !== undefined && formData.sequenceNumber !== ""
+          ? formData.sequenceNumber
+          : data.sequenceNumber,
       rating: rating > 0 ? String(rating) : data.rating,
       obsPhoto: data.obsPhoto,
       revPhoto: data.revPhoto,
@@ -692,6 +696,37 @@ const EditCoin = () => {
                     rows={3}
                     className="block w-full max-w-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     defaultValue={""}
+                  />
+                </div>
+              </div>
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <label
+                  htmlFor="postal-code"
+                  className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                >
+                  Obs Description
+                </label>
+                <div className="mt-1 sm:mt-0 sm:col-span-2">
+                  <input
+                    type="text"
+                    {...register("obs")}
+                    className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
+                  />
+                </div>
+              </div>
+
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <label
+                  htmlFor="postal-code"
+                  className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                >
+                  Rev Description
+                </label>
+                <div className="mt-1 sm:mt-0 sm:col-span-2">
+                  <input
+                    type="text"
+                    {...register("rev")}
+                    className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
                   />
                 </div>
               </div>
