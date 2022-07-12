@@ -25,7 +25,18 @@ const fetchCoinsFromCoinage = async (coinageName: string) => {
       },
       body: JSON.stringify({ coinageName: coinageName }),
     }).then((res) => res.json());
-    return filteredCoins;
+
+    let orderedFilteredCoins = [];
+
+    let objs = Object.values(filteredCoins);
+
+    objs.sort(
+      (a: any, b: any) => Number(a.sequenceNumber) - Number(b.sequenceNumber)
+    );
+
+    console.log(objs);
+
+    return objs;
   } catch (error) {
     console.log(error);
     return error;
@@ -52,7 +63,7 @@ const Coinage = () => {
   }
 
   if (data) {
-    if (data.length === 0) {
+    if ((data as any).length === 0) {
       return (
         <div className="px-8 py-4">
           <h1 className="text-4xl font-bold tracking-tight text-center">
@@ -71,8 +82,11 @@ const Coinage = () => {
       case "list":
         view = (
           <div className="w-full flex flex-col px-6 space-y-4">
-            {Object.entries(data).map(([key, value]) => (
+            {/* {Object.entries(data).map(([key, value]) => (
               <LongCoinCard coin={value} key={`long-${key}`} />
+            ))} */}
+            {(data as any).map((item: any, index: any) => (
+              <LongCoinCard coin={item} key={`long-${index}`} />
             ))}
           </div>
         );
@@ -80,8 +94,11 @@ const Coinage = () => {
       case "grid":
         view = (
           <div className="w-full p-2 overflow-y-scroll grid grid-cols-2">
-            {Object.entries(data).map(([key, value]) => (
+            {/* {Object.entries(data).map(([key, value]) => (
               <CoinCard coin={value} key={key} />
+            ))} */}
+            {(data as any).map((item: any, index: any) => (
+              <CoinCard coin={item} key={`long-${index}`} />
             ))}
           </div>
         );
