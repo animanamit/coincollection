@@ -30,8 +30,11 @@ const fetchCoinsFromCoinage = async (coinageName: string) => {
 
     let objs = Object.values(filteredCoins);
 
-    objs.sort(
-      (a: any, b: any) => Number(a.sequenceNumber) - Number(b.sequenceNumber)
+    objs.sort((a: any, b: any) =>
+      a.sequenceNumber.localeCompare(b.sequenceNumber, undefined, {
+        numeric: true,
+        sensitivity: "base",
+      })
     );
 
     console.log(objs);
