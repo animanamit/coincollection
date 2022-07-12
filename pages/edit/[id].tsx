@@ -58,7 +58,7 @@ const EditCoin = () => {
   const { isLoading, isError, isSuccess, data } = useQuery(
     ["getCoinDataToEdit", id],
     () => getCoinDataToEdit(id),
-    { enabled: Boolean(id) }
+    { enabled: Boolean(id), refetchOnWindowFocus: false }
   );
 
   const [coin, setCoin] = useState<any>();
@@ -75,6 +75,7 @@ const EditCoin = () => {
 
   useEffect(() => {
     if (data) {
+      console.log("data is here in useEffect!");
       setRating(data.rating);
       setCoinage(data.coinage);
     }
@@ -228,6 +229,8 @@ const EditCoin = () => {
   const submitData = async (formData: any) => {
     // console.log(formData);
 
+    console.log(formData.coinage);
+
     // console.log(data);
     let dataObj = {
       coinId: data.coinId,
@@ -312,7 +315,10 @@ const EditCoin = () => {
       revPhoto: data.revPhoto,
       obsRemarkPhoto: data.obsRemarkPhoto,
       revRemarkPhoto: data.revRemarkPhoto,
+      status: data.status,
     };
+
+    console.log(dataObj);
 
     if (obs || rev || obs2 || rev2) {
       console.log("a new image was added");
@@ -405,24 +411,47 @@ const EditCoin = () => {
                     id="coinage"
                     // autoComplete="country-name"
                     {...register("coinage")}
-                    value={coinage}
+                    // value={data.coinage}
+                    placeholder={data.coinage}
                     onChange={(e) => setCoinage(e.target.value)}
                     className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
                   >
                     <option disabled>Select Coinage</option>
-                    <option>Assam</option>
-                    <option>Gupta</option>
-                    <option>British Gold</option>
-                    <option>British Circulation Rarities</option>
-                    <option>Awadh Gold</option>
-                    <option>Hyderabad Gold</option>
-                    <option>Baroda Gold</option>
-                    <option>Mughal Gold</option>
-                    <option>Kutch Gold</option>
-                    <option>Nawanagar Gold</option>
-                    <option>Rajkot</option>
-                    <option>Tripura</option>
-                    <option>Bengal Presidency</option>
+                    <option selected={data.coinage === "Assam"}>Assam</option>
+                    <option selected={data.coinage === "Gupta"}>Gupta</option>
+                    <option selected={data.coinage === "British Gold"}>
+                      British Gold
+                    </option>
+                    <option
+                      selected={data.coinage === "British Circulation Rarities"}
+                    >
+                      British Circulation Rarities
+                    </option>
+                    <option selected={data.coinage === "Awadh Gold"}>
+                      Awadh Gold
+                    </option>
+                    <option selected={data.coinage === "Hyderabad Gold"}>
+                      Hyderabad Gold
+                    </option>
+                    <option selected={data.coinage === "Baroda Gold"}>
+                      Baroda Gold
+                    </option>
+                    <option selected={data.coinage === "Mughal Gold"}>
+                      Mughal Gold
+                    </option>
+                    <option selected={data.coinage === "Kutch Gold"}>
+                      Kutch Gold
+                    </option>
+                    <option selected={data.coinage === "Nawanagar Gold"}>
+                      Nawanagar Gold
+                    </option>
+                    <option selected={data.coinage === "Rajkot"}>Rajkot</option>
+                    <option selected={data.coinage === "Tripura"}>
+                      Tripura
+                    </option>
+                    <option selected={data.coinage === "Bengal Presidency"}>
+                      Bengal Presidency
+                    </option>
                   </select>
                 </div>
               </div>
@@ -684,23 +713,6 @@ const EditCoin = () => {
 
               <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <label
-                  htmlFor="about"
-                  className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                >
-                  Remarks
-                </label>
-                <div className="mt-1 sm:mt-0 sm:col-span-2">
-                  <textarea
-                    {...register("remarks")}
-                    placeholder={data.remarks}
-                    rows={3}
-                    className="block w-full max-w-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    defaultValue={""}
-                  />
-                </div>
-              </div>
-              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                <label
                   htmlFor="postal-code"
                   className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                 >
@@ -727,6 +739,24 @@ const EditCoin = () => {
                     type="text"
                     {...register("rev")}
                     className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
+                  />
+                </div>
+              </div>
+
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <label
+                  htmlFor="about"
+                  className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                >
+                  Remarks
+                </label>
+                <div className="mt-1 sm:mt-0 sm:col-span-2">
+                  <textarea
+                    {...register("remarks")}
+                    placeholder={data.remarks}
+                    rows={3}
+                    className="block w-full max-w-lg border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    defaultValue={""}
                   />
                 </div>
               </div>

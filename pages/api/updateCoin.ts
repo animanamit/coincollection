@@ -37,6 +37,8 @@ export default async function handler(
         revPhoto: updatedData.revPhoto,
         obsRemarkPhoto: updatedData.obsRemarkPhoto,
         revRemarkPhoto: updatedData.revRemarkPhoto,
+        sequenceNumber: updatedData.sequenceNumber,
+        status: updatedData.status,
       },
     });
     console.log("success!!!!!");
