@@ -79,7 +79,7 @@ const Coinage = () => {
         break;
       case "grid":
         view = (
-          <div className="w-full p-4">
+          <div className="w-full p-2 overflow-y-scroll grid grid-cols-2">
             {Object.entries(data).map(([key, value]) => (
               <CoinCard coin={value} key={key} />
             ))}
@@ -111,7 +111,7 @@ const Coinage = () => {
         <h1 className="text-4xl font-bold tracking-tight text-center">
           {name}
         </h1>
-        <div className="flex">
+        <div className="flex h-full">
           <div className=" bg-white rounded-lg h-1/2 flex flex-col  space-y-6 my-4 ">
             <button
               onClick={() => setToggleView("history")}

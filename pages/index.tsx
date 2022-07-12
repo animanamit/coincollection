@@ -11,6 +11,8 @@ import Link from "next/link";
 
 import styles from "../styles/Home.module.css";
 
+import { useSession, signIn, signOut } from "next-auth/react";
+
 const coinages = [
   "Gupta",
   "Assam",
@@ -28,6 +30,8 @@ const coinages = [
 ];
 
 const Home: NextPage = () => {
+  const { data: session } = useSession();
+
   return (
     <div className="antialiased h-screen">
       <Head>
@@ -37,15 +41,19 @@ const Home: NextPage = () => {
       </Head>
 
       <main className=" px-12 py-4 flex space-x-2 h-full">
-        <div className="grid  grid-cols-2 gap-2 w-full pr-2 h-full">
-          {coinages.map((item, index) => (
-            <Link key={index} href={`coinage/${item}`}>
-              <div className=" hover:bg-gray-700 bg-black items-center text-white rounded-lg flex justify-center p-4">
-                <h1 className="font-medium text-center">{item}</h1>
-              </div>
-            </Link>
-          ))}
-        </div>
+        {session ? (
+          <div className="grid  grid-cols-2 gap-2 w-full pr-2 h-full">
+            {coinages.map((item, index) => (
+              <Link key={index} href={`coinage/${item}`}>
+                <div className=" hover:bg-gray-700 bg-black items-center text-white rounded-lg flex justify-center p-4">
+                  <h1 className="font-medium text-center">{item}</h1>
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <h1>Need to sign in</h1>
+        )}
       </main>
 
       {/* <footer className={styles.footer}>

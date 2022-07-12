@@ -16,6 +16,7 @@ const CoinCard = ({ coin }: any) => {
             setDialogImageURL(coin.obsPhoto);
             setIsOpen(true);
           }}
+          className="h-[200px]"
         >
           {/* {startMagnifying ? (
             <GlassMagnifier
@@ -46,6 +47,7 @@ const CoinCard = ({ coin }: any) => {
             setDialogImageURL(coin.revPhoto);
             setIsOpen(true);
           }}
+          className="h-[200px]"
         >
           {/* {startMagnifying ? (
             <GlassMagnifier
