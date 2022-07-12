@@ -6,6 +6,8 @@ import {
   ClipboardListIcon,
   SearchIcon,
   AdjustmentsIcon,
+  MenuAlt4Icon,
+  ViewBoardsIcon,
 } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -85,9 +87,6 @@ const Coinage = () => {
       case "list":
         view = (
           <div className="w-full flex flex-col px-6 space-y-4">
-            {/* {Object.entries(data).map(([key, value]) => (
-              <LongCoinCard coin={value} key={`long-${key}`} />
-            ))} */}
             {(data as any).map((item: any, index: any) => (
               <LongCoinCard coin={item} key={`long-${index}`} />
             ))}
@@ -96,10 +95,7 @@ const Coinage = () => {
         break;
       case "grid":
         view = (
-          <div className="w-full p-2 overflow-y-scroll grid grid-cols-2">
-            {/* {Object.entries(data).map(([key, value]) => (
-              <CoinCard coin={value} key={key} />
-            ))} */}
+          <div className="w-fit px-8 py-4 overflow-y-scroll grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {(data as any).map((item: any, index: any) => (
               <CoinCard coin={item} key={`long-${index}`} />
             ))}
@@ -149,7 +145,7 @@ const Coinage = () => {
               onClick={() => setToggleView("list")}
               className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
             >
-              <ViewListIcon />
+              <ViewBoardsIcon className="rotate-90" />
             </button>
             <button
               onClick={() => setToggleView("wishlist")}
@@ -167,18 +163,20 @@ const Coinage = () => {
 
             {/* <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"></button> */}
           </div>
-          {
-            // <div className="w-full p-4 grid">
-            //   {Object.entries(data).map(([key, value]) =>
-            //     toggleView ? (
-            //       <LongCoinCard coin={value} key={key} />
-            //     ) : (
-            //       <CoinCard coin={value} key={key} />
-            //     )
-            //   )}
-            // </div>
-            view
-          }
+          <div className="flex flex-1 justify-center">
+            {
+              // <div className="w-full p-4 grid">
+              //   {Object.entries(data).map(([key, value]) =>
+              //     toggleView ? (
+              //       <LongCoinCard coin={value} key={key} />
+              //     ) : (
+              //       <CoinCard coin={value} key={key} />
+              //     )
+              //   )}
+              // </div>
+              view
+            }
+          </div>
         </div>
       </div>
     );
