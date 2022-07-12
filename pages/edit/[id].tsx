@@ -32,9 +32,13 @@ const exampleCoin = {
 };
 
 const getCoinDataToEdit = async (coinId: any) => {
+  console.log("inside client side func", coinId);
   try {
     let { coinToEdit } = await fetch(`/api/getCoinById`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ coinId: coinId }),
     }).then((res) => res.json());
 
@@ -47,12 +51,14 @@ const getCoinDataToEdit = async (coinId: any) => {
 
 const EditCoin = () => {
   const router = useRouter();
-  let { id } = router.query;
+  let { id } = router?.query;
+
+  console.log(id);
 
   const { isLoading, isError, isSuccess, data } = useQuery(
     ["getCoinDataToEdit", id],
     () => getCoinDataToEdit(id),
-    { refetchOnWindowFocus: false }
+    { enabled: Boolean(id) }
   );
 
   const [coin, setCoin] = useState<any>();
@@ -364,6 +370,7 @@ const EditCoin = () => {
   };
 
   if (data) {
+    console.log("data is here", id);
     return (
       <div className="px-12">
         <form
@@ -512,6 +519,7 @@ const EditCoin = () => {
                       />
                     </div>
                   </div>
+
                   <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                     <label
                       htmlFor="postal-code"
@@ -530,6 +538,22 @@ const EditCoin = () => {
                   </div>
                 </>
               )}
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <label
+                  htmlFor="postal-code"
+                  className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                >
+                  Sequence Number
+                </label>
+                <div className="mt-1 sm:mt-0 sm:col-span-2">
+                  <input
+                    type="text"
+                    {...register("sequenceNumber")}
+                    placeholder={data.sequenceNumber}
+                    className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
+                  />
+                </div>
+              </div>
 
               {(coinage === "Gupta" || coinage === "Tripura") && (
                 <>

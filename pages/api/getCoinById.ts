@@ -8,6 +8,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { coinId } = req.body;
+
   try {
     const coinToEdit = await prisma.coin.findFirst({
       where: {
