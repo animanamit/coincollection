@@ -9,7 +9,7 @@ const CoinCard = ({ coin }: any) => {
 
   const [dialogImageURL, setDialogImageURL] = useState("");
   return (
-    <div className="bg-black hover:shadow-md rounded-xl h-[310px] md:w-[400px] flex flex-col">
+    <div className="bg-black hover:shadow-md rounded-xl h-[320px] md:w-[400px] flex flex-col">
       <div className="relative flex w-auto h-[310px] rounded-t-xl bg-black">
         <div
           onClick={() => {
@@ -88,10 +88,13 @@ const CoinCard = ({ coin }: any) => {
         </span>
         {/* <span className="text-lg font-semibold tracking-tight text-zinc-800">
           {coin.grade}
-        </span>
-        <span className="text-lg font-semibold tracking-tight text-zinc-800">
-          {coin.class}
         </span> */}
+        <span className="text-md font-medium tracking-tight text-gray-500">
+          {coin.type}
+        </span>
+        <span className="text-md font-medium tracking-tight text-gray-500">
+          {coin.class}
+        </span>
         <span className="text-md font-medium tracking-tight text-gray-500">
           {coin.variety}
         </span>

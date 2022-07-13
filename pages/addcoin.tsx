@@ -577,7 +577,7 @@ const AddCoin = () => {
                             htmlFor="push-email"
                             className="block ml-3 text-sm font-medium text-gray-700"
                           >
-                            Wishlist
+                          Desired
                           </label>
                         </div>
                       </div>

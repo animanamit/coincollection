@@ -10,8 +10,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Set {
+id Int @id @default(autoincrement())
+name String
+coins  CoinsOnSets[]
+}
+
+model CoinsOnSets  {
+  set Set @relation(fields: [setId], references: [id])
+  setId Int
+  coin Coin @relation(fields: [coinId], references: [id])
+  coinId Int
+  @@id([setId, coinId])
+}
+
 model Coin {
   id Int @id @default(autoincrement())
+  sets CoinsOnSets[]
   coinId String @unique
   name String
   coinage String

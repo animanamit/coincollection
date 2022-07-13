@@ -13,7 +13,6 @@ export default async function handler(
     const filteredCoins = await prisma.coin.findMany({
       where: {
         coinage: coinageName,
-        status: "owned",
       },
     });
     console.log("success!!!!!");

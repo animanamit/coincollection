@@ -86,6 +86,32 @@ const LongCoinCard = ({ coin }: any) => {
       });
   };
 
+  const addCoinToSet = (id: string) => {
+    toast
+      .promise(
+        fetch("/api/addCoinToSet", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: id }),
+        }),
+        {
+          loading: "Please wait...",
+          success: "Coin has been added to Priority Set!",
+          error: "Error! Something went wrong.",
+        },
+        {
+          duration: 5000,
+        }
+      )
+      .then(() => {
+        // if (res.success) {
+        console.log("finished");
+        // router.reload();
+      });
+  };
+
+  console.log(coin);
+
   return (
     <div className="bg-white rounded-xl hover:shadow-md flex px-4 py-8">
       <div className="flex bg-black justify-evenly h-[200px] w-[400px]">
@@ -167,7 +193,7 @@ const LongCoinCard = ({ coin }: any) => {
         <p className="inline  ">{coin.grade}</p>
         {coin.type && <p className="inline ">{coin.type}</p>}
         {coin.class && <p>{coin.class}</p>}
-        {coin.variation && <p>{coin.variety}</p>}
+        {coin.variety && <p>{coin.variety}</p>}
         {coin.weight && <p>{coin.weight}</p>}
         {coin.rarity && <p>{coin.rarity}</p>}
         {coin.rating ? (
@@ -215,6 +241,10 @@ const LongCoinCard = ({ coin }: any) => {
             className="w-5 h-5 transition-transform duration-150 ease-out cursor-pointer hover:scale-150"
           />
         )}
+        <StarIcon
+          onClick={() => addCoinToSet(coin.id)}
+          className="w-5 h-5 transition-transform duration-150 ease-out cursor-pointer hover:scale-150"
+        />
       </div>
 
       <Transition

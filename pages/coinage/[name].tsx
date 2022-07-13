@@ -8,6 +8,8 @@ import {
   AdjustmentsIcon,
   MenuAlt4Icon,
   ViewBoardsIcon,
+  TableIcon,
+  StarIcon
 } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -17,6 +19,7 @@ import LongCoinCard from "../../components/coin-card/long-coin-card";
 import Wishlist from "../../components/wishlist";
 
 import { usePopper } from "react-popper";
+import Priority from "../../components/priority";
 
 const fetchCoinsFromCoinage = async (coinageName: string) => {
   try {
@@ -118,6 +121,13 @@ const Coinage = () => {
           </div>
         );
         break;
+      case "sets":
+        view = (
+          <div className="flex flex-col justify-center w-full">
+            <Priority />
+          </div>
+        );
+        break;
       default:
         break;
     }
@@ -147,6 +157,9 @@ const Coinage = () => {
             >
               <ViewBoardsIcon className="rotate-90" />
             </button>
+            <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
+              <TableIcon />
+            </button>
             <button
               onClick={() => setToggleView("wishlist")}
               className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
@@ -159,6 +172,13 @@ const Coinage = () => {
 
             <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
               <AdjustmentsIcon />
+            </button>
+
+            <button
+              onClick={() => setToggleView("sets")}
+              className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
+            >
+              <StarIcon />
             </button>
 
             {/* <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"></button> */}
