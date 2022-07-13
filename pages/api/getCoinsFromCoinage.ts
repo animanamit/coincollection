@@ -15,9 +15,7 @@ export default async function handler(
         coinage: coinageName,
       },
     });
-    console.log("success!!!!!");
-    console.log(filteredCoins);
-    console.log(req.body);
+
     return res.status(200).json({ filteredCoins });
   } catch (error) {
     console.error("Request error", error);

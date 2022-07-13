@@ -58,7 +58,7 @@ const LongCoinCard = ({ coin }: any) => {
       .then(() => {
         // if (res.success) {
         console.log("finished");
-        router.reload();
+        // router.reload();
       });
   };
 
@@ -82,7 +82,7 @@ const LongCoinCard = ({ coin }: any) => {
       .then(() => {
         // if (res.success) {
         console.log("finished");
-        router.reload();
+        // router.reload();
       });
   };
 

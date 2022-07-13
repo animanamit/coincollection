@@ -18,7 +18,7 @@ export default async function handler(
     console.log("success!!!!!");
     return res.status(200).json({ success: true });
   } catch (error) {
-    console.error("Request error", error);
-    return res.status(500).json({ error, success: false });
+    console.error("Request error with delete Coin", error);
+    return res.status(400).json({ error, success: false });
   }
 }
