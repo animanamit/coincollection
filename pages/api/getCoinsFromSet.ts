@@ -7,9 +7,9 @@ export default async function handler(req: any, res: any) {
   try {
     let submission = await prisma.coinsOnSets.findMany({
       where: {
-        setId: 2,
+        setName: "priority",
         coin: {
-          coinage: "Assam",
+          coinage: "Gupta",
         },
       },
       include: {

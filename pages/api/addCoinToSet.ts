@@ -8,7 +8,8 @@ export default async function handler(req: any, res: any) {
     let submission = await prisma.coinsOnSets.create({
       data: {
         coinId: id,
-        setId: 2,
+        setId: 3,
+        setName: "priority",
       },
     });
 

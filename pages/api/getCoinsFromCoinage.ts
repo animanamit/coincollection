@@ -14,6 +14,9 @@ export default async function handler(
       where: {
         coinage: coinageName,
       },
+      include: {
+        sets: true,
+      },
     });
 
     return res.status(200).json({ filteredCoins });

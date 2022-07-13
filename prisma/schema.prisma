@@ -14,11 +14,13 @@ model Set {
 id Int @id @default(autoincrement())
 name String
 coins  CoinsOnSets[]
+@@unique([id, name])
 }
 
 model CoinsOnSets  {
   id Int @id @default(autoincrement())
-  set Set @relation(fields: [setId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  set Set @relation(fields: [setId, setName], references: [id, name], onDelete: Cascade, onUpdate: Cascade)
+  setName String @default("test")
   setId Int
   coin Coin @relation(fields: [coinId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   coinId Int

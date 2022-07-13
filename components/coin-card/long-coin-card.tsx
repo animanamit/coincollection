@@ -13,6 +13,13 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { useRouter } from "next/router";
 
+interface set {
+  setName: string;
+  id: number;
+  coinId: number;
+  setId: number;
+}
+
 const LongCoinCard = ({ coin }: any) => {
   const router = useRouter();
 
@@ -23,6 +30,10 @@ const LongCoinCard = ({ coin }: any) => {
   const [dialogImageURL, setDialogImageURL] = useState("");
 
   const [isCoinDisplayOpen, setIsCoinDisplayOpen] = useState(false);
+
+  const [isPriority, setIsPriority] = useState(
+    coin.sets.filter((item: set) => item.setName === "priority").length > 0
+  );
 
   let completeButtonRef = useRef(null);
 
@@ -109,8 +120,6 @@ const LongCoinCard = ({ coin }: any) => {
         // router.reload();
       });
   };
-
-  console.log(coin);
 
   return (
     <div className="bg-white rounded-xl hover:shadow-md flex px-4 py-8">
@@ -243,7 +252,9 @@ const LongCoinCard = ({ coin }: any) => {
         )}
         <StarIcon
           onClick={() => addCoinToSet(coin.id)}
-          className="w-5 h-5 transition-transform duration-150 ease-out cursor-pointer hover:scale-150"
+          className={`w-5 h-5 transition-transform duration-150 ease-out cursor-pointer hover:scale-150 ${
+            isPriority ? "fill-yellow-500" : ""
+          }`}
         />
       </div>
 
