@@ -4,8 +4,19 @@ import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
 
+interface set {
+  setName: string;
+  id: number;
+  coinId: number;
+  setId: number;
+}
+
 const CoinCard = ({ coin }: any) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const [isPriority, setIsPriority] = useState(
+    coin.sets.filter((item: set) => item.setName === "priority").length > 0
+  );
 
   const [dialogImageURL, setDialogImageURL] = useState("");
   return (
@@ -74,7 +85,7 @@ const CoinCard = ({ coin }: any) => {
           {/* )} */}
         </div>
       </div>
-      <div className="flex flex-col h-full px-4 py-2 bg-white rounded-b-xl">
+      <div className="flex flex-col h-full px-4 py-2 bg-white rounded-b-xl relative">
         <Link href={`/coin/${coin.name}`}>
           <span className="text-lg font-bold tracking-tight cursor-pointer text-zinc-800 hover:text-zinc-500">
             {coin.ruler}
@@ -104,6 +115,13 @@ const CoinCard = ({ coin }: any) => {
         <span className="text-lg font-semibold tracking-tight text-zinc-800">
           {coin.weight}
         </span> */}
+        {!!isPriority && (
+          <div className="absolute right-4 bottom-4 bg-yellow-400 px-2 py-1 rounded-full flex justify-center items-center">
+            <span className="text-yellow-700  text-xs font-semibold">
+              Priority
+            </span>
+          </div>
+        )}
       </div>
       <Dialog
         open={isOpen}

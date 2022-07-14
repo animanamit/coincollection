@@ -69,7 +69,7 @@ const LongCoinCard = ({ coin }: any) => {
       .then(() => {
         // if (res.success) {
         console.log("finished");
-        // router.reload();
+        router.reload();
       });
   };
 
@@ -93,7 +93,7 @@ const LongCoinCard = ({ coin }: any) => {
       .then(() => {
         // if (res.success) {
         console.log("finished");
-        // router.reload();
+        router.reload();
       });
   };
 
@@ -117,8 +117,44 @@ const LongCoinCard = ({ coin }: any) => {
       .then(() => {
         // if (res.success) {
         console.log("finished");
-        // router.reload();
+        router.reload();
       });
+  };
+
+  const removeCoinFromSet = async () => {
+    const relationId = coin.sets.filter(
+      (item: set) => item.setName === "priority"
+    )[0].id;
+    console.log(relationId);
+    toast
+      .promise(
+        fetch("/api/deleteCoinFromSet", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ relationId: relationId }),
+        }),
+        {
+          loading: "Please wait...",
+          success: "Coin has been removed from Priority Set!",
+          error: "Error! Something went wrong.",
+        },
+        {
+          duration: 5000,
+        }
+      )
+      .then(() => {
+        // if (res.success) {
+        console.log("finished");
+        router.reload();
+      });
+  };
+
+  const priorityHandler = () => {
+    if (isPriority) {
+      removeCoinFromSet();
+    } else {
+      addCoinToSet(coin.id);
+    }
   };
 
   return (
@@ -251,7 +287,7 @@ const LongCoinCard = ({ coin }: any) => {
           />
         )}
         <StarIcon
-          onClick={() => addCoinToSet(coin.id)}
+          onClick={priorityHandler}
           className={`w-5 h-5 transition-transform duration-150 ease-out cursor-pointer hover:scale-150 ${
             isPriority ? "fill-yellow-500" : ""
           }`}

@@ -20,7 +20,7 @@ coins  CoinsOnSets[]
 model CoinsOnSets  {
   id Int @id @default(autoincrement())
   set Set @relation(fields: [setId, setName], references: [id, name], onDelete: Cascade, onUpdate: Cascade)
-  setName String @default("test")
+  setName String 
   setId Int
   coin Coin @relation(fields: [coinId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   coinId Int
