@@ -1,4 +1,5 @@
 import { useQuery } from "react-query";
+import LongCoinCard from "./coin-card/long-coin-card";
 
 const fetchCoinsFromSet = async (setName: string) => {
   try {
@@ -22,7 +23,23 @@ const Priority = () => {
   );
 
   if (data) {
-    return <h1>Data is here</h1>;
+    console.log(data);
+    if (data.submission.length === 0) {
+      return (
+        <div className="flex justify-center w-full">
+          <h1 className="text-xl font-normal   text-center text-gray-500">
+            No coins found
+          </h1>
+        </div>
+      );
+    } else
+      return (
+        <div className="w-full flex flex-col px-6 space-y-4">
+          {data.submission.map((item: any, index: any) => (
+            <LongCoinCard coin={item.coin} key={`long-${index}`} />
+          ))}
+        </div>
+      );
   }
 
   if (isLoading) {

@@ -18,6 +18,8 @@ const CoinCard = ({ coin }: any) => {
     coin.sets.filter((item: set) => item.setName === "priority").length > 0
   );
 
+  const [isWishlisted, setIsWishlisted] = useState(coin.status === "wishlist");
+
   const [dialogImageURL, setDialogImageURL] = useState("");
   return (
     <div className="bg-black hover:shadow-md rounded-xl h-[320px] md:w-[400px] flex flex-col">
@@ -120,6 +122,11 @@ const CoinCard = ({ coin }: any) => {
             <span className="text-yellow-700  text-xs font-semibold">
               Priority
             </span>
+          </div>
+        )}
+        {!!isWishlisted && (
+          <div className="absolute right-4 bottom-4 bg-gray-400 px-2 py-1 rounded-full flex justify-center items-center">
+            <span className="tex-gray-700  text-xs font-semibold">Desired</span>
           </div>
         )}
       </div>

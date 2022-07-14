@@ -32,7 +32,7 @@ const LongCoinCard = ({ coin }: any) => {
   const [isCoinDisplayOpen, setIsCoinDisplayOpen] = useState(false);
 
   const [isPriority, setIsPriority] = useState(
-    coin.sets.filter((item: set) => item.setName === "priority").length > 0
+    coin.sets?.filter((item: set) => item.setName === "priority").length > 0
   );
 
   let completeButtonRef = useRef(null);

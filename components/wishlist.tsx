@@ -44,15 +44,14 @@ const Wishlist = ({ coinage }: { coinage: string }) => {
           </h1>
         </div>
       );
-    }
-
-    return (
-      <div className="w-full flex flex-col px-6 space-y-4">
-        {Object.entries(data).map(([key, value]) => (
-          <LongCoinCard coin={value} key={`long-${key}`} />
-        ))}
-      </div>
-    );
+    } else
+      return (
+        <div className="w-full flex flex-col px-6 space-y-4">
+          {Object.entries(data).map(([key, value]) => (
+            <LongCoinCard coin={value} key={`long-${key}`} />
+          ))}
+        </div>
+      );
   }
 
   return <div>Error</div>;
