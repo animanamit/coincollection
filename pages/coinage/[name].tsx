@@ -12,7 +12,7 @@ import {
   StarIcon,
 } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import CoinCard from "../../components/coin-card/coin-card";
 import LongCoinCard from "../../components/coin-card/long-coin-card";
@@ -79,6 +79,14 @@ const Coinage = () => {
   );
 
   const [toggleView, setToggleView] = useState("grid");
+
+  const [coinsToDisplay, setCoinsToDisplay] = useState([]);
+
+  useEffect(() => {
+    if (data) {
+      setCoinsToDisplay((data as any).coinObjs);
+    }
+  }, [data]);
 
   if (isError) {
     <div className="px-8 py-4">
@@ -157,7 +165,7 @@ const Coinage = () => {
         </h1>
         <div className="flex h-full">
           <div>
-            <div className=" bg-white rounded-lg h-1/2 flex flex-col sticky  space-y-6 my-4 ">
+            <div className="fixed bg-white rounded-lg h-1/2 flex flex-col  space-y-6 my-4 ">
               <button
                 onClick={() => setToggleView("history")}
                 className="text-gray-400 w-6 h-6   hover:scale-110  rounded-md transition-transform ease-out duration-120 flex justify-center items-center"
