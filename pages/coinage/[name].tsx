@@ -9,7 +9,7 @@ import {
   MenuAlt4Icon,
   ViewBoardsIcon,
   TableIcon,
-  StarIcon
+  StarIcon,
 } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -33,18 +33,36 @@ const fetchCoinsFromCoinage = async (coinageName: string) => {
 
     let orderedFilteredCoins = [];
 
-    let objs = Object.values(filteredCoins);
+    let coinObjs = Object.values(filteredCoins);
 
-    objs.sort((a: any, b: any) =>
+    coinObjs.sort((a: any, b: any) =>
       a.sequenceNumber.localeCompare(b.sequenceNumber, undefined, {
         numeric: true,
         sensitivity: "base",
       })
     );
 
-    console.log(objs);
+    let rulersArr: string[] = [];
 
-    return objs;
+    if (coinageName === "Assam" || coinageName === "Gupta") {
+      const { rulers } = await fetch("/api/getRulersFromCoinage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ coinageName: coinageName }),
+      }).then((res) => res.json());
+
+      console.log("here are the rulers", rulers);
+
+      rulers.forEach((ruler: any) => {
+        if (rulersArr.indexOf(ruler.ruler) === -1) {
+          rulersArr.push(ruler.ruler);
+        }
+      });
+    }
+
+    return { coinObjs, rulersArr };
   } catch (error) {
     console.log(error);
     return error;
@@ -90,7 +108,7 @@ const Coinage = () => {
       case "list":
         view = (
           <div className="w-full flex flex-col px-6 space-y-4">
-            {(data as any).map((item: any, index: any) => (
+            {(data as any).coinObjs.map((item: any, index: any) => (
               <LongCoinCard coin={item} key={`long-${index}`} />
             ))}
           </div>
@@ -99,7 +117,7 @@ const Coinage = () => {
       case "grid":
         view = (
           <div className="w-fit px-8 py-4 overflow-y-scroll grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {(data as any).map((item: any, index: any) => (
+            {(data as any).coinObjs.map((item: any, index: any) => (
               <CoinCard coin={item} key={`long-${index}`} />
             ))}
           </div>
@@ -138,50 +156,52 @@ const Coinage = () => {
           {name}
         </h1>
         <div className="flex h-full">
-          <div className=" bg-white rounded-lg h-1/2 flex flex-col  space-y-6 my-4 ">
-            <button
-              onClick={() => setToggleView("history")}
-              className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
-            >
-              <BookOpenIcon className="" />
-            </button>
-            <button
-              onClick={() => setToggleView("grid")}
-              className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
-            >
-              <ViewGridIcon />
-            </button>
-            <button
-              onClick={() => setToggleView("list")}
-              className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
-            >
-              <ViewBoardsIcon className="rotate-90" />
-            </button>
-            <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
-              <TableIcon />
-            </button>
-            <button
-              onClick={() => setToggleView("wishlist")}
-              className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
-            >
-              <ClipboardListIcon />
-            </button>
-            <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
-              <SearchIcon />
-            </button>
+          <div>
+            <div className=" bg-white rounded-lg h-1/2 flex flex-col sticky  space-y-6 my-4 ">
+              <button
+                onClick={() => setToggleView("history")}
+                className="text-gray-400 w-6 h-6   hover:scale-110  rounded-md transition-transform ease-out duration-120 flex justify-center items-center"
+              >
+                <BookOpenIcon className="" />
+              </button>
+              <button
+                onClick={() => setToggleView("grid")}
+                className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
+              >
+                <ViewGridIcon />
+              </button>
+              <button
+                onClick={() => setToggleView("list")}
+                className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
+              >
+                <ViewBoardsIcon className="rotate-90" />
+              </button>
+              <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
+                <TableIcon />
+              </button>
+              <button
+                onClick={() => setToggleView("wishlist")}
+                className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
+              >
+                <ClipboardListIcon />
+              </button>
+              <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
+                <SearchIcon />
+              </button>
 
-            <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
-              <AdjustmentsIcon />
-            </button>
+              <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
+                <AdjustmentsIcon />
+              </button>
 
-            <button
-              onClick={() => setToggleView("sets")}
-              className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
-            >
-              <StarIcon />
-            </button>
+              <button
+                onClick={() => setToggleView("sets")}
+                className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
+              >
+                <StarIcon />
+              </button>
 
-            {/* <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"></button> */}
+              {/* <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"></button> */}
+            </div>
           </div>
           <div className="flex flex-1 justify-center">
             {
@@ -198,6 +218,20 @@ const Coinage = () => {
             }
           </div>
         </div>
+        {(name === "Gupta" || name === "Assam") && (
+          <div className=" z-20 backdrop-filter backdrop-blur-lg bg-opacity-30  border-t-[1px] border-gray-200 sticky bottom-0 h-20 flex items-center bg-white overflow-x-scroll space-x-2 px-2">
+            {(data as any).rulersArr.map((item: string, index: number) => (
+              <div
+                key={index}
+                className=" bg-yellow-400 px-2 py-1 rounded-full w-fit flex justify-center items-center cursor-pointer"
+              >
+                <span className="text-yellow-700 whitespace-nowrap text-xs font-semibold">
+                  {item}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     );
   }

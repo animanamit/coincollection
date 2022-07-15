@@ -384,7 +384,7 @@ const EditCoin = () => {
     return (
       <div className="px-12">
         <form
-          className="px-12 space-y-8 bg-white divide-y divide-gray-200 py-8"
+          className="max-w-2xl mx-auto space-y-8 bg-white divide-y divide-gray-200 py-8"
           onSubmit={handleSubmit(submitData)}
         >
           <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">

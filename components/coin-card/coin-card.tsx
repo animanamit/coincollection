@@ -22,7 +22,7 @@ const CoinCard = ({ coin }: any) => {
 
   const [dialogImageURL, setDialogImageURL] = useState("");
   return (
-    <div className="bg-black hover:shadow-md rounded-xl h-[320px] md:w-[400px] flex flex-col">
+    <div className="bg-black hover:shadow-md rounded-xl h-[350px] md:w-[400px] flex flex-col">
       <div className="relative flex w-auto h-[310px] rounded-t-xl bg-black">
         <div
           onClick={() => {
@@ -117,19 +117,25 @@ const CoinCard = ({ coin }: any) => {
         <span className="text-lg font-semibold tracking-tight text-zinc-800">
           {coin.weight}
         </span> */}
-        {!!isPriority && (
-          <div className="absolute right-4 bottom-4 bg-yellow-400 px-2 py-1 rounded-full flex justify-center items-center">
-            <span className="text-yellow-700  text-xs font-semibold">
-              Priority
-            </span>
-          </div>
-        )}
-        {!!isWishlisted && (
-          <div className="absolute right-4 bottom-4 bg-gray-400 px-2 py-1 rounded-full flex justify-center items-center">
-            <span className="tex-gray-700  text-xs font-semibold">Desired</span>
-          </div>
-        )}
+
+        <div className="flex mt-1 justify-end space-x-2">
+          {!!isPriority && (
+            <div className=" bg-yellow-400 px-2 py-1 rounded-full flex justify-center items-center">
+              <span className="text-yellow-700  text-xs font-semibold">
+                Priority
+              </span>
+            </div>
+          )}
+          {!!isWishlisted && (
+            <div className="bg-gray-400 px-2 py-1 rounded-full flex justify-center items-center">
+              <span className="tex-gray-700  text-xs font-semibold">
+                Desired
+              </span>
+            </div>
+          )}
+        </div>
       </div>
+
       <Dialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
