@@ -7,20 +7,28 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { coinageName } = req.body;
+  const { filters } = req.body;
+
+  console.log(req.body);
+
+  let filterObj: any = [];
+
+  filters.forEach((item: string) => {
+    filterObj.push({
+      ruler: item,
+    });
+  });
 
   try {
-    const rulers = await prisma.coin.findMany({
+    const coinsViaFilters = await prisma.coin.findMany({
       where: {
-        coinage: coinageName,
+        OR: [...filterObj],
       },
-      select: {
-        ruler: true,
-        sequenceNumber: true,
+      include: {
+        sets: true,
       },
     });
-
-    return res.status(200).json({ rulers });
+    return res.status(200).json({ coinsViaFilters });
   } catch (error) {
     console.error("Request error", error);
     return res.status(500).json({ error, success: false });

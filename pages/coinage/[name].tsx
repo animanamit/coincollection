@@ -12,7 +12,7 @@ import {
   StarIcon,
 } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import CoinCard from "../../components/coin-card/coin-card";
 import LongCoinCard from "../../components/coin-card/long-coin-card";
@@ -53,7 +53,14 @@ const fetchCoinsFromCoinage = async (coinageName: string) => {
         body: JSON.stringify({ coinageName: coinageName }),
       }).then((res) => res.json());
 
-      console.log("here are the rulers", rulers);
+      rulers.sort((a: any, b: any) =>
+        a.sequenceNumber.localeCompare(b.sequenceNumber, undefined, {
+          numeric: true,
+          sensitivity: "base",
+        })
+      );
+
+      // TODO: add sorting for non Gupta coins, discard first 2 digits of sequenceNumber
 
       rulers.forEach((ruler: any) => {
         if (rulersArr.indexOf(ruler.ruler) === -1) {
@@ -82,9 +89,79 @@ const Coinage = () => {
 
   const [coinsToDisplay, setCoinsToDisplay] = useState([]);
 
+  const filters = useRef(new Map());
+
+  const rulers = useRef([]);
+
+  const displayCoinsWithFilters = async (
+    label: string,
+    filter: string,
+    action: string
+  ) => {
+    let currFilters = filters.current;
+    if (action === "add") currFilters.set(label, filter);
+    if (action === "remove") currFilters.delete(label);
+
+    let vals = Array.from(currFilters.values());
+    // console.log(vals);
+
+    if (vals.length === 0) {
+      const { filteredCoins } = await fetch("/api/getCoinsFromCoinage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ coinageName: name }),
+      }).then((res) => res.json());
+
+      let orderedFilteredCoins = [];
+
+      let coinObjs = Object.values(filteredCoins);
+
+      coinObjs.sort((a: any, b: any) =>
+        a.sequenceNumber.localeCompare(b.sequenceNumber, undefined, {
+          numeric: true,
+          sensitivity: "base",
+        })
+      );
+      setCoinsToDisplay(coinObjs as any);
+    } else {
+      let { coinsViaFilters } = await fetch("/api/getCoinsWithFilters", {
+        method: "POST",
+        body: JSON.stringify({ filters: vals }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => res.json());
+      setCoinsToDisplay(coinsViaFilters);
+    }
+
+    filters.current = currFilters;
+  };
+
+  // const addFilter = (filter: string, label: string) => {
+  //   filters.current.set(label, filter);
+  //   displayCoinsWithFilters(label, filter);
+  // };
+
+  // const removeFilter = (filter: string, label: string) => {
+  //   filters.current.delete(label);
+  //   console.log(filters.current);
+  //   displayCoinsWithFilters();
+  // };
+
+  const filterHandler = (filter: string, label: string) => {
+    if (filters.current.has(label)) {
+      displayCoinsWithFilters(filter, label, "remove");
+    } else {
+      displayCoinsWithFilters(label, filter, "add");
+    }
+  };
+
   useEffect(() => {
     if (data) {
       setCoinsToDisplay((data as any).coinObjs);
+      rulers.current = (data as any).rulersArr;
     }
   }, [data]);
 
@@ -116,18 +193,20 @@ const Coinage = () => {
       case "list":
         view = (
           <div className="w-full flex flex-col px-6 space-y-4">
-            {(data as any).coinObjs.map((item: any, index: any) => (
-              <LongCoinCard coin={item} key={`long-${index}`} />
-            ))}
+            {!!coinsToDisplay &&
+              coinsToDisplay.map((item: any, index: any) => (
+                <LongCoinCard coin={item} key={`long-${index}`} />
+              ))}
           </div>
         );
         break;
       case "grid":
         view = (
           <div className="w-fit px-8 py-4 overflow-y-scroll grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {(data as any).coinObjs.map((item: any, index: any) => (
-              <CoinCard coin={item} key={`long-${index}`} />
-            ))}
+            {!!coinsToDisplay &&
+              coinsToDisplay.map((item: any, index: any) => (
+                <CoinCard coin={item} key={`long-${index}`} />
+              ))}
           </div>
         );
         break;
@@ -144,6 +223,9 @@ const Coinage = () => {
         view = (
           <div className="flex flex-col justify-center w-full">
             <Wishlist coinage={name as string} />
+            {
+              // TODO: only show waitlist coins from selected coinage
+            }
           </div>
         );
         break;
@@ -228,16 +310,26 @@ const Coinage = () => {
         </div>
         {(name === "Gupta" || name === "Assam") && (
           <div className=" z-20 backdrop-filter backdrop-blur-lg bg-opacity-30  border-t-[1px] border-gray-200 sticky bottom-0 h-20 flex items-center bg-white overflow-x-scroll space-x-2 px-2">
-            {(data as any).rulersArr.map((item: string, index: number) => (
-              <div
-                key={index}
-                className=" bg-yellow-400 px-2 py-1 rounded-full w-fit flex justify-center items-center cursor-pointer"
-              >
-                <span className="text-yellow-700 whitespace-nowrap text-xs font-semibold">
-                  {item}
-                </span>
-              </div>
-            ))}
+            {!!rulers.current &&
+              rulers.current.map((item: string, index: number) => (
+                <div
+                  key={index}
+                  onClick={() => filterHandler(item, item)}
+                  className={`${
+                    filters.current.has(item) ? "bg-red-400" : "bg-yellow-400 "
+                  } px-2 py-1 rounded-full w-fit flex justify-center items-center cursor-pointer`}
+                >
+                  <span
+                    className={`${
+                      filters.current.has(item)
+                        ? "text-red-700"
+                        : "text-yellow-700"
+                    } whitespace-nowrap text-xs font-semibold`}
+                  >
+                    {item}
+                  </span>
+                </div>
+              ))}
           </div>
         )}
       </div>
