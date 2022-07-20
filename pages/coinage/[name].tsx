@@ -21,14 +21,25 @@ import Wishlist from "../../components/wishlist";
 import { usePopper } from "react-popper";
 import Priority from "../../components/priority";
 
-const fetchCoinsFromCoinage = async (coinageName: string) => {
+const fetchCoinsFromCoinage = async (
+  coinageName: string,
+  filters: any,
+  status: any
+) => {
+  // let vals = Array.from(filters.values());
+  // console.log(vals);
+
   try {
     const { filteredCoins } = await fetch("/api/getCoinsFromCoinage", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ coinageName: coinageName }),
+      body: JSON.stringify({
+        coinageName: coinageName,
+        filters: filters,
+        status: status,
+      }),
     }).then((res) => res.json());
 
     let orderedFilteredCoins = [];
@@ -44,7 +55,7 @@ const fetchCoinsFromCoinage = async (coinageName: string) => {
 
     let rulersArr: string[] = [];
 
-    if (coinageName === "Assam" || coinageName === "Gupta") {
+    if (coinageName === "Gupta") {
       const { rulers } = await fetch("/api/getRulersFromCoinage", {
         method: "POST",
         headers: {
@@ -77,11 +88,21 @@ const fetchCoinsFromCoinage = async (coinageName: string) => {
 };
 
 const Coinage = () => {
+  // const filters = useRef(new Map());
+  const [filters, setFilters] = useState(new Map());
+  const [status, setStatus] = useState("owned");
+  const [coinLayout, setCoinLayout] = useState("grid");
+
   const router = useRouter();
   let { name } = router.query;
-  const { isLoading, isError, isSuccess, data } = useQuery(
-    ["fetchCoinsFromCoinage", name],
-    () => fetchCoinsFromCoinage(name as string),
+  const { isLoading, isError, data } = useQuery(
+    ["fetchCoinsFromCoinage", name, Array.from(filters.values()), status],
+    () =>
+      fetchCoinsFromCoinage(
+        name as string,
+        Array.from(filters.values()) as any,
+        status
+      ),
     { refetchOnWindowFocus: false }
   );
 
@@ -89,54 +110,54 @@ const Coinage = () => {
 
   const [coinsToDisplay, setCoinsToDisplay] = useState([]);
 
-  const filters = useRef(new Map());
-
   const rulers = useRef([]);
 
-  const displayCoinsWithFilters = async (
+  const displayCoinsWithFilters = (
     label: string,
     filter: string,
     action: string
   ) => {
-    let currFilters = filters.current;
+    let currFilters = new Map(filters);
     if (action === "add") currFilters.set(label, filter);
     if (action === "remove") currFilters.delete(label);
+    console.log(currFilters);
+    setFilters((filters) => currFilters);
 
-    let vals = Array.from(currFilters.values());
+    // let vals = Array.from(currFilters.values());
     // console.log(vals);
 
-    if (vals.length === 0) {
-      const { filteredCoins } = await fetch("/api/getCoinsFromCoinage", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ coinageName: name }),
-      }).then((res) => res.json());
+    // if (vals.length === 0) {
+    //   const { filteredCoins } = await fetch("/api/getCoinsFromCoinage", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ coinageName: name }),
+    //   }).then((res) => res.json());
 
-      let orderedFilteredCoins = [];
+    //   let orderedFilteredCoins = [];
 
-      let coinObjs = Object.values(filteredCoins);
+    //   let coinObjs = Object.values(filteredCoins);
 
-      coinObjs.sort((a: any, b: any) =>
-        a.sequenceNumber.localeCompare(b.sequenceNumber, undefined, {
-          numeric: true,
-          sensitivity: "base",
-        })
-      );
-      setCoinsToDisplay(coinObjs as any);
-    } else {
-      let { coinsViaFilters } = await fetch("/api/getCoinsWithFilters", {
-        method: "POST",
-        body: JSON.stringify({ filters: vals }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).then((res) => res.json());
-      setCoinsToDisplay(coinsViaFilters);
-    }
+    //   coinObjs.sort((a: any, b: any) =>
+    //     a.sequenceNumber.localeCompare(b.sequenceNumber, undefined, {
+    //       numeric: true,
+    //       sensitivity: "base",
+    //     })
+    //   );
+    //   setCoinsToDisplay(coinObjs as any);
+    // } else {
+    //   let { coinsViaFilters } = await fetch("/api/getCoinsWithFilters", {
+    //     method: "POST",
+    //     body: JSON.stringify({ filters: vals }),
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   }).then((res) => res.json());
+    //   setCoinsToDisplay(coinsViaFilters);
+    // }
 
-    filters.current = currFilters;
+    // filters.current = currFilters;
   };
 
   // const addFilter = (filter: string, label: string) => {
@@ -151,7 +172,8 @@ const Coinage = () => {
   // };
 
   const filterHandler = (filter: string, label: string) => {
-    if (filters.current.has(label)) {
+    if (filters.has(label)) {
+      console.log("removing label");
       displayCoinsWithFilters(filter, label, "remove");
     } else {
       displayCoinsWithFilters(label, filter, "add");
@@ -160,6 +182,7 @@ const Coinage = () => {
 
   useEffect(() => {
     if (data) {
+      console.log("new data has arrived");
       setCoinsToDisplay((data as any).coinObjs);
       rulers.current = (data as any).rulersArr;
     }
@@ -193,8 +216,8 @@ const Coinage = () => {
       case "list":
         view = (
           <div className="w-full flex flex-col px-6 space-y-4">
-            {!!coinsToDisplay &&
-              coinsToDisplay.map((item: any, index: any) => (
+            {!!data &&
+              (data as any).coinObjs.map((item: any, index: any) => (
                 <LongCoinCard coin={item} key={`long-${index}`} />
               ))}
           </div>
@@ -203,8 +226,8 @@ const Coinage = () => {
       case "grid":
         view = (
           <div className="w-fit px-8 py-4 overflow-y-scroll grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {!!coinsToDisplay &&
-              coinsToDisplay.map((item: any, index: any) => (
+            {!!data &&
+              (data as any).coinObjs.map((item: any, index: any) => (
                 <CoinCard coin={item} key={`long-${index}`} />
               ))}
           </div>
@@ -256,7 +279,9 @@ const Coinage = () => {
               </button>
               <button
                 onClick={() => setToggleView("grid")}
-                className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
+                className={`${
+                  toggleView === "grid" ? "text-purple-500" : "text-gray-400"
+                } w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center`}
               >
                 <ViewGridIcon />
               </button>
@@ -270,8 +295,12 @@ const Coinage = () => {
                 <TableIcon />
               </button>
               <button
-                onClick={() => setToggleView("wishlist")}
-                className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
+                onClick={() =>
+                  setStatus(status === "owned" ? "wishlist" : "owned")
+                }
+                className={` w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center ${
+                  status === "wishlist" ? "text-purple-500" : "text-gray-400"
+                }`}
               >
                 <ClipboardListIcon />
               </button>
@@ -316,14 +345,12 @@ const Coinage = () => {
                   key={index}
                   onClick={() => filterHandler(item, item)}
                   className={`${
-                    filters.current.has(item) ? "bg-red-400" : "bg-yellow-400 "
+                    filters.has(item) ? "bg-red-400" : "bg-yellow-400 "
                   } px-2 py-1 rounded-full w-fit flex justify-center items-center cursor-pointer`}
                 >
                   <span
                     className={`${
-                      filters.current.has(item)
-                        ? "text-red-700"
-                        : "text-yellow-700"
+                      filters.has(item) ? "text-red-700" : "text-yellow-700"
                     } whitespace-nowrap text-xs font-semibold`}
                   >
                     {item}
