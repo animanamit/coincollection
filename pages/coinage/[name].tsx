@@ -112,72 +112,32 @@ const Coinage = () => {
 
   const rulers = useRef([]);
 
-  const displayCoinsWithFilters = (
-    label: string,
-    filter: string,
-    action: string
-  ) => {
-    let currFilters = new Map(filters);
-    if (action === "add") currFilters.set(label, filter);
-    if (action === "remove") currFilters.delete(label);
-    console.log(currFilters);
-    setFilters((filters) => currFilters);
-
-    // let vals = Array.from(currFilters.values());
-    // console.log(vals);
-
-    // if (vals.length === 0) {
-    //   const { filteredCoins } = await fetch("/api/getCoinsFromCoinage", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ coinageName: name }),
-    //   }).then((res) => res.json());
-
-    //   let orderedFilteredCoins = [];
-
-    //   let coinObjs = Object.values(filteredCoins);
-
-    //   coinObjs.sort((a: any, b: any) =>
-    //     a.sequenceNumber.localeCompare(b.sequenceNumber, undefined, {
-    //       numeric: true,
-    //       sensitivity: "base",
-    //     })
-    //   );
-    //   setCoinsToDisplay(coinObjs as any);
-    // } else {
-    //   let { coinsViaFilters } = await fetch("/api/getCoinsWithFilters", {
-    //     method: "POST",
-    //     body: JSON.stringify({ filters: vals }),
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   }).then((res) => res.json());
-    //   setCoinsToDisplay(coinsViaFilters);
-    // }
-
-    // filters.current = currFilters;
-  };
-
-  // const addFilter = (filter: string, label: string) => {
-  //   filters.current.set(label, filter);
-  //   displayCoinsWithFilters(label, filter);
-  // };
-
-  // const removeFilter = (filter: string, label: string) => {
-  //   filters.current.delete(label);
-  //   console.log(filters.current);
-  //   displayCoinsWithFilters();
+  // const displayCoinsWithFilters = (
+  //   label: string,
+  //   filter: string,
+  //   action: string
+  // ) => {
+  //   let currFilters = new Map(filters);
+  //   if (action === "add") currFilters.set(label, filter);
+  //   if (action === "remove") currFilters.delete(label);
+  //   console.log(currFilters);
+  //   setFilters((filters) => currFilters);
   // };
 
   const filterHandler = (filter: string, label: string) => {
+    console.log("inside filter handler");
+    let currFilters = new Map(filters);
     if (filters.has(label)) {
-      console.log("removing label");
-      displayCoinsWithFilters(filter, label, "remove");
+      // console.log("removing label");
+      currFilters.delete(label);
+
+      // displayCoinsWithFilters(filter, label, "remove");
     } else {
-      displayCoinsWithFilters(label, filter, "add");
+      currFilters.set(label, filter);
+      // displayCoinsWithFilters(label, filter, "add");
     }
+    console.log(currFilters);
+    setFilters((filters) => currFilters);
   };
 
   useEffect(() => {
@@ -197,168 +157,137 @@ const Coinage = () => {
   }
 
   if (data) {
-    if ((data as any).length === 0) {
-      return (
-        <div className="px-8 py-4">
-          <h1 className="text-4xl font-bold tracking-tight text-center">
-            {name}
-          </h1>
-          <h1 className="text-lg mt-8 font-medium text-gray-700  text-center">
-            No coins found.
-          </h1>
-        </div>
-      );
-    }
-
     let view;
 
-    switch (toggleView) {
-      case "list":
-        view = (
-          <div className="w-full flex flex-col px-6 space-y-4">
-            {!!data &&
-              (data as any).coinObjs.map((item: any, index: any) => (
-                <LongCoinCard coin={item} key={`long-${index}`} />
-              ))}
-          </div>
-        );
-        break;
-      case "grid":
-        view = (
-          <div className="w-fit px-8 py-4 overflow-y-scroll grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {!!data &&
-              (data as any).coinObjs.map((item: any, index: any) => (
-                <CoinCard coin={item} key={`long-${index}`} />
-              ))}
-          </div>
-        );
-        break;
-      case "history":
-        view = (
-          <div className="flex justify-center w-full py-4">
-            <h1 className="text-xl font-bold tracking-tight  text-center">
-              History
-            </h1>
-          </div>
-        );
-        break;
-      case "wishlist":
-        view = (
-          <div className="flex flex-col justify-center w-full">
-            <Wishlist coinage={name as string} />
-            {
-              // TODO: only show waitlist coins from selected coinage
-            }
-          </div>
-        );
-        break;
-      case "sets":
-        view = (
-          <div className="flex flex-col justify-center w-full">
-            <Priority />
-          </div>
-        );
-        break;
-      default:
-        break;
-    }
+    // switch (toggleView) {
+    //   case "list":
+    //     view = (
+    //       <div className="w-full flex flex-col px-6 space-y-4">
+    //         {!!data &&
+    //           (data as any).coinObjs.map((item: any, index: any) => (
+    //             <LongCoinCard coin={item} key={`long-${index}`} />
+    //           ))}
+    //       </div>
+    //     );
+    //     break;
+    //   case "grid":
+    //     view = (
+    //       <div className="w-fit px-8 py-4 overflow-y-scroll grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+    //         {!!data &&
+    //           (data as any).coinObjs.map((item: any, index: any) => (
+    //             <CoinCard coin={item} key={`long-${index}`} />
+    //           ))}
+    //       </div>
+    //     );
+    //     break;
+    //   case "history":
+    //     view = (
+    //       <div className="flex justify-center w-full py-4">
+    //         <h1 className="text-xl font-bold tracking-tight  text-center">
+    //           History
+    //         </h1>
+    //       </div>
+    //     );
+    //     break;
+    //   case "wishlist":
+    //     view = (
+    //       <div className="flex flex-col justify-center w-full">
+    //         <Wishlist coinage={name as string} />
+    //       </div>
+    //     );
+    //     break;
+    //   case "sets":
+    //     view = (
+    //       <div className="flex flex-col justify-center w-full">
+    //         <Priority />
+    //       </div>
+    //     );
+    //     break;
+    //   default:
+    //     break;
+    // }
 
     return (
-      <div className="px-8 py-4 h-full">
-        <h1 className="text-4xl font-bold tracking-tight text-center">
-          {name}
-        </h1>
-        <div className="flex h-full">
-          <div>
-            <div className="fixed bg-white rounded-lg h-1/2 flex flex-col  space-y-6 my-4 ">
-              <button
-                onClick={() => setToggleView("history")}
-                className="text-gray-400 w-6 h-6   hover:scale-110  rounded-md transition-transform ease-out duration-120 flex justify-center items-center"
-              >
-                <BookOpenIcon className="" />
-              </button>
-              <button
-                onClick={() => setToggleView("grid")}
-                className={`${
-                  toggleView === "grid" ? "text-purple-500" : "text-gray-400"
-                } w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center`}
-              >
-                <ViewGridIcon />
-              </button>
-              <button
-                onClick={() => setToggleView("list")}
-                className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
-              >
-                <ViewBoardsIcon className="rotate-90" />
-              </button>
-              <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
-                <TableIcon />
-              </button>
-              <button
-                onClick={() =>
-                  setStatus(status === "owned" ? "wishlist" : "owned")
-                }
-                className={` w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center ${
-                  status === "wishlist" ? "text-purple-500" : "text-gray-400"
-                }`}
-              >
-                <ClipboardListIcon />
-              </button>
-              <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
-                <SearchIcon />
-              </button>
-
-              <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
-                <AdjustmentsIcon />
-              </button>
-
-              <button
-                onClick={() => setToggleView("sets")}
-                className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
-              >
-                <StarIcon />
-              </button>
-
-              {/* <button className="text-gray-400 w-6 h-6 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"></button> */}
-            </div>
+      <div className="h-full">
+        <div className="fixed z-10 bg-white w-full">
+          <div className="h-20 flex justify-center items-center w-full border-b-[1px] border-gray-200 ">
+            <h1 className="text-3xl font-bold tracking-tight text-center">
+              {name}
+            </h1>
           </div>
-          <div className="flex flex-1 justify-center">
-            {
-              // <div className="w-full p-4 grid">
-              //   {Object.entries(data).map(([key, value]) =>
-              //     toggleView ? (
-              //       <LongCoinCard coin={value} key={key} />
-              //     ) : (
-              //       <CoinCard coin={value} key={key} />
-              //     )
-              //   )}
-              // </div>
-              view
-            }
+
+          {name === "Gupta" && (
+            <div className=" border-gray-200 border-b-[1px]  h-16 flex items-center bg-white overflow-x-scroll space-x-2 px-2">
+              {!!rulers.current &&
+                rulers.current.map((item: string, index: number) => (
+                  <div
+                    key={index}
+                    onClick={() => filterHandler(item, item)}
+                    className={`${
+                      filters.has(item) ? "bg-red-400" : "bg-yellow-400 "
+                    } px-2 py-1 rounded-full w-fit flex justify-center items-center cursor-pointer`}
+                  >
+                    <span
+                      className={`${
+                        filters.has(item) ? "text-red-700" : "text-yellow-700"
+                      } whitespace-nowrap text-xs font-semibold`}
+                    >
+                      {item}
+                    </span>
+                  </div>
+                ))}
+            </div>
+          )}
+          <div className="h-10 flex justify-end border-b-[1px] border-gray-200 space-x-4 px-4 items-center">
+            <button
+              onClick={() => setToggleView("history")}
+              className="text-gray-400 w-5 h-5   hover:scale-110  rounded-md transition-transform ease-out duration-120 flex justify-center items-center"
+            >
+              <BookOpenIcon className="" />
+            </button>
+            <button
+              onClick={() => setToggleView("grid")}
+              className="text-gray-400 w-5 h-5 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
+            >
+              <ViewGridIcon />
+            </button>
+            <button
+              onClick={() => setToggleView("list")}
+              className="text-gray-400 w-5 h-5 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
+            >
+              <ViewBoardsIcon className="rotate-90" />
+            </button>
+            <button className="text-gray-400 w-5 h-5 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
+              <TableIcon />
+            </button>
+            <button
+              onClick={() => setToggleView("wishlist")}
+              className="text-gray-400 w-5 h-5 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
+            >
+              <ClipboardListIcon />
+            </button>
+            <button className="text-gray-400 w-5 h-5 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
+              <SearchIcon />
+            </button>
+
+            <button className="text-gray-400 w-5 h-5 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
+              <AdjustmentsIcon />
+            </button>
+
+            <button
+              onClick={() => setToggleView("sets")}
+              className="text-gray-400 w-5 h-5 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
+            >
+              <StarIcon />
+            </button>
           </div>
         </div>
-        {(name === "Gupta" || name === "Assam") && (
-          <div className=" z-20 backdrop-filter backdrop-blur-lg bg-opacity-30  border-t-[1px] border-gray-200 sticky bottom-0 h-20 flex items-center bg-white overflow-x-scroll space-x-2 px-2">
-            {!!rulers.current &&
-              rulers.current.map((item: string, index: number) => (
-                <div
-                  key={index}
-                  onClick={() => filterHandler(item, item)}
-                  className={`${
-                    filters.has(item) ? "bg-red-400" : "bg-yellow-400 "
-                  } px-2 py-1 rounded-full w-fit flex justify-center items-center cursor-pointer`}
-                >
-                  <span
-                    className={`${
-                      filters.has(item) ? "text-red-700" : "text-yellow-700"
-                    } whitespace-nowrap text-xs font-semibold`}
-                  >
-                    {item}
-                  </span>
-                </div>
-              ))}
-          </div>
-        )}
+        <div className="w-full h-1/2 overflow-y-scroll flex flex-col px-6 mt-4 space-y-4">
+          {!!data &&
+            (data as any).coinObjs.map((item: any, index: any) => (
+              <LongCoinCard coin={item} key={`long-${index}`} />
+            ))}
+        </div>
       </div>
     );
   }
