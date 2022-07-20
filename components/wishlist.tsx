@@ -19,6 +19,7 @@ const fetchWishListCoins = async (coinage: string) => {
 };
 
 const Wishlist = ({ coinage }: { coinage: string }) => {
+  console.log(coinage);
   const { isLoading, isError, data } = useQuery(
     ["fetchWishListCoins", coinage],
     () => fetchWishListCoins(coinage),

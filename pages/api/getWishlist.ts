@@ -7,12 +7,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { coinageName } = req.body;
+  const { coinage } = req.body;
 
   try {
     const watchListCoins = await prisma.coin.findMany({
       where: {
-        coinage: coinageName,
+        coinage: coinage,
         status: "wishlist",
       },
     });
