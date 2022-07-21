@@ -9,6 +9,7 @@ import {
   ViewBoardsIcon,
   TableIcon,
   StarIcon,
+  PrinterIcon,
 } from "@heroicons/react/outline";
 import {
   SearchIcon as SolidSearchIcon,
@@ -204,25 +205,26 @@ const Coinage = () => {
               {name}
             </h1>
           </div>
-          <div className="bg-slate-50 border-t-[1px] border-b-[1px] border-slate-300 h-10 px-2 py-1 flex items-center justify-center">
-            <input
-              placeholder="Search for..."
-              className="w-full px-4 py-2 bg-slate-50 text-xs"
-            />
-            <SolidSearchIcon className="h-4 w-4 ml-2 text-slate-500" />
-          </div>
-          <div className="h-12 bg-white flex justify-evenly items-center px-4  py-2 border-b-[1px] border-gray-300">
-            <div>
-              <button className="text-slate-500 w-4 h-4   hover:scale-110  rounded-md transition-transform ease-out duration-120 flex justify-center items-center">
-                <BookOpenIcon className="" />
-              </button>
-            </div>
-            <div className="flex-1 flex justify-center space-x-3">
+          {/* <div className="bg-slate-50 border-t-[1px] border-b-[1px] border-slate-300 h-10 px-2 py-1 flex items-center justify-center">
+            <form
+              onSubmit={() => {
+                console.log("search");
+              }}
+            >
+              <input
+                placeholder="Search for..."
+                className="w-full px-4 py-2 bg-slate-50 text-xs"
+              />
+              <SolidSearchIcon className="h-4 w-4 ml-2 text-slate-500" />
+            </form>
+          </div> */}
+          <div className="h-16 bg-white flex justify-between items-center px-4  py-2 border-b-[1px] border-gray-300">
+            <div className="flex-1 flex  space-x-3">
               <button
                 onClick={() =>
                   setShowSelection(showSelection === "rulers" ? "" : "rulers")
                 }
-                className="bg-slate-300 px-2 py-1 text-xs rounded-sm flex items-center justify-between"
+                className="bg-slate-300 px-2 py-1 text-sm rounded-sm flex items-center justify-between"
               >
                 Rulers
                 {showSelection === "rulers" ? (
@@ -235,7 +237,7 @@ const Coinage = () => {
                 onClick={() =>
                   setShowSelection(showSelection === "sets" ? "" : "sets")
                 }
-                className="bg-slate-300 px-2 py-1 text-xs rounded-sm flex items-center justify-between"
+                className="bg-slate-300 px-2 py-1 text-sm rounded-sm flex items-center justify-between"
               >
                 Sets
                 {showSelection === "sets" ? (
@@ -246,27 +248,48 @@ const Coinage = () => {
               </button>
             </div>
             <div className="flex ml-2 space-x-2">
+              <button className="text-slate-500 w-5 h-5   hover:scale-110  rounded-md transition-transform ease-out duration-120 flex justify-center items-center">
+                <BookOpenIcon className="w-5 h-5 " />
+              </button>
               <button
                 onClick={() => setCoinLayout("grid")}
-                className="text-slate-500 w-4 h-4 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
+                className="text-slate-500 w-5 h-5 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
               >
-                <ViewGridIcon />
+                <ViewGridIcon className="w-5 h-5 " />
               </button>
               <button
                 onClick={() => setCoinLayout("list")}
-                className="text-slate-500 w-4 h-4 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
+                className="text-slate-500 w-5 h-5 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
               >
-                <ViewBoardsIcon className="rotate-90" />
+                <ViewBoardsIcon className="rotate-90 h-5 w-5" />
               </button>
-              <button className="text-slate-500 w-4 h-4 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
-                <TableIcon />
+              <button className="text-slate-500 w-5 h-5 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
+                <TableIcon className="w-5 h-5 " />
               </button>
+              <button className="text-slate-500 w-5 h-5 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
+                <PrinterIcon className="w-5 h-5 " />
+              </button>
+            </div>
+
+            <div>
+              <form
+                onSubmit={() => {
+                  console.log("search");
+                }}
+                className="flex items-center ml-2 bg-slate-50 px-2 w-56"
+              >
+                <input
+                  placeholder="Search for..."
+                  className="w-full px-2 py-2 bg-slate-50 text-xs"
+                />
+                <SolidSearchIcon className="h-5 w-5 ml-2 text-slate-500" />
+              </form>
             </div>
           </div>
 
           {showSelection !== "" && showSelection === "rulers" && (
-            <div className="w-full h-fit flex justify-center items-center border-b-[1px] border-gray-300">
-              <div className="w-4/5 grid grid-flow-col grid-rows-3 gap-y-2 overflow-x-scroll px-2 py-4">
+            <div className="w-full h-fit flex px-12 items-center border-b-[1px] border-gray-300">
+              <div className="flex space-x-2 overflow-x-scroll px-2 py-4">
                 {name === "Gupta" &&
                   (data as any).rulersArr.map((item: string, index: number) => (
                     <div
@@ -274,12 +297,12 @@ const Coinage = () => {
                       onClick={() => filterHandler(item, item)}
                       className={`${
                         filters.has(item) ? "bg-red-400" : "bg-yellow-400 "
-                      } px-2 py-1 rounded-md w-fit flex justify-center items-center cursor-pointer`}
+                      } px-2 py-1 rounded-sm w-fit flex justify-center items-center cursor-pointer`}
                     >
                       <span
                         className={`${
                           filters.has(item) ? "text-red-700" : "text-yellow-700"
-                        } whitespace-nowrap text-xs `}
+                        } whitespace-nowrap text-sm `}
                       >
                         {item}
                       </span>
@@ -290,16 +313,16 @@ const Coinage = () => {
           )}
 
           {showSelection !== "" && showSelection === "sets" && (
-            <div className="w-full max-h-fit flex justify-center items-center border-b-[1px] border-gray-300">
-              <div className="w-4/5 flex justify-center space-x-4 px-2 py-2 ">
-                <button className="text-xs bg-slate-300 rounded-md px-2 py-1">
+            <div className="w-full max-h-fit flex px-12 items-center border-b-[1px] border-gray-300">
+              <div className="w-4/5 flex  space-x-2 px-2 py-2 ">
+                <button className="text-sm bg-slate-300 rounded-sm px-2 py-1">
                   Priority
                 </button>
                 <button
                   onClick={() => {
                     setStatus(status === "wishlist" ? "owned" : "wishlist");
                   }}
-                  className="text-xs bg-slate-300 rounded-md px-2 py-1"
+                  className="text-sm bg-slate-300 rounded-sm px-2 py-1"
                 >
                   Desired
                 </button>
