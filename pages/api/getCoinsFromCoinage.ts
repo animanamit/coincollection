@@ -20,6 +20,7 @@ export default async function handler(
   });
 
   console.log(filterObj);
+  console.log(status);
 
   try {
     if (filterObj.length === 0) {
@@ -32,7 +33,6 @@ export default async function handler(
           sets: true,
         },
       });
-      console.log(filteredCoins);
 
       return res.status(200).json({ filteredCoins });
     } else {

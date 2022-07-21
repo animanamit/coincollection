@@ -32,6 +32,7 @@ const fetchCoinsFromCoinage = async (
 ) => {
   // let vals = Array.from(filters.values());
   // console.log(vals);
+  console.log(status);
 
   try {
     const { filteredCoins } = await fetch("/api/getCoinsFromCoinage", {
@@ -42,7 +43,7 @@ const fetchCoinsFromCoinage = async (
       body: JSON.stringify({
         coinageName: coinageName,
         filters: filters,
-        status: status,
+        ...(status !== "" && { status: status }),
       }),
     }).then((res) => res.json());
 
@@ -265,13 +266,13 @@ const Coinage = () => {
             </div>
             <div className="flex ml-2 space-x-2">
               <button
-                onClick={() => setToggleView("grid")}
+                onClick={() => setCoinLayout("grid")}
                 className="text-slate-500 w-4 h-4 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
               >
                 <ViewGridIcon />
               </button>
               <button
-                onClick={() => setToggleView("list")}
+                onClick={() => setCoinLayout("list")}
                 className="text-slate-500 w-4 h-4 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
               >
                 <ViewBoardsIcon className="rotate-90" />
@@ -283,7 +284,7 @@ const Coinage = () => {
           </div>
 
           {showSelection !== "" && showSelection === "rulers" && (
-            <div className="w-full h-fit flex justify-center items-center border-b-[1px] border-gray-400">
+            <div className="w-full h-fit flex justify-center items-center border-b-[1px] border-gray-300">
               <div className="w-4/5 grid grid-flow-col grid-rows-3 gap-y-2 overflow-x-scroll px-2 py-4">
                 {name === "Gupta" &&
                   !!rulers.current &&
@@ -309,12 +310,17 @@ const Coinage = () => {
           )}
 
           {showSelection !== "" && showSelection === "sets" && (
-            <div className="w-full max-h-fit flex justify-center items-center">
-              <div className="w-4/5 flex justify-center space-x-4 px-2 py-4">
+            <div className="w-full max-h-fit flex justify-center items-center border-b-[1px] border-gray-300">
+              <div className="w-4/5 flex justify-center space-x-4 px-2 py-2 ">
                 <button className="text-xs bg-slate-300 rounded-md px-2 py-1">
                   Priority
                 </button>
-                <button className="text-xs bg-slate-300 rounded-md px-2 py-1">
+                <button
+                  onClick={() => {
+                    setStatus(status === "wishlist" ? "owned" : "wishlist");
+                  }}
+                  className="text-xs bg-slate-300 rounded-md px-2 py-1"
+                >
                   Desired
                 </button>
               </div>
@@ -395,9 +401,11 @@ const Coinage = () => {
               ))}
             </div>
           ) : (
-            (data as any).coinObjs.map((item: any, index: any) => (
-              <LongCoinCard coin={item} key={`long-${index}`} />
-            ))
+            <div className="w-full flex flex-col px-6 space-y-4">
+              {(data as any).coinObjs.map((item: any, index: any) => (
+                <LongCoinCard coin={item} key={`long-${index}`} />
+              ))}
+            </div>
           )}
         </div>
       </div>

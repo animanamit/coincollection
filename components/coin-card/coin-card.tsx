@@ -14,12 +14,6 @@ interface set {
 const CoinCard = ({ coin }: any) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const [isPriority, setIsPriority] = useState(
-    coin.sets.filter((item: set) => item.setName === "priority").length > 0
-  );
-
-  const [isWishlisted, setIsWishlisted] = useState(coin.status === "wishlist");
-
   const [dialogImageURL, setDialogImageURL] = useState("");
   return (
     <div className="bg-black hover:shadow-md rounded-xl h-[350px] md:w-[400px] flex flex-col">
@@ -88,11 +82,14 @@ const CoinCard = ({ coin }: any) => {
         </div>
       </div>
       <div className="flex flex-col h-full px-4 py-2 bg-white rounded-b-xl relative">
-        <Link href={`/coin/${coin.name}`}>
-          <span className="text-lg font-bold tracking-tight cursor-pointer text-zinc-800 hover:text-zinc-500">
-            {coin.ruler}
-          </span>
-        </Link>
+        {/* <Link href={`/coin/${coin.name}`}> */}
+        <span
+          onClick={() => console.log(coin)}
+          className="text-lg font-bold tracking-tight cursor-pointer text-zinc-800 hover:text-zinc-500"
+        >
+          {coin.ruler}
+        </span>
+        {/* </Link> */}
         <span className="text-md font-medium tracking-tight text-gray-500">
           {coin.denomination}
         </span>
@@ -119,14 +116,14 @@ const CoinCard = ({ coin }: any) => {
         </span> */}
 
         <div className="flex mt-1 justify-end space-x-2">
-          {!!isPriority && (
+          {coin.sets.length > 0 && (
             <div className=" bg-yellow-400 px-2 py-1 rounded-full flex justify-center items-center">
               <span className="text-yellow-700  text-xs font-semibold">
                 Priority
               </span>
             </div>
           )}
-          {!!isWishlisted && (
+          {coin.status === "wishlist" && (
             <div className="bg-gray-400 px-2 py-1 rounded-full flex justify-center items-center">
               <span className="tex-gray-700  text-xs font-semibold">
                 Desired
