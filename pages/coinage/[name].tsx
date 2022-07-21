@@ -1,4 +1,3 @@
-import { Popover } from "@headlessui/react";
 import {
   BookOpenIcon,
   ViewGridIcon,
@@ -11,6 +10,11 @@ import {
   TableIcon,
   StarIcon,
 } from "@heroicons/react/outline";
+import {
+  SearchIcon as SolidSearchIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
@@ -95,6 +99,7 @@ const Coinage = () => {
 
   const router = useRouter();
   let { name } = router.query;
+
   const { isLoading, isError, data } = useQuery(
     ["fetchCoinsFromCoinage", name, Array.from(filters.values()), status],
     () =>
@@ -111,6 +116,8 @@ const Coinage = () => {
   const [coinsToDisplay, setCoinsToDisplay] = useState([]);
 
   const rulers = useRef([]);
+
+  const [showSelection, setShowSelection] = useState("");
 
   // const displayCoinsWithFilters = (
   //   label: string,
@@ -209,14 +216,112 @@ const Coinage = () => {
 
     return (
       <div className="h-full">
-        <div className="fixed z-10 bg-white w-full">
+        <div className=" bg-white w-full">
           <div className="h-20 flex justify-center items-center w-full border-b-[1px] border-gray-200 ">
             <h1 className="text-3xl font-bold tracking-tight text-center">
               {name}
             </h1>
           </div>
+          <div className="bg-slate-50 border-t-[1px] border-b-[1px] border-slate-300 h-10 px-2 py-1 flex items-center justify-center">
+            <input
+              placeholder="Search for..."
+              className="w-full px-4 py-2 bg-slate-50 text-xs"
+            />
+            <SolidSearchIcon className="h-4 w-4 ml-2 text-slate-500" />
+          </div>
+          <div className="h-12 bg-white flex justify-evenly items-center px-4  py-2 border-b-[1px] border-gray-300">
+            <div>
+              <button className="text-slate-500 w-4 h-4   hover:scale-110  rounded-md transition-transform ease-out duration-120 flex justify-center items-center">
+                <BookOpenIcon className="" />
+              </button>
+            </div>
+            <div className="flex-1 flex justify-center space-x-3">
+              <button
+                onClick={() =>
+                  setShowSelection(showSelection === "rulers" ? "" : "rulers")
+                }
+                className="bg-slate-300 px-2 py-1 text-xs rounded-sm flex items-center justify-between"
+              >
+                Rulers
+                {showSelection === "rulers" ? (
+                  <ChevronUpIcon className="h-4 w-4" />
+                ) : (
+                  <ChevronDownIcon className="h-4 w-4" />
+                )}
+              </button>
+              <button
+                onClick={() =>
+                  setShowSelection(showSelection === "sets" ? "" : "sets")
+                }
+                className="bg-slate-300 px-2 py-1 text-xs rounded-sm flex items-center justify-between"
+              >
+                Sets
+                {showSelection === "sets" ? (
+                  <ChevronUpIcon className="h-4 w-4" />
+                ) : (
+                  <ChevronDownIcon className="h-4 w-4" />
+                )}
+              </button>
+            </div>
+            <div className="flex ml-2 space-x-2">
+              <button
+                onClick={() => setToggleView("grid")}
+                className="text-slate-500 w-4 h-4 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
+              >
+                <ViewGridIcon />
+              </button>
+              <button
+                onClick={() => setToggleView("list")}
+                className="text-slate-500 w-4 h-4 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center"
+              >
+                <ViewBoardsIcon className="rotate-90" />
+              </button>
+              <button className="text-slate-500 w-4 h-4 hover:scale-110 transition-transform ease-out duration-120 flex justify-center items-center">
+                <TableIcon />
+              </button>
+            </div>
+          </div>
 
-          {name === "Gupta" && (
+          {showSelection !== "" && showSelection === "rulers" && (
+            <div className="w-full h-fit flex justify-center items-center border-b-[1px] border-gray-400">
+              <div className="w-4/5 grid grid-flow-col grid-rows-3 gap-y-2 overflow-x-scroll px-2 py-4">
+                {name === "Gupta" &&
+                  !!rulers.current &&
+                  rulers.current.map((item: string, index: number) => (
+                    <div
+                      key={index}
+                      onClick={() => filterHandler(item, item)}
+                      className={`${
+                        filters.has(item) ? "bg-red-400" : "bg-yellow-400 "
+                      } px-2 py-1 rounded-md w-fit flex justify-center items-center cursor-pointer`}
+                    >
+                      <span
+                        className={`${
+                          filters.has(item) ? "text-red-700" : "text-yellow-700"
+                        } whitespace-nowrap text-xs font-semibold`}
+                      >
+                        {item}
+                      </span>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
+
+          {showSelection !== "" && showSelection === "sets" && (
+            <div className="w-full max-h-fit flex justify-center items-center">
+              <div className="w-4/5 flex justify-center space-x-4 px-2 py-4">
+                <button className="text-xs bg-slate-300 rounded-md px-2 py-1">
+                  Priority
+                </button>
+                <button className="text-xs bg-slate-300 rounded-md px-2 py-1">
+                  Desired
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* {name === "Gupta" && (
             <div className=" border-gray-200 border-b-[1px]  h-16 flex items-center bg-white overflow-x-scroll space-x-2 px-2">
               {!!rulers.current &&
                 rulers.current.map((item: string, index: number) => (
@@ -237,8 +342,8 @@ const Coinage = () => {
                   </div>
                 ))}
             </div>
-          )}
-          <div className="h-10 flex justify-end border-b-[1px] border-gray-200 space-x-4 px-4 items-center">
+          )} */}
+          {/* <div className="h-10 flex justify-end border-b-[1px] border-gray-200 space-x-4 px-4 items-center">
             <button
               onClick={() => setToggleView("history")}
               className="text-gray-400 w-5 h-5   hover:scale-110  rounded-md transition-transform ease-out duration-120 flex justify-center items-center"
@@ -280,13 +385,20 @@ const Coinage = () => {
             >
               <StarIcon />
             </button>
-          </div>
+          </div> */}
         </div>
-        <div className="w-full h-1/2 overflow-y-scroll flex flex-col px-6 mt-4 space-y-4">
-          {!!data &&
+        <div className="w-full flex justify-center py-6">
+          {coinLayout === "grid" ? (
+            <div className="grid lg:grid-cols-3 md:grid-cols-2 xs:grid-cols-1 gap-y-6 px-8 h-full w-full items-center justify-items-center">
+              {(data as any).coinObjs.map((item: any, index: any) => (
+                <CoinCard coin={item} key={`long-${index}`} />
+              ))}
+            </div>
+          ) : (
             (data as any).coinObjs.map((item: any, index: any) => (
               <LongCoinCard coin={item} key={`long-${index}`} />
-            ))}
+            ))
+          )}
         </div>
       </div>
     );
