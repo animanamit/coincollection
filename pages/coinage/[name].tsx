@@ -93,7 +93,6 @@ const fetchCoinsFromCoinage = async (
 };
 
 const Coinage = () => {
-  // const filters = useRef(new Map());
   const [filters, setFilters] = useState(new Map());
   const [status, setStatus] = useState("owned");
   const [coinLayout, setCoinLayout] = useState("grid");
@@ -111,12 +110,6 @@ const Coinage = () => {
       ),
     { refetchOnWindowFocus: false }
   );
-
-  const [toggleView, setToggleView] = useState("grid");
-
-  const [coinsToDisplay, setCoinsToDisplay] = useState([]);
-
-  const rulers = useRef([]);
 
   const [showSelection, setShowSelection] = useState("");
 
@@ -136,25 +129,13 @@ const Coinage = () => {
     console.log("inside filter handler");
     let currFilters = new Map(filters);
     if (filters.has(label)) {
-      // console.log("removing label");
       currFilters.delete(label);
-
-      // displayCoinsWithFilters(filter, label, "remove");
     } else {
       currFilters.set(label, filter);
-      // displayCoinsWithFilters(label, filter, "add");
     }
     console.log(currFilters);
     setFilters((filters) => currFilters);
   };
-
-  useEffect(() => {
-    if (data) {
-      console.log("new data has arrived");
-      setCoinsToDisplay((data as any).coinObjs);
-      rulers.current = (data as any).rulersArr;
-    }
-  }, [data]);
 
   if (isError) {
     <div className="px-8 py-4">
@@ -287,8 +268,7 @@ const Coinage = () => {
             <div className="w-full h-fit flex justify-center items-center border-b-[1px] border-gray-300">
               <div className="w-4/5 grid grid-flow-col grid-rows-3 gap-y-2 overflow-x-scroll px-2 py-4">
                 {name === "Gupta" &&
-                  !!rulers.current &&
-                  rulers.current.map((item: string, index: number) => (
+                  (data as any).rulersArr.map((item: string, index: number) => (
                     <div
                       key={index}
                       onClick={() => filterHandler(item, item)}
@@ -299,7 +279,7 @@ const Coinage = () => {
                       <span
                         className={`${
                           filters.has(item) ? "text-red-700" : "text-yellow-700"
-                        } whitespace-nowrap text-xs font-semibold`}
+                        } whitespace-nowrap text-xs `}
                       >
                         {item}
                       </span>

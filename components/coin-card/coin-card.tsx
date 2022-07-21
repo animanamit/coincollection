@@ -125,7 +125,7 @@ const CoinCard = ({ coin }: any) => {
           )}
           {coin.status === "wishlist" && (
             <div className="bg-gray-400 px-2 py-1 rounded-full flex justify-center items-center">
-              <span className="tex-gray-700  text-xs font-semibold">
+              <span className="text-gray-700  text-xs font-semibold">
                 Desired
               </span>
             </div>
