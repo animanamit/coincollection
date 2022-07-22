@@ -127,7 +127,7 @@ const Coinage = () => {
   if (data) {
     return (
       <div className="h-full">
-        <div className="w-full bg-white ">
+        <div className="w-full bg-white sticky top-0 z-20">
           <div className="h-20 flex justify-center items-center w-full border-b-[1px] border-gray-200 ">
             <h1 className="text-3xl font-bold tracking-tight text-center">
               {name}
@@ -140,7 +140,9 @@ const Coinage = () => {
                 onClick={() =>
                   setShowSelection(showSelection === "rulers" ? "" : "rulers")
                 }
-                className="flex items-center justify-between px-2 py-1 text-sm rounded-sm bg-slate-300"
+                className={`flex items-center justify-between px-2 py-1 text-sm rounded-sm ${
+                  showSelection === "rulers" ? "bg-gray-300" : "bg-white"
+                }`}
               >
                 Rulers
                 {showSelection === "rulers" ? (
@@ -153,7 +155,9 @@ const Coinage = () => {
                 onClick={() =>
                   setShowSelection(showSelection === "sets" ? "" : "sets")
                 }
-                className="flex items-center justify-between px-2 py-1 text-sm rounded-sm bg-slate-300"
+                className={`${
+                  showSelection === "sets" ? "bg-gray-300" : "bg-white"
+                } flex items-center justify-between px-2 py-1 text-sm rounded-sm `}
               >
                 Sets
                 {showSelection === "sets" ? (
@@ -164,25 +168,25 @@ const Coinage = () => {
               </button>
             </div>
             <div className="flex ml-2 space-x-4">
-              <button className="flex items-center justify-center w-5 h-5 transition-transform ease-out rounded-md text-slate-500 hover:scale-110 duration-120">
+              <button className="flex items-center justify-center w-5 h-5 text-gray-500 transition-transform ease-out rounded-md hover:scale-110 duration-120">
                 <BookOpenIcon className="w-5 h-5 " />
               </button>
               <button
                 onClick={() => setCoinLayout("grid")}
-                className="flex items-center justify-center w-5 h-5 transition-transform ease-out text-slate-500 hover:scale-110 duration-120"
+                className="flex items-center justify-center w-5 h-5 text-gray-500 transition-transform ease-out hover:scale-110 duration-120"
               >
                 <ViewGridIcon className="w-5 h-5 " />
               </button>
               <button
                 onClick={() => setCoinLayout("list")}
-                className="flex items-center justify-center w-5 h-5 transition-transform ease-out text-slate-500 hover:scale-110 duration-120"
+                className="flex items-center justify-center w-5 h-5 text-gray-500 transition-transform ease-out hover:scale-110 duration-120"
               >
                 <ViewBoardsIcon className="w-5 h-5 rotate-90" />
               </button>
-              <button className="flex items-center justify-center w-5 h-5 transition-transform ease-out text-slate-500 hover:scale-110 duration-120">
+              <button className="flex items-center justify-center w-5 h-5 text-gray-500 transition-transform ease-out hover:scale-110 duration-120">
                 <TableIcon className="w-5 h-5 " />
               </button>
-              <button className="flex items-center justify-center w-5 h-5 transition-transform ease-out text-slate-500 hover:scale-110 duration-120">
+              <button className="flex items-center justify-center w-5 h-5 text-gray-500 transition-transform ease-out hover:scale-110 duration-120">
                 <PrinterIcon className="w-5 h-5 " />
               </button>
             </div>
@@ -192,13 +196,16 @@ const Coinage = () => {
                 onSubmit={() => {
                   console.log("search");
                 }}
-                className="flex items-center px-2 ml-2 w-72 bg-slate-50"
+                className="flex items-center px-2 ml-2 w-72 bg-gray-50"
               >
+                {
+                  // TODO: create query for search and reroute/restructure data
+                }
                 <input
                   placeholder="Search for..."
-                  className="w-full px-2 py-2 text-sm bg-slate-50"
+                  className="w-full px-2 py-2 text-sm bg-gray-50"
                 />
-                <SolidSearchIcon className="w-5 h-5 ml-2 text-slate-500" />
+                <SolidSearchIcon className="w-5 h-5 ml-2 text-gray-500" />
               </form>
             </div>
           </div>
@@ -231,14 +238,16 @@ const Coinage = () => {
           {showSelection !== "" && showSelection === "sets" && (
             <div className="w-full max-h-fit flex px-12 items-center border-b-[1px] border-gray-300">
               <div className="flex w-4/5 px-2 py-2 space-x-2 ">
-                <button className="px-2 py-1 text-sm rounded-sm bg-slate-300">
+                <button className={`px-2 py-1 text-sm bg-white rounded-sm`}>
                   Priority
                 </button>
                 <button
                   onClick={() => {
                     setStatus(status === "wishlist" ? "owned" : "wishlist");
                   }}
-                  className="px-2 py-1 text-sm rounded-sm bg-slate-300"
+                  className={` ${
+                    status === "wishlist" ? "bg-gray-300" : "bg-white"
+                  } px-2 py-1 text-sm rounded-sm`}
                 >
                   Desired
                 </button>
@@ -280,7 +289,9 @@ const Coinage = () => {
               onClick={() =>
                 setShowSelection(showSelection === "rulers" ? "" : "rulers")
               }
-              className="flex items-center justify-between px-2 py-1 text-sm rounded-sm bg-slate-300"
+              className={`flex items-center justify-between px-2 py-1 text-sm rounded-sm ${
+                showSelection === "rulers" ? "bg-gray-500" : "bg-white"
+              }`}
             >
               Rulers
               {showSelection === "rulers" ? (
@@ -293,7 +304,9 @@ const Coinage = () => {
               onClick={() =>
                 setShowSelection(showSelection === "sets" ? "" : "sets")
               }
-              className="flex items-center justify-between px-2 py-1 text-sm rounded-sm bg-slate-300"
+              className={`${
+                showSelection === "sets" ? "bg-gray-500" : "bg-white"
+              } flex items-center justify-between px-2 py-1 text-sm rounded-sm `}
             >
               Sets
               {showSelection === "sets" ? (
@@ -304,25 +317,28 @@ const Coinage = () => {
             </button>
           </div>
           <div className="flex ml-2 space-x-4">
-            <button className="flex items-center justify-center w-5 h-5 transition-transform ease-out rounded-md text-slate-500 hover:scale-110 duration-120">
+            <button className="flex items-center justify-center w-5 h-5 text-gray-500 transition-transform ease-out rounded-md hover:scale-110 duration-120">
               <BookOpenIcon className="w-5 h-5 " />
             </button>
             <button
               onClick={() => setCoinLayout("grid")}
-              className="flex items-center justify-center w-5 h-5 transition-transform ease-out text-slate-500 hover:scale-110 duration-120"
+              className="flex items-center justify-center w-5 h-5 text-gray-500 transition-transform ease-out hover:scale-110 duration-120"
             >
               <ViewGridIcon className="w-5 h-5 " />
             </button>
             <button
               onClick={() => setCoinLayout("list")}
-              className="flex items-center justify-center w-5 h-5 transition-transform ease-out text-slate-500 hover:scale-110 duration-120"
+              className="flex items-center justify-center w-5 h-5 text-gray-500 transition-transform ease-out hover:scale-110 duration-120"
             >
               <ViewBoardsIcon className="w-5 h-5 rotate-90" />
             </button>
-            <button className="flex items-center justify-center w-5 h-5 transition-transform ease-out text-slate-500 hover:scale-110 duration-120">
+            <button className="flex items-center justify-center w-5 h-5 text-gray-500 transition-transform ease-out hover:scale-110 duration-120">
               <TableIcon className="w-5 h-5 " />
+              {
+                // TODO: create table of coins which can be printed, with the option of having photo or not
+              }
             </button>
-            <button className="flex items-center justify-center w-5 h-5 transition-transform ease-out text-slate-500 hover:scale-110 duration-120">
+            <button className="flex items-center justify-center w-5 h-5 text-gray-500 transition-transform ease-out hover:scale-110 duration-120">
               <PrinterIcon className="w-5 h-5 " />
             </button>
           </div>
@@ -332,13 +348,13 @@ const Coinage = () => {
               onSubmit={() => {
                 console.log("search");
               }}
-              className="flex items-center px-2 ml-2 w-72 bg-slate-50"
+              className="flex items-center px-2 ml-2 w-72 bg-gray-50"
             >
               <input
                 placeholder="Search for..."
-                className="w-full px-2 py-2 text-sm bg-slate-50"
+                className="w-full px-2 py-2 text-sm bg-gray-50"
               />
-              <SolidSearchIcon className="w-5 h-5 ml-2 text-slate-500" />
+              <SolidSearchIcon className="w-5 h-5 ml-2 text-gray-500" />
             </form>
           </div>
         </div>

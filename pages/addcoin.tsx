@@ -347,6 +347,9 @@ const AddCoin = () => {
               >
                 Sequence No.
               </label>
+              {
+                //TODO: add hint for sequence number
+              }
               <div className="mt-1 sm:mt-0 sm:col-span-2">
                 <input
                   type="text"
