@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
 
+import { useMediaQuery } from "react-responsive";
+
 interface set {
   setName: string;
   id: number;
@@ -14,16 +16,21 @@ interface set {
 const CoinCard = ({ coin }: any) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const isIPad = useMediaQuery({
+    query: "(max-width: 700px)",
+  });
+
+  console.log(isIPad);
   const [dialogImageURL, setDialogImageURL] = useState("");
   return (
-    <div className="bg-black hover:shadow-md rounded-xl h-[350px] md:w-[400px] flex flex-col">
+    <div className="bg-black hover:shadow-md rounded-xl sm:h-[350px] md:w-[400px] w-[300px] h-[300px] flex flex-col">
       <div className="relative flex w-auto h-[310px] rounded-t-xl bg-black">
         <div
           onClick={() => {
             setDialogImageURL(coin.obsPhoto);
             setIsOpen(true);
           }}
-          className="h-[200px]"
+          className="sm:h-[200px] h-[150px]"
         >
           {/* {startMagnifying ? (
             <GlassMagnifier
@@ -43,8 +50,8 @@ const CoinCard = ({ coin }: any) => {
               src={coin.obsPhoto}
               alt="coin"
               className="rounded-tl-xl"
-              width={200}
-              height={200}
+              width={isIPad ? 150 : 200}
+              height={isIPad ? 150 : 200}
             />
           )}
           {/* // )} */}
@@ -54,7 +61,7 @@ const CoinCard = ({ coin }: any) => {
             setDialogImageURL(coin.revPhoto);
             setIsOpen(true);
           }}
-          className="h-[200px]"
+          className="sm:h-[200px] h-[150px]"
         >
           {/* {startMagnifying ? (
             <GlassMagnifier
@@ -73,8 +80,8 @@ const CoinCard = ({ coin }: any) => {
             <Image
               src={coin.revPhoto}
               className="rounded-tr-xl"
-              height={200}
-              width={200}
+              height={isIPad ? 150 : 200}
+              width={isIPad ? 150 : 200}
               alt="coin"
             />
           )}

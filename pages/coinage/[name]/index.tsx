@@ -136,8 +136,8 @@ const Coinage = () => {
             </h1>
           </div>
 
-          <div className="h-16 bg-white flex justify-between items-center px-4  py-2 border-b-[1px] border-gray-300">
-            <div className="flex flex-1 space-x-3">
+          <div className="sm:h-16 h-fit bg-white flex flex-col-reverse sm:flex-row space-y-2 sm:space-y-0 justify-between items-center px-4  py-2 border-b-[1px] border-gray-300">
+            <div className="flex sm:flex-1 sm:space-x-3 py-2 sm:py-0">
               <button
                 onClick={() =>
                   setShowSelection(showSelection === "rulers" ? "" : "rulers")
@@ -169,7 +169,7 @@ const Coinage = () => {
                 )}
               </button>
             </div>
-            <div className="flex ml-2 space-x-4">
+            <div className="flex sm:ml-2 py-2 sm:py-0 space-x-4">
               <button className="flex items-center justify-center w-5 h-5 text-gray-500 transition-transform ease-out rounded-md hover:scale-110 duration-120">
                 <BookOpenIcon className="w-5 h-5 " />
               </button>
@@ -257,9 +257,9 @@ const Coinage = () => {
             </div>
           )}
         </div>
-        <div className="flex justify-center w-full py-6">
+        <div className="flex justify-center w-full sm:py-6 py-2">
           {coinLayout === "grid" ? (
-            <div className="grid items-center w-full h-full px-8 lg:grid-cols-3 md:grid-cols-2 xs:grid-cols-1 gap-y-6 justify-items-center">
+            <div className="sm:grid items-center w-full h-full lg:px-8 lg:grid-cols-3 sm:grid-cols-2  sm:gap-y-6 sm:justify-items-center space-y-4 sm:space-y-0 flex flex-col">
               {(data as any).coinObjs.map((item: any, index: any) => (
                 <CoinCard coin={item} key={`long-${index}`} />
               ))}
