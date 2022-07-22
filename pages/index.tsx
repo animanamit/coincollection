@@ -13,18 +13,12 @@ import styles from "../styles/Home.module.css";
 
 const coinages = [
   "Gupta",
-  "Assam",
-  "British",
-  "British Circulation Rarities",
-  "Awadh",
-  "Hyderabad",
-  "Baroda",
   "Mughal",
-  "Kutch",
-  "Nawanagar",
-  "Rajkot",
+  "Assam",
   "Tripura",
   "Bengal Presidency",
+  "Princely State",
+  "British India Rarities",
 ];
 
 const Home: NextPage = () => {

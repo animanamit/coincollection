@@ -417,40 +417,23 @@ const EditCoin = () => {
                     className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
                   >
                     <option disabled>Select Coinage</option>
-                    <option selected={data.coinage === "Assam"}>Assam</option>
                     <option selected={data.coinage === "Gupta"}>Gupta</option>
-                    <option selected={data.coinage === "British Gold"}>
-                      British Gold
-                    </option>
-                    <option
-                      selected={data.coinage === "British Circulation Rarities"}
-                    >
-                      British Circulation Rarities
-                    </option>
-                    <option selected={data.coinage === "Awadh Gold"}>
-                      Awadh Gold
-                    </option>
-                    <option selected={data.coinage === "Hyderabad Gold"}>
-                      Hyderabad Gold
-                    </option>
-                    <option selected={data.coinage === "Baroda Gold"}>
-                      Baroda Gold
-                    </option>
-                    <option selected={data.coinage === "Mughal Gold"}>
-                      Mughal Gold
-                    </option>
-                    <option selected={data.coinage === "Kutch Gold"}>
-                      Kutch Gold
-                    </option>
-                    <option selected={data.coinage === "Nawanagar Gold"}>
-                      Nawanagar Gold
-                    </option>
-                    <option selected={data.coinage === "Rajkot"}>Rajkot</option>
+
+                    <option selected={data.coinage === "Mughal"}>Mughal</option>
+                    <option selected={data.coinage === "Assam"}>Assam</option>
                     <option selected={data.coinage === "Tripura"}>
                       Tripura
                     </option>
                     <option selected={data.coinage === "Bengal Presidency"}>
                       Bengal Presidency
+                    </option>
+                    <option selected={data.coinage === "Princely State"}>
+                      Princely State
+                    </option>
+                    <option
+                      selected={data.coinage === "British India Rarities"}
+                    >
+                      British India Rarities
                     </option>
                   </select>
                 </div>

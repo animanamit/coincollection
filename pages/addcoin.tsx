@@ -214,19 +214,13 @@ const AddCoin = () => {
                   className="block w-full max-w-lg border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm"
                 >
                   <option disabled>Select Coinage</option>
-                  <option>Assam</option>
                   <option>Gupta</option>
-                  <option>British Gold</option>
-                  <option>British Circulation Rarities</option>
-                  <option>Awadh Gold</option>
-                  <option>Hyderabad Gold</option>
-                  <option>Baroda Gold</option>
-                  <option>Mughal Gold</option>
-                  <option>Kutch Gold</option>
-                  <option>Nawanagar Gold</option>
-                  <option>Rajkot</option>
+                  <option>Mughal</option>
+                  <option>Assam</option>
                   <option>Tripura</option>
                   <option>Bengal Presidency</option>
+                  <option>Princely State</option>
+                  <option>British India Rarities</option>
                 </select>
               </div>
             </div>

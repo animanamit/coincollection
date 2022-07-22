@@ -83,6 +83,8 @@ const fetchCoinsFromCoinage = async (
   }
 };
 
+const searchForCoin = async (query: string) => {};
+
 const Coinage = () => {
   const [filters, setFilters] = useState(new Map());
   const [status, setStatus] = useState("owned");
