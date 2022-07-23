@@ -221,16 +221,10 @@ const Coinage = () => {
                       key={index}
                       onClick={() => filterHandler(item, item)}
                       className={`${
-                        filters.has(item) ? "bg-red-400" : "bg-yellow-400 "
+                        filters.has(item) ? "bg-gray-300" : "bg-white "
                       } px-2 py-1 rounded-sm w-fit flex justify-center items-center cursor-pointer`}
                     >
-                      <span
-                        className={`${
-                          filters.has(item) ? "text-red-700" : "text-yellow-700"
-                        } whitespace-nowrap text-sm `}
-                      >
-                        {item}
-                      </span>
+                      <span className="whitespace-nowrap text-sm">{item}</span>
                     </div>
                   ))}
               </div>
@@ -254,12 +248,13 @@ const Coinage = () => {
                   Desired
                 </button>
                 <button
-                // onClick={() => {
-                //   setStatus(status === "wishlist" ? "owned" : "wishlist");
-                // }}
-                // className={` ${
-                //   status === "wishlist" ? "bg-gray-300" : "bg-white"
-                // } px-2 py-1 text-sm rounded-sm`}
+                  className="text-sm px-2 py-1 rounded-sm"
+                  // onClick={() => {
+                  //   setStatus(status === "wishlist" ? "owned" : "wishlist");
+                  // }}
+                  // className={` ${
+                  //   status === "wishlist" ? "bg-gray-300" : "bg-white"
+                  // } px-2 py-1 text-sm rounded-sm`}
                 >
                   Normal
                 </button>
