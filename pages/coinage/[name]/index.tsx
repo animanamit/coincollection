@@ -253,25 +253,44 @@ const Coinage = () => {
                 >
                   Desired
                 </button>
+                <button
+                // onClick={() => {
+                //   setStatus(status === "wishlist" ? "owned" : "wishlist");
+                // }}
+                // className={` ${
+                //   status === "wishlist" ? "bg-gray-300" : "bg-white"
+                // } px-2 py-1 text-sm rounded-sm`}
+                >
+                  Normal
+                </button>
               </div>
             </div>
           )}
         </div>
-        <div className="flex justify-center w-full sm:py-6 py-2">
-          {coinLayout === "grid" ? (
-            <div className="sm:grid items-center w-full h-full lg:px-8 lg:grid-cols-3 sm:grid-cols-2  sm:gap-y-6 sm:justify-items-center space-y-4 sm:space-y-0 flex flex-col">
-              {(data as any).coinObjs.map((item: any, index: any) => (
-                <CoinCard coin={item} key={`long-${index}`} />
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col w-full px-6 space-y-4">
-              {(data as any).coinObjs.map((item: any, index: any) => (
-                <LongCoinCard coin={item} key={`long-${index}`} />
-              ))}
-            </div>
-          )}
-        </div>
+
+        {(data as any).coinObjs.length > 0 ? (
+          <div className="flex justify-center w-full sm:py-6 py-2">
+            {coinLayout === "grid" ? (
+              <div className="sm:grid items-center w-full h-full lg:px-8 lg:grid-cols-3 sm:grid-cols-2  sm:gap-y-6 sm:justify-items-center space-y-4 sm:space-y-0 flex flex-col">
+                {(data as any).coinObjs.map((item: any, index: any) => (
+                  <CoinCard coin={item} key={`long-${index}`} />
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col w-full px-6 space-y-4">
+                {(data as any).coinObjs.map((item: any, index: any) => (
+                  <LongCoinCard coin={item} key={`long-${index}`} />
+                ))}
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="flex justify-center items-center h-44">
+            <h1 className="text-gray-800 text-xl font-normal tracking-normal">
+              No Coins Found
+            </h1>
+          </div>
+        )}
       </div>
     );
   }
